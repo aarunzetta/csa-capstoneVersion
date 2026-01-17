@@ -26,6 +26,10 @@ export default {
         danger: "#ef4444",
         info: "#3b82f6",
       },
+      fontFamily: {
+        sans: ["Inter", "sans-serif"],
+        mono: ["JetBrains Mono", "monospace"],
+      },
     },
   },
   plugins: [],
