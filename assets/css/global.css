@@ -1,0 +1,4 @@
+/* Button Classes */
+.btn-primary {
+  @apply bg-gradient-to-br from-primary-light via-primary to-primary-dark text-white font-semibold py-3 border border-primary rounded-lg transition duration-200 ease-in-out transform hover:scale-105 active:scale-100;
+}
