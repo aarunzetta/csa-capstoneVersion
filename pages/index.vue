@@ -5,11 +5,7 @@ const username = ref("");
 const password = ref("");
 
 const handleLogin = () => {
-  // Frontend only
-  console.log("Login attempt:", {
-    username: username.value,
-    password: password.value,
-  });
+  navigateTo("/dashboard");
 };
 </script>
 
