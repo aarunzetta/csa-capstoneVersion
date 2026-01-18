@@ -52,7 +52,7 @@ const handleLogin = () => {
 
       <!-- Right Side -->
       <div class="hidden sm:flex col-span-1 items-center justify-center">
-        <img src="/public/cma_logo.png" alt="cma_logo" />
+        <img src="/cma_logo.png" alt="cma_logo" />
       </div>
     </div>
   </div>
