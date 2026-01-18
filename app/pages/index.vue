@@ -1,6 +1,10 @@
 <script setup>
 import { ref } from "vue";
 
+definePageMeta({
+  layout: false,
+});
+
 const username = ref("");
 const password = ref("");
 
@@ -52,7 +56,12 @@ const handleLogin = () => {
 
       <!-- Right Side -->
       <div class="hidden sm:flex col-span-1 items-center justify-center">
-        <img src="/cma_logo.png" alt="cma_logo" />
+        <NuxtImg
+          src="/cma_logo.png"
+          alt="cma_logo"
+          format="webp"
+          loading="lazy"
+        />
       </div>
     </div>
   </div>

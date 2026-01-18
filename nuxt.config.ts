@@ -8,7 +8,6 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxt/fonts",
     "@nuxt/image",
-    "@nuxt/icon",
   ],
   fonts: {
     families: [
