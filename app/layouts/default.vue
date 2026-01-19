@@ -5,6 +5,7 @@
     </aside>
     <div class="flex-1 flex flex-col">
       <main class="">
+        <layoutHeader />
         <slot />
       </main>
     </div>

@@ -20,7 +20,7 @@ const isActive = (path: string) => {
         loading="lazy"
         sizes="50"
       />
-      <h1 class="text-primary font-bold text-lg">ComSecApp</h1>
+      <h1 class="text-primary font-bold text-xl">ComSecApp</h1>
     </div>
     <!-- Navigation Links -->
     <div class="flex flex-col gap-8 overflow-y-auto">
