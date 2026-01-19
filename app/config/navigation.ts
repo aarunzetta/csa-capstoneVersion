@@ -35,8 +35,8 @@ export const navigationConfig: NavSection[] = [
     title: "Tables",
     items: [
       {
-        label: "Trips",
-        path: "/trips",
+        label: "Rides",
+        path: "/rides",
         icon: CarTaxiFront,
       },
       {
