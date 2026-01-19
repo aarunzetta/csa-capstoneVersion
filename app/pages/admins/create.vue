@@ -1,5 +1,5 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div>Dashboard</div>
+  <div>Create Admin</div>
 </template>

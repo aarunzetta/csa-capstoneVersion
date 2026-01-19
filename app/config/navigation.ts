@@ -66,7 +66,7 @@ export const navigationConfig: NavSection[] = [
     items: [
       {
         label: "QR Code Generator",
-        path: "/qr-code",
+        path: "/qr-code-generator",
         icon: QrCode,
       },
       {
