@@ -35,8 +35,8 @@ export const navigationConfig: NavSection[] = [
     title: "Tables",
     items: [
       {
-        label: "Trips",
-        path: "/trips",
+        label: "Rides",
+        path: "/rides",
         icon: CarTaxiFront,
       },
       {
@@ -66,7 +66,7 @@ export const navigationConfig: NavSection[] = [
     items: [
       {
         label: "QR Code Generator",
-        path: "/qr-code",
+        path: "/qr-code-generator",
         icon: QrCode,
       },
       {
