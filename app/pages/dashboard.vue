@@ -76,13 +76,13 @@ const formatDate = (date: Date) => {
       />
     </div>
 
-    <!-- Rides Table -->
-
     <!-- Loading State -->
     <div v-if="isLoading" class="text-white">Loading rides...</div>
 
     <!-- Error State -->
     <div v-else-if="error" class="text-red-500">{{ error }}</div>
+
+    <!-- Rides Table -->
     <tablesDataTable v-else :columns="columns" :data="rides" :actions="false">
       <!-- Custom formatting for distance -->
       <template #cell-ride_distance_km="{ value }">
