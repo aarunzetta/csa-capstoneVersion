@@ -1,4 +1,3 @@
-// ...existing code...
 <script setup lang="ts">
 defineProps<{
   id: string;
@@ -17,7 +16,7 @@ function onInput(e: Event) {
   emit("update:modelValue", target.value);
 }
 </script>
-...existing code...
+
 <template>
   <div>
     <label :for="id" class="block text-sm font-medium text-slate-300 mb-2">
