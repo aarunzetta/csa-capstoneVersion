@@ -6,7 +6,11 @@
     <div class="flex-1 flex flex-col">
       <main>
         <layoutHeader />
-        <div class="bg-primary text-white p-6 h-full"><slot /></div>
+        <div
+          class="bg-gradient-to-br from-primary-dark via-primary to-primary-light text-white p-6"
+        >
+          <slot />
+        </div>
       </main>
     </div>
   </div>
