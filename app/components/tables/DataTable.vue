@@ -16,11 +16,18 @@ export interface TableColumn {
   sortable?: boolean;
 }
 
-const props = defineProps<{
-  columns: TableColumn[];
-  data: T[];
-  actions?: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    columns: TableColumn[];
+    data: T[];
+    actions?: boolean;
+    defaultEntriesPerPage?: number;
+  }>(),
+  {
+    actions: true,
+    defaultEntriesPerPage: 5,
+  },
+);
 
 const emit = defineEmits<{
   edit: [item: T];
@@ -30,7 +37,7 @@ const emit = defineEmits<{
 
 // Pagination
 const currentPage = ref(1);
-const entriesPerPage = ref(5);
+const entriesPerPage = ref(props.defaultEntriesPerPage);
 const entriesOptions = [5, 10, 15, 20];
 
 // Search

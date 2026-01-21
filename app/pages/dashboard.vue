@@ -82,21 +82,24 @@ const formatDate = (date: Date) => {
     <!-- Error State -->
     <div v-else-if="error" class="text-red-500">{{ error }}</div>
 
-    <!-- Rides Table -->
-    <tablesDataTable v-else :columns="columns" :data="rides" :actions="false">
-      <!-- Custom formatting for distance -->
-      <template #cell-ride_distance_km="{ value }">
-        <span class="text-blue-400">{{ value.toFixed(2) }} km</span>
-      </template>
-      <!-- Custom formatting for duration -->
-      <template #cell-ride_duration_minutes="{ value }">
-        <span class="text-green-400">{{ value }} min</span>
-      </template>
+    <div v-else>
+      <h3 class="text-white text-2xl mb-4">View Latest Rides</h3>
+      <!-- Rides Table -->
+      <tablesDataTable :columns="columns" :data="rides" :actions="false">
+        <!-- Custom formatting for distance -->
+        <template #cell-ride_distance_km="{ value }">
+          <span class="text-blue-400">{{ value.toFixed(2) }} km</span>
+        </template>
+        <!-- Custom formatting for duration -->
+        <template #cell-ride_duration_minutes="{ value }">
+          <span class="text-green-400">{{ value }} min</span>
+        </template>
 
-      <!-- Custom formatting for dates -->
-      <template #cell-completed_at="{ value }">
-        <span class="text-gray-300">{{ formatDate(value) }}</span>
-      </template>
-    </tablesDataTable>
+        <!-- Custom formatting for dates -->
+        <template #cell-completed_at="{ value }">
+          <span class="text-gray-300">{{ formatDate(value) }}</span>
+        </template>
+      </tablesDataTable>
+    </div>
   </div>
 </template>
