@@ -41,7 +41,7 @@ const formatDate = (date: Date) => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-8 h-dvh">
+  <div class="flex flex-col gap-8">
     <h2 class="text-white text-4xl">Dashboard</h2>
 
     <!-- Statistics Cards -->
