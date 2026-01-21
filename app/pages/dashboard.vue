@@ -85,7 +85,17 @@ const formatDate = (date: Date) => {
     <div v-else>
       <h3 class="text-white text-2xl mb-4">View Latest Rides</h3>
       <!-- Rides Table -->
-      <tablesDataTable :columns="columns" :data="rides" :actions="false">
+      <tablesDataTable
+        :columns="columns"
+        :data="rides"
+        :actions="true"
+        :action-buttons="{
+          view: true,
+          edit: false,
+          suspend: false,
+          delete: false,
+        }"
+      >
         <!-- Custom formatting for distance -->
         <template #cell-ride_distance_km="{ value }">
           <span class="text-blue-400">{{ value.toFixed(2) }} km</span>

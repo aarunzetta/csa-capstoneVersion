@@ -6,8 +6,7 @@ import { formatDate } from "../utils/dateFormatter";
 
 // Define columns for the Passengers table
 const columns: TableColumn[] = [
-  { key: "passenger_id", label: "Passenger ID", sortable: true },
-  { key: "passenger_name", label: "Passenger Name", sortable: true },
+  { key: "passenger_name", label: "Passenger", sortable: true },
   { key: "username", label: "Username", sortable: true },
   { key: "date_of_birth", label: "Date of Birth", sortable: true },
   { key: "email", label: "Email", sortable: true },
@@ -40,12 +39,22 @@ onMounted(() => {
         :data="passengers"
         :actions="true"
         :default-entries-per-page="10"
+        :action-buttons="{
+          view: true,
+          edit: true,
+          suspend: false,
+          delete: true,
+        }"
+        :action-labels="{
+          edit: 'Edit Passenger',
+          delete: 'Delete Passenger',
+        }"
       >
         <!-- Custom formatting for passenger name -->
         <template #cell-passenger_name="{ item }">
-          <span class="text-gray-300"
-            >{{ item.last_name }}, {{ item.first_name }}
-            {{ item.middle_name }}</span
+          <span class="text-gray-300 flex flex-col"
+            >{{ item.last_name }}, {{ item.first_name }} {{ item.middle_name }}
+            <span class="text-xs">#{{ item.passenger_id }}</span></span
           >
         </template>
 

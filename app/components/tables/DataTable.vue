@@ -7,6 +7,8 @@ import {
   Eye,
   Pencil,
   Trash2,
+  Ellipsis,
+  ShieldOff,
 } from "lucide-vue-next";
 import type { T } from "vue-router/dist/router-CWoNjPRp.mjs";
 
@@ -16,16 +18,40 @@ export interface TableColumn {
   sortable?: boolean;
 }
 
+export interface ActionButtons {
+  view?: boolean;
+  edit?: boolean;
+  suspend?: boolean;
+  delete?: boolean;
+}
+
+export interface ActionLabels {
+  edit?: string;
+  delete?: string;
+}
+
 const props = withDefaults(
   defineProps<{
     columns: TableColumn[];
     data: T[];
     actions?: boolean;
     defaultEntriesPerPage?: number;
+    actionButtons?: ActionButtons;
+    actionLabels?: ActionLabels;
   }>(),
   {
     actions: true,
     defaultEntriesPerPage: 5,
+    actionButtons: () => ({
+      view: true,
+      edit: true,
+      suspend: true,
+      delete: true,
+    }),
+    actionLabels: () => ({
+      edit: "Edit",
+      delete: "Delete",
+    }),
   },
 );
 
@@ -33,7 +59,13 @@ const emit = defineEmits<{
   edit: [item: T];
   delete: [item: T];
   view: [item: T];
+  suspend: [item: T];
 }>();
+
+// Action modal state
+const isActionModalOpen = ref(false);
+const selectedItem = ref<T | null>(null);
+const modalPosition = ref({ top: 0, left: 0 });
 
 // Pagination
 const currentPage = ref(1);
@@ -126,6 +158,53 @@ const handleEntriesChange = () => {
 const handleSearchChange = () => {
   currentPage.value = 1;
 };
+
+// Action modal methods
+const openActionModal = (item: T, event: MouseEvent) => {
+  selectedItem.value = item;
+  const button = event.currentTarget as HTMLButtonElement;
+  const rect = button.getBoundingClientRect();
+
+  modalPosition.value = {
+    top: rect.bottom - 12,
+    left: rect.left - 155,
+  };
+
+  isActionModalOpen.value = true;
+};
+
+const closeActionModal = () => {
+  isActionModalOpen.value = false;
+  selectedItem.value = null;
+};
+
+const handleView = () => {
+  if (selectedItem.value) {
+    emit("view", selectedItem.value);
+    closeActionModal();
+  }
+};
+
+const handleEdit = () => {
+  if (selectedItem.value) {
+    emit("edit", selectedItem.value);
+    closeActionModal();
+  }
+};
+
+const handleSuspend = () => {
+  if (selectedItem.value) {
+    emit("suspend", selectedItem.value);
+    closeActionModal();
+  }
+};
+
+const handleDelete = () => {
+  if (selectedItem.value) {
+    emit("delete", selectedItem.value);
+    closeActionModal();
+  }
+};
 </script>
 
 <template>
@@ -164,7 +243,7 @@ const handleSearchChange = () => {
           <th
             v-for="column in columns"
             :key="column.key"
-            class="p-3 text-left select-none"
+            class="p-2 text-left select-none"
             :class="column.sortable !== false ? 'cursor-pointer' : ''"
             @click="column.sortable !== false && handleSort(column.key)"
           >
@@ -201,7 +280,7 @@ const handleSearchChange = () => {
           <td
             v-for="column in columns"
             :key="column.key"
-            class="p-3 border-b border-[#3a3a3a]"
+            class="p-2 border-b border-[#3a3a3a]"
           >
             <slot
               :name="`cell-${column.key}`"
@@ -212,30 +291,14 @@ const handleSearchChange = () => {
             </slot>
           </td>
 
-          <td v-if="actions" class="p-3 border-b border-[#3a3a3a]">
+          <td v-if="actions" class="p-2 border-b border-[#3a3a3a] relative">
             <slot name="actions" :item="item">
-              <div class="flex gap-4">
-                <button
-                  class="bg-none border-none cursor-pointer hover:opacity-70"
-                  @click="emit('view', item)"
-                >
-                  <Eye class="w-5 h-5" />
-                </button>
-
-                <button
-                  class="bg-none border-none cursor-pointer hover:opacity-70"
-                  @click="emit('edit', item)"
-                >
-                  <Pencil class="w-5 h-5" />
-                </button>
-
-                <button
-                  class="bg-none border-none cursor-pointer hover:opacity-70"
-                  @click="emit('delete', item)"
-                >
-                  <Trash2 class="w-5 h-5" />
-                </button>
-              </div>
+              <button
+                class="bg-none border-none cursor-pointer hover:opacity-70 rounded hover:bg-gray-700 transition-colors"
+                @click="openActionModal(item, $event)"
+              >
+                <Ellipsis class="w-5 h-5" />
+              </button>
             </slot>
           </td>
         </tr>
@@ -277,6 +340,74 @@ const handleSearchChange = () => {
         >
           Next
         </button>
+      </div>
+    </div>
+    <!-- Action Modal -->
+    <div
+      v-if="isActionModalOpen"
+      class="fixed inset-0 z-40"
+      @click="closeActionModal"
+    ></div>
+    <div
+      v-if="isActionModalOpen"
+      class="fixed z-50 bg-secondary-dark rounded-lg p-1 w-48 shadow-xl border border-[#3a3a3a]"
+      :style="{
+        top: `${modalPosition.top}px`,
+        left: `${modalPosition.left}px`,
+      }"
+    >
+      <!-- Modal Actions -->
+      <div class="flex flex-col gap-1">
+        <div
+          v-if="props.actionButtons.view || props.actionButtons.edit"
+          class="flex flex-col gap-1"
+          :class="
+            props.actionButtons.suspend || props.actionButtons.delete
+              ? 'border-b border-[#3a3a3a]'
+              : ''
+          "
+        >
+          <button
+            v-if="props.actionButtons.view"
+            class="flex items-center gap-4 w-full p-2 text-left rounded hover:bg-blue-500 transition-colors text-white text-sm"
+            @click="handleView"
+          >
+            <Eye class="w-4 h-4 text-[#9c9c9c]" />
+            <span class="font-medium">View Details</span>
+          </button>
+
+          <button
+            v-if="props.actionButtons.edit"
+            class="flex items-center gap-4 w-full p-2 text-left rounded hover:bg-blue-500 transition-colors text-white text-sm"
+            @click="handleEdit"
+          >
+            <Pencil class="w-4 h-4 text-[#9c9c9c]" />
+            <span class="font-medium">{{ props.actionLabels.edit }}</span>
+          </button>
+        </div>
+        <div
+          v-if="props.actionButtons.suspend || props.actionButtons.delete"
+          class="flex flex-col gap-1"
+        >
+          <button
+            v-if="props.actionButtons.suspend"
+            class="flex items-center gap-4 w-full p-2 text-left rounded hover:bg-blue-500 transition-colors text-white text-sm"
+            @click="handleSuspend"
+          >
+            <ShieldOff class="w-4 h-4 text-[#9c9c9c]" />
+            <span class="font-medium text-warning">Suspend</span>
+          </button>
+          <button
+            v-if="props.actionButtons.delete"
+            class="flex items-center gap-4 w-full p-2 text-left rounded hover:bg-blue-500 transition-colors text-white text-sm"
+            @click="handleDelete"
+          >
+            <Trash2 class="w-4 h-4 text-[#9c9c9c]" />
+            <span class="font-medium text-danger">{{
+              props.actionLabels.delete
+            }}</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
