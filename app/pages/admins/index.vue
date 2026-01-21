@@ -1,5 +1,112 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted } from "vue";
+import type { TableColumn } from "../../types";
+import { useAdmins } from "../../composables/useAdmins";
+import { formatDate } from "../../utils/dateFormatter";
+import { formatLastLogin } from "../../utils/lastLoginFormatter";
+import { Dot } from "lucide-vue-next";
+
+// Define columns for the admins table
+const columns: TableColumn[] = [
+  { key: "admin_id", label: "Admin ID", sortable: true },
+  { key: "admin_name", label: "Admin", sortable: true },
+  { key: "role", label: "Role", sortable: false },
+  { key: "is_active", label: "Status", sortable: false },
+  { key: "last_login", label: "Last Login", sortable: true },
+  { key: "registered_at", label: "Registered At", sortable: true },
+];
+
+// Use the admins composable
+const { admins, isLoading, error, fetchAdmins } = useAdmins();
+
+// Fetch admins when component mounts
+onMounted(() => {
+  fetchAdmins();
+});
+
+type ColorMap = Record<string, string>;
+
+const getStatusColor = (
+  value: string,
+  map: ColorMap,
+  fallback = "text-white",
+): string => {
+  return map[value] || fallback;
+};
+
+const roleColors: ColorMap = {
+  superadmin: "text-success",
+  admin: "text-info",
+  moderator: "text-warning",
+};
+
+const getStatusMeta = (value: number) => {
+  if (value === 1) {
+    return {
+      label: "Active",
+      color: "text-success",
+    };
+  }
+
+  return {
+    label: "Inactive",
+    color: "text-danger",
+  };
+};
+</script>
 
 <template>
-  <div>Admins</div>
+  <div class="flex flex-col gap-8">
+    <h2 class="text-white text-4xl">Admins</h2>
+    <!-- Loading State -->
+    <div v-if="isLoading" class="text-white">Loading admins...</div>
+
+    <!-- Error State -->
+    <div v-else-if="error" class="text-red-500">{{ error }}</div>
+
+    <div v-else>
+      <!-- admins Table -->
+      <tablesDataTable
+        :columns="columns"
+        :data="admins"
+        :actions="true"
+        :default-entries-per-page="10"
+      >
+        <!-- Custom formatting for admin name -->
+        <template #cell-admin_name="{ item }">
+          <span class="text-gray-300 flex flex-col"
+            >{{ item.last_name }}, {{ item.first_name }}
+            <span class="text-sm">{{ item.email }}</span>
+          </span>
+        </template>
+
+        <!-- Custom formatting for role -->
+        <template #cell-role="{ value }">
+          <span :class="getStatusColor(value, roleColors)">{{ value }}</span>
+        </template>
+
+        <!-- Custom formatting for status -->
+        <template #cell-is_active="{ value }">
+          <span class="flex items-center gap-1 text-white">
+            <Dot :class="['w-6 h-6', getStatusMeta(value).color]" />
+            <span>{{ getStatusMeta(value).label }}</span>
+          </span>
+        </template>
+
+        <!-- Custom formatting for last login -->
+        <template #cell-last_login="{ value }">
+          <span class="text-white">
+            {{ formatLastLogin(value) }}
+          </span>
+        </template>
+
+        <!-- Custom formatting for dates -->
+        <template #cell-registered_at="{ item }">
+          <span class="text-white">{{
+            formatDate(item.registered_at, false)
+          }}</span>
+        </template>
+      </tablesDataTable>
+    </div>
+  </div>
 </template>
