@@ -5,3 +5,5 @@ export type { TableColumn } from "./table";
 export type { Ride, RideFormData } from "./ride";
 
 export type { Driver } from "./driver";
+
+export type { Passenger } from "./passenger";
