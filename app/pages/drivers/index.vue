@@ -3,8 +3,12 @@ import { onMounted } from "vue";
 import type { TableColumn } from "../../types";
 import { useDrivers } from "../../composables/useDrivers";
 import { formatDate } from "../../utils/dateFormatter";
+import {
+  getStatusColor,
+  type ColorMap,
+} from "../../utils/statusColorFormatter";
 
-// Define columns for the Rides table
+// Define columns for the Drivers table
 const columns: TableColumn[] = [
   { key: "driver_name", label: "Driver", sortable: false },
   { key: "date_of_birth", label: "Date of Birth", sortable: true },
@@ -19,23 +23,13 @@ const columns: TableColumn[] = [
   { key: "register_at", label: "Registered At", sortable: true },
 ];
 
-// Use the rides composable
+// Use the drivers composable
 const { drivers, isLoading, error, fetchDrivers } = useDrivers();
 
-// Fetch rides when component mounts
+// Fetch drivers when component mounts
 onMounted(() => {
   fetchDrivers();
 });
-
-type ColorMap = Record<string, string>;
-
-const getStatusColor = (
-  value: string,
-  map: ColorMap,
-  fallback = "text-white",
-): string => {
-  return map[value] || fallback;
-};
 
 const licenseStatusColors: ColorMap = {
   active: "text-success",
@@ -62,7 +56,7 @@ const vehicleOwnershipColors: ColorMap = {
     <div v-else-if="error" class="text-red-500">{{ error }}</div>
 
     <div v-else>
-      <!-- Rides Table -->
+      <!-- Drivers Table -->
       <tablesDataTable
         :columns="columns"
         :data="drivers"

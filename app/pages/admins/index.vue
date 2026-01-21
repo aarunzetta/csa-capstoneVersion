@@ -4,6 +4,10 @@ import type { TableColumn } from "../../types";
 import { useAdmins } from "../../composables/useAdmins";
 import { formatDate } from "../../utils/dateFormatter";
 import { formatLastLogin } from "../../utils/lastLoginFormatter";
+import {
+  getStatusColor,
+  type ColorMap,
+} from "../../utils/statusColorFormatter";
 import { Dot } from "lucide-vue-next";
 
 // Define columns for the admins table
@@ -22,16 +26,6 @@ const { admins, isLoading, error, fetchAdmins } = useAdmins();
 onMounted(() => {
   fetchAdmins();
 });
-
-type ColorMap = Record<string, string>;
-
-const getStatusColor = (
-  value: string,
-  map: ColorMap,
-  fallback = "text-white",
-): string => {
-  return map[value] || fallback;
-};
 
 const roleColors: ColorMap = {
   superadmin: "text-success",
