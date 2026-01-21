@@ -3,8 +3,13 @@ import { onMounted } from "vue";
 import type { TableColumn } from "../../types";
 import { useDrivers } from "../../composables/useDrivers";
 import { formatDate } from "../../utils/dateFormatter";
+import {
+  getStatusColor,
+  type ColorMap,
+} from "../../utils/statusColorFormatter";
+import { capitalize } from "../../utils/capitalizeFormatter";
 
-// Define columns for the Rides table
+// Define columns for the Drivers table
 const columns: TableColumn[] = [
   { key: "driver_name", label: "Driver", sortable: false },
   { key: "date_of_birth", label: "Date of Birth", sortable: true },
@@ -19,36 +24,33 @@ const columns: TableColumn[] = [
   { key: "register_at", label: "Registered At", sortable: true },
 ];
 
-// Use the rides composable
+// Use the drivers composable
 const { drivers, isLoading, error, fetchDrivers } = useDrivers();
 
-// Fetch rides when component mounts
+// Fetch drivers when component mounts
 onMounted(() => {
   fetchDrivers();
 });
 
-type ColorMap = Record<string, string>;
-
-const getStatusColor = (
-  value: string,
-  map: ColorMap,
-  fallback = "text-white",
-): string => {
-  return map[value] || fallback;
-};
-
 const licenseStatusColors: ColorMap = {
-  active: "text-success",
-  expired: "text-warning",
-  suspended: "text-warning",
-  revoked: "text-danger",
+  active:
+    "text-success border border-success py-[6px] px-3 rounded-2xl bg-teal-900",
+  expired:
+    "text-danger border border-danger py-[6px] px-3 rounded-2xl bg-rose-950",
+  suspended:
+    "text-warning border border-warning py-[6px] px-3 rounded-2xl bg-amber-950",
+  revoked:
+    "text-gray-600 border border-gray-600 py-[6px] px-3 rounded-2xl bg-gray-900",
 };
 
 const vehicleOwnershipColors: ColorMap = {
-  owned: "text-info",
-  rented: "text-warning",
-  company: "text-success",
-  other: "text-secondary-light",
+  owned: "text-info border border-info py-[6px] px-3 rounded-2xl bg-blue-950",
+  rented:
+    "text-warning border border-warning py-[6px] px-3 rounded-2xl bg-amber-950",
+  company:
+    "text-success border border-success py-[6px] px-3 rounded-2xl bg-teal-900",
+  other:
+    "text-secondary-light border border-secondary-light py-[6px] px-3 rounded-2xl bg-slate-300",
 };
 </script>
 
@@ -59,10 +61,10 @@ const vehicleOwnershipColors: ColorMap = {
     <div v-if="isLoading" class="text-white">Loading drivers...</div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="text-red-500">{{ error }}</div>
+    <div v-else-if="error" class="text-danger">{{ error }}</div>
 
     <div v-else>
-      <!-- Rides Table -->
+      <!-- Drivers Table -->
       <tablesDataTable
         :columns="columns"
         :data="drivers"
@@ -90,16 +92,20 @@ const vehicleOwnershipColors: ColorMap = {
 
         <!-- Custom formatting for license status -->
         <template #cell-license_status="{ value }">
-          <span :class="getStatusColor(value, licenseStatusColors)">{{
-            value
-          }}</span>
+          <span
+            class="text-sm"
+            :class="getStatusColor(value, licenseStatusColors)"
+            >{{ capitalize(value) }}</span
+          >
         </template>
 
         <!-- Custom formatting for vehicle ownership -->
         <template #cell-vehicle_ownership="{ value }">
-          <span :class="getStatusColor(value, vehicleOwnershipColors)">{{
-            value
-          }}</span>
+          <span
+            class="text-sm"
+            :class="getStatusColor(value, vehicleOwnershipColors)"
+            >{{ capitalize(value) }}</span
+          >
         </template>
 
         <!-- Custom formatting for dates -->

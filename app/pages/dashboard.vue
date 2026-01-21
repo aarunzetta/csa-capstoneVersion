@@ -3,6 +3,7 @@ import { Users, IdCard, CarTaxiFront, UserStar } from "lucide-vue-next";
 import { ref, onMounted } from "vue";
 import type { TableColumn } from "../types";
 import { useRides } from "../composables/useRides";
+import { formatDate } from "../utils/dateFormatter";
 
 // Card statistics
 const passengersCount = ref(1);
@@ -27,17 +28,6 @@ const { rides, isLoading, error, fetchRides } = useRides();
 onMounted(() => {
   fetchRides();
 });
-
-// Helper function to format dates
-const formatDate = (date: Date) => {
-  return new Date(date).toLocaleString("en-PH", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-};
 </script>
 
 <template>
