@@ -291,10 +291,10 @@ const handleDelete = () => {
             </slot>
           </td>
 
-          <td v-if="actions" class="p-3 border-b border-[#3a3a3a] relative">
+          <td v-if="actions" class="p-2 border-b border-[#3a3a3a] relative">
             <slot name="actions" :item="item">
               <button
-                class="bg-none border-none cursor-pointer hover:opacity-70 p-2 rounded hover:bg-gray-700 transition-colors"
+                class="bg-none border-none cursor-pointer hover:opacity-70 rounded hover:bg-gray-700 transition-colors"
                 @click="openActionModal(item, $event)"
               >
                 <Ellipsis class="w-5 h-5" />

@@ -8,7 +8,6 @@ import { Dot } from "lucide-vue-next";
 
 // Define columns for the admins table
 const columns: TableColumn[] = [
-  { key: "admin_id", label: "Admin ID", sortable: true },
   { key: "admin_name", label: "Admin", sortable: true },
   { key: "role", label: "Role", sortable: false },
   { key: "is_active", label: "Status", sortable: false },
@@ -49,7 +48,7 @@ const getStatusMeta = (value: number) => {
   }
 
   return {
-    label: "Inactive",
+    label: "Suspended",
     color: "text-danger",
   };
 };
@@ -71,12 +70,17 @@ const getStatusMeta = (value: number) => {
         :data="admins"
         :actions="true"
         :default-entries-per-page="10"
+        :action-labels="{
+          edit: 'Edit Admin',
+          delete: 'Delete Admin',
+        }"
       >
         <!-- Custom formatting for admin name -->
         <template #cell-admin_name="{ item }">
           <span class="text-gray-300 flex flex-col"
             >{{ item.last_name }}, {{ item.first_name }}
-            <span class="text-sm">{{ item.email }}</span>
+            <span class="text-xs">{{ item.email }}</span>
+            <span class="text-xs">#{{ item.admin_id }}</span>
           </span>
         </template>
 

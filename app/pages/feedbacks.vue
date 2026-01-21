@@ -61,6 +61,12 @@ onMounted(() => {
         :data="feedbacks"
         :actions="true"
         :default-entries-per-page="10"
+        :action-buttons="{
+          view: true,
+          edit: false,
+          suspend: false,
+          delete: false,
+        }"
       >
         <!-- Custom formatting for rating with stars -->
         <template #cell-rating="{ item }">

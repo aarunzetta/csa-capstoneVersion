@@ -6,8 +6,7 @@ import { formatDate } from "../../utils/dateFormatter";
 
 // Define columns for the Rides table
 const columns: TableColumn[] = [
-  { key: "driver_id", label: "Driver ID", sortable: true },
-  { key: "driver_name", label: "Driver Name", sortable: false },
+  { key: "driver_name", label: "Driver", sortable: false },
   { key: "date_of_birth", label: "Date of Birth", sortable: true },
   { key: "phone_number", label: "Phone Number", sortable: false },
   { key: "license_status", label: "License Status", sortable: true },
@@ -69,13 +68,24 @@ const vehicleOwnershipColors: ColorMap = {
         :data="drivers"
         :actions="true"
         :default-entries-per-page="10"
+        :action-buttons="{
+          view: true,
+          edit: true,
+          suspend: false,
+          delete: true,
+        }"
+        :action-labels="{
+          edit: 'Edit Driver',
+          delete: 'Delete Driver',
+        }"
       >
         <!-- Custom formatting for driver name -->
         <template #cell-driver_name="{ item }">
-          <span class="text-gray-300"
+          <span class="text-gray-300 flex flex-col"
             >{{ item.last_name }}, {{ item.first_name }}
-            {{ item.middle_name }}</span
-          >
+            {{ item.middle_name }}
+            <span class="text-xs">#{{ item.driver_id }}</span>
+          </span>
         </template>
 
         <!-- Custom formatting for license status -->

@@ -40,8 +40,14 @@ onMounted(() => {
       <tablesDataTable
         :columns="columns"
         :data="rides"
-        :actions="false"
+        :actions="true"
         :default-entries-per-page="10"
+        :action-buttons="{
+          view: true,
+          edit: false,
+          suspend: false,
+          delete: false,
+        }"
       >
         <!-- Custom formatting for distance -->
         <template #cell-ride_distance_km="{ value }">
