@@ -9,6 +9,7 @@ import {
   type ColorMap,
 } from "../../utils/statusColorFormatter";
 import { Dot } from "lucide-vue-next";
+import { capitalize } from "../../utils/capitalizeFormatter";
 
 // Define columns for the admins table
 const columns: TableColumn[] = [
@@ -28,9 +29,11 @@ onMounted(() => {
 });
 
 const roleColors: ColorMap = {
-  superadmin: "text-success",
-  admin: "text-info",
-  moderator: "text-warning",
+  superadmin:
+    "text-success  border border-success py-[6px] px-3 rounded-2xl bg-teal-900",
+  admin: "text-info border border-info py-[6px] px-3 rounded-2xl bg-blue-950",
+  moderator:
+    "text-warning border border-warning py-[6px] px-3 rounded-2xl bg-amber-950",
 };
 
 const getStatusMeta = (value: number) => {
@@ -80,7 +83,9 @@ const getStatusMeta = (value: number) => {
 
         <!-- Custom formatting for role -->
         <template #cell-role="{ value }">
-          <span :class="getStatusColor(value, roleColors)">{{ value }}</span>
+          <span class="text-sm" :class="getStatusColor(value, roleColors)">{{
+            capitalize(value)
+          }}</span>
         </template>
 
         <!-- Custom formatting for status -->

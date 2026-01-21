@@ -21,16 +21,18 @@ const { feedbacks, isLoading, error, fetchFeedbacks } = useFeedbacks();
 
 // Function to get sentiment based on rating
 const getSentiment = (rating: number) => {
-  if (rating >= 4) return "positive";
-  if (rating === 3) return "neutral";
-  return "negative";
+  if (rating >= 4) return "Positive";
+  if (rating === 3) return "Neutral";
+  return "Negative";
 };
 
 // Function to get sentiment color class
 const getSentimentColor = (rating: number) => {
-  if (rating >= 4) return "text-success";
-  if (rating === 3) return "text-warning";
-  return "text-danger";
+  if (rating >= 4)
+    return "text-success border border-success py-[6px] px-3 rounded-2xl bg-teal-900";
+  if (rating === 3)
+    return "text-warning border border-warning py-[6px] px-3 rounded-2xl bg-amber-950";
+  return "text-danger border border-danger py-[6px] px-3 rounded-2xl bg-rose-950";
 };
 
 // Function to truncate comments
@@ -88,7 +90,7 @@ onMounted(() => {
 
         <!-- Custom formatting for sentiment -->
         <template #cell-sentiment="{ item }">
-          <span :class="getSentimentColor(item.rating)">
+          <span class="text-sm" :class="getSentimentColor(item.rating)">
             {{ getSentiment(item.rating) }}
           </span>
         </template>
