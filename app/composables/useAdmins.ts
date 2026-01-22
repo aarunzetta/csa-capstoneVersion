@@ -1,76 +1,138 @@
 import type { Admin } from "../types";
 
+interface AdminsResponse {
+  success: boolean;
+  count: number;
+  data: Admin[];
+}
+
+interface AdminResponse {
+  success: boolean;
+  data: Admin;
+}
+
+interface DeleteResponse {
+  success: boolean;
+  message: string;
+}
+
 export const useAdmins = () => {
+  const { apiFetch } = useApi();
   const admins = ref<Admin[]>([]);
   const isLoading = ref(false);
   const error = ref<string | null>(null);
 
-  // for API integration
+  // Fetch all admins from API
   const fetchAdmins = async () => {
     isLoading.value = true;
     error.value = null;
 
     try {
-      // Will Replace with actual API call when ready
-      // const response = await $fetch<Admin[]>('/api/admins');
-      // admins.value = response;
+      const response = await apiFetch<AdminsResponse>("/admins");
 
-      // Mock data for now
-      admins.value = [
-        {
-          admin_id: 1,
-          username: "jojoKing",
-          first_name: "Joe",
-          last_name: "King",
-          email: "joeking@gmail.com",
-          role: "moderator",
-          is_active: 2,
-          registered_at: new Date("2023-01-15T10:00:00Z"),
-          last_login: new Date("2024-06-10T08:30:00Z"),
-        },
-        {
-          admin_id: 2,
-          username: "sara565",
-          first_name: "Sara",
-          last_name: "Liu",
-          email: "saraliu77@gmail.com",
-          role: "admin",
-          is_active: 1,
-          registered_at: new Date("2022-11-20T14:45:00Z"),
-          last_login: new Date("2026-01-19T16:15:00Z"),
-        },
-        {
-          admin_id: 3,
-          username: "mikeT99",
-          first_name: "Mike",
-          last_name: "Tyson",
-          email: "mikeyty10@work.com",
-          role: "superadmin",
-          is_active: 1,
-          registered_at: new Date("2023-05-05T09:20:00Z"),
-          last_login: new Date("2026-01-21T09:40:00Z"),
-        },
-      ];
-    } catch (err) {
-      error.value = "Failed to fetch admins";
-      console.error(err);
+      if (response.success) {
+        admins.value = response.data;
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        error.value = err.message;
+      } else {
+        error.value = "Failed to fetch admins";
+      }
+      console.error("Fetch admins error:", err);
     } finally {
       isLoading.value = false;
     }
   };
 
+  // Get single admin by ID
+  const getAdminById = async (id: number) => {
+    try {
+      const response = await apiFetch<AdminResponse>(`/admins/${id}`);
+      return response.data;
+    } catch (err: unknown) {
+      console.error("Get admin error:", err);
+      throw err;
+    }
+  };
+
+  // Create new admin
+  const createAdmin = async (
+    adminData: Partial<Admin> & { password: string },
+  ) => {
+    try {
+      const response = await apiFetch<{
+        success: boolean;
+        message: string;
+        data: Admin;
+      }>("/admins", {
+        method: "POST",
+        body: JSON.stringify(adminData),
+      });
+
+      if (response.success) {
+        // Refresh the list
+        await fetchAdmins();
+        return { success: true, data: response.data };
+      }
+
+      return { success: false, message: response.message };
+    } catch (err: unknown) {
+      console.error("Create admin error:", err);
+      if (err instanceof Error) {
+        return { success: false, message: err.message };
+      }
+      return { success: false, message: "Failed to create admin" };
+    }
+  };
+
+  // Update admin
+  const updateAdmin = async (id: number, adminData: Partial<Admin>) => {
+    try {
+      const response = await apiFetch<{ success: boolean; message: string }>(
+        `/admins/${id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify(adminData),
+        },
+      );
+
+      if (response.success) {
+        // Refresh the list
+        await fetchAdmins();
+        return { success: true };
+      }
+
+      return { success: false, message: response.message };
+    } catch (err: unknown) {
+      console.error("Update admin error:", err);
+      if (err instanceof Error) {
+        return { success: false, message: err.message };
+      }
+      return { success: false, message: "Failed to update admin" };
+    }
+  };
+
+  // Delete admin
   const deleteAdmin = async (id: number) => {
     try {
-      // will replace with actual API call when ready
-      // await $fetch(`/api/admins/${id}`, { method: 'DELETE' });
+      const response = await apiFetch<DeleteResponse>(`/admins/${id}`, {
+        method: "DELETE",
+      });
 
-      admins.value = admins.value.filter(
-        (r: { admin_id: number }) => r.admin_id !== id,
-      );
-      return true;
-    } catch (err) {
-      console.error(err);
-      return false;
+      if (response.success) {
+        // Remove from local array
+        admins.value = admins.value.filter((admin) => admin.admin_id !== id);
+        return { success: true };
+      }
+
+      return { success: false, message: response.message };
+    } catch (err: unknown) {
+      console.error("Delete admin error:", err);
+      if (err instanceof Error) {
+        return { success: false, message: err.message };
+      }
+      return { success: false, message: "Failed to delete admin" };
     }
   };
 
@@ -79,6 +141,9 @@ export const useAdmins = () => {
     isLoading,
     error,
     fetchAdmins,
+    getAdminById,
+    createAdmin,
+    updateAdmin,
     deleteAdmin,
   };
 };
