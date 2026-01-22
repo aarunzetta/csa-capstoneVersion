@@ -1,75 +1,116 @@
-# Nuxt Minimal Starter
+# Commuter Security Application - Admin Dashboard
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A modern admin dashboard built with **Nuxt 3**, **Vue 3**, **Pinia**, and **TypeScript** for managing a commuter security platform. This application provides comprehensive statistics, user management, and ride tracking capabilities.
 
-## Setup
+## Features
 
-Make sure to install dependencies:
+- **Dashboard Analytics** - Real-time statistics for passengers, drivers, rides, and admins
+- **User Management** - Manage passengers, drivers, and admin accounts
+- **Ride Tracking** - View and monitor all rides with detailed information
+- **Authentication** - Secure middleware-protected routes
+- **Responsive Design** - Mobile-friendly UI with TailwindCSS
+- **Type Safety** - Full TypeScript support for better development experience
 
-```bash
-# npm
-npm install
+## Tech Stack
 
-# pnpm
-pnpm install
+- **Framework**: Nuxt 3
+- **UI Framework**: Vue 3
+- **Language**: TypeScript
+- **Styling**: TailwindCSS
+- **Icons**: Lucide Vue Next
+- **API Client**: Custom composables with error handling
 
-# yarn
-yarn install
+## Project Structure
 
-# bun
-bun install
+```
+app/
+├── pages/           # Page components (dashboard, passengers, drivers, etc.)
+├── composables/     # Reusable logic (useRides, useDashboard, useApi, etc.)
+├── components/      # Reusable UI components
+├── utils/           # Utility functions (date formatting, etc.)
+├── types/           # TypeScript type definitions
+└── middleware/      # Route middleware (auth, etc.)
 ```
 
-## Development Server
+## Getting Started
+
+### Prerequisites
+
+- Node.js 16+
+- npm, pnpm, yarn, or bun
+
+### Installation
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+### Development Server
 
 Start the development server on `http://localhost:3000`:
 
 ```bash
-# npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+The application will be available at `http://localhost:3000` with hot module replacement enabled.
+
+### Build for Production
 
 Build the application for production:
 
 ```bash
-# npm
 npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
 ```
 
-Locally preview production build:
+### Preview Production Build
+
+Locally preview the production build:
 
 ```bash
-# npm
 npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## API Integration
+
+The dashboard integrates with a backend API for:
+
+- **Dashboard Stats** - Fetches total passengers, drivers, rides, admins, and active drivers
+- **Rides Data** - Retrieves ride history with pickup/dropoff locations and timestamps
+- **User Management** - CRUD operations for passengers, drivers, and admins
+
+### Example API Response (Dashboard Stats)
+
+```json
+{
+  "success": true,
+  "data": {
+    "totalPassengers": 924,
+    "totalDrivers": 420,
+    "totalRides": 3169,
+    "totalAdmins": 5,
+    "todayRides": 169,
+    "activeDrivers": 402
+  }
+}
+```
+
+## Key Composables
+
+- **useDashboard** - Manages dashboard statistics and data fetching
+- **useRides** - Handles ride data retrieval and management
+- **useApi** - Custom API client with error handling
+
+## Authentication
+
+Routes are protected with the `auth` middleware. Ensure users are authenticated before accessing protected pages.
+
+## Deployment
+
+For deployment information, check out the [Nuxt deployment documentation](https://nuxt.com/docs/getting-started/deployment).
+
+## License
+
+This project is part of the CSA Capstone program.
