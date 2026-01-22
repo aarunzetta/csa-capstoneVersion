@@ -16,5 +16,5 @@ export interface Driver {
   vehicle_ownership: "owned" | "rented" | "company" | "other";
   vehicle_plate_number: string;
   qr_code: string;
-  register_at: Date;
+  registered_at: Date | string;
 }

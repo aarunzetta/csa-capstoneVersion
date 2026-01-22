@@ -21,7 +21,7 @@ const columns: TableColumn[] = [
     sortable: false,
   },
   { key: "vehicle_ownership", label: "Vehicle Ownership", sortable: true },
-  { key: "register_at", label: "Registered At", sortable: true },
+  { key: "registered_at", label: "Registered At", sortable: true },
 ];
 
 // Use the drivers composable
@@ -112,7 +112,7 @@ const vehicleOwnershipColors: ColorMap = {
         <template #cell-date_of_birth="{ value }">
           <span class="text-gray-300">{{ formatDate(value, false) }}</span>
         </template>
-        <template #cell-register_at="{ value }">
+        <template #cell-registered_at="{ value }">
           <span class="text-gray-300">{{ formatDate(value, false) }}</span>
         </template>
       </tablesDataTable>
