@@ -2,12 +2,21 @@
 import { useRoute } from "vue-router";
 import { navigationConfig } from "../../config/navigation";
 import { useSidebar } from "../../composables/useSidebar";
+import { LogOut } from "lucide-vue-next";
+import { useAuth } from "../../composables/useAuth";
 
 const route = useRoute();
 const { isOpen } = useSidebar();
+const { logout } = useAuth();
 
 const isActive = (path: string) => {
   return route.path === path || route.path.startsWith(path + "/");
+};
+
+const handleLogout = async () => {
+  if (confirm("Are you sure you want to logout?")) {
+    await logout();
+  }
 };
 </script>
 
@@ -38,7 +47,7 @@ const isActive = (path: string) => {
     </div>
     <!-- Navigation Links -->
     <div class="flex flex-col gap-8 overflow-y-auto overflow-x-hidden">
-      <template v-for="section in navigationConfig" :key="section.title">
+      <div v-for="section in navigationConfig" :key="section.title">
         <!-- Section Items -->
         <div v-if="!section.title" class="flex flex-col">
           <NuxtLink
@@ -99,7 +108,23 @@ const isActive = (path: string) => {
             </span>
           </NuxtLink>
         </div>
-      </template>
+      </div>
+    </div>
+    <!-- Logout Section at Bottom -->
+    <div class="border-t border-gray-200 mt-auto overflow-hidden">
+      <!-- Logout Button -->
+      <button
+        class="w-full flex gap-2 items-center cursor-pointer py-3 px-8 text-danger hover:bg-red-50 transition-colors duration-200"
+        @click="handleLogout"
+      >
+        <LogOut class="flex-shrink-0" :size="20" />
+        <span
+          v-if="isOpen"
+          class="whitespace-nowrap transition-opacity duration-300"
+        >
+          Logout
+        </span>
+      </button>
     </div>
   </div>
 </template>

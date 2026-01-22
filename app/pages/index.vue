@@ -1,15 +1,35 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
+import { useAuth } from "../composables/useAuth";
 
 definePageMeta({
   layout: false,
+  middleware: "auth",
 });
+
+const { login, isLoading } = useAuth();
 
 const username = ref("");
 const password = ref("");
+const errorMessage = ref("");
 
-const handleLogin = () => {
-  navigateTo("/dashboard");
+const handleLogin = async () => {
+  // Clear previous errors
+  errorMessage.value = "";
+
+  // Validate inputs
+  if (!username.value || !password.value) {
+    errorMessage.value = "Please enter both username and password";
+    return;
+  }
+
+  // Call login function
+  const result = await login(username.value, password.value);
+
+  if (!result.success) {
+    errorMessage.value = result.message || "Login failed";
+  }
+  // If success, the login composable will redirect to dashboard
 };
 </script>
 
@@ -30,6 +50,11 @@ const handleLogin = () => {
           </h1>
         </div>
 
+        <!-- Error Message -->
+        <div v-if="errorMessage" class="mb-4">
+          <p class="text-red-500 text-sm">{{ errorMessage }}</p>
+        </div>
+
         <!-- Form -->
         <form class="space-y-6" @submit.prevent="handleLogin">
           <!-- Username Field -->
@@ -38,6 +63,7 @@ const handleLogin = () => {
             v-model="username"
             label="Username"
             placeholder="Enter username"
+            :disabled="isLoading"
           />
 
           <!-- Password Field -->
@@ -47,10 +73,17 @@ const handleLogin = () => {
             type="password"
             label="Password"
             placeholder="Enter password"
+            :disabled="isLoading"
           />
 
           <!-- Login Button -->
-          <button type="submit" class="w-full btn-primary">Login</button>
+          <button
+            type="submit"
+            class="w-full btn-primary"
+            :disabled="isLoading"
+          >
+            {{ isLoading ? "Logging in..." : "Login" }}
+          </button>
         </form>
       </div>
 

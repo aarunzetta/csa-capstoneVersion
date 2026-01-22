@@ -16,7 +16,7 @@ const columns: TableColumn[] = [
   { key: "admin_name", label: "Admin", sortable: true },
   { key: "role", label: "Role", sortable: false },
   { key: "is_active", label: "Status", sortable: false },
-  { key: "last_login", label: "Last Login", sortable: true },
+  { key: "last_login_at", label: "Last Login", sortable: true },
   { key: "registered_at", label: "Registered At", sortable: true },
 ];
 
@@ -75,7 +75,7 @@ const getStatusMeta = (value: number) => {
         <!-- Custom formatting for admin name -->
         <template #cell-admin_name="{ item }">
           <span class="text-gray-300 flex flex-col"
-            >{{ item.last_name }}, {{ item.first_name }}
+            >{{ item.first_name }} {{ item.last_name }}
             <span class="text-xs">{{ item.email }}</span>
             <span class="text-xs">#{{ item.admin_id }}</span>
           </span>
@@ -97,17 +97,15 @@ const getStatusMeta = (value: number) => {
         </template>
 
         <!-- Custom formatting for last login -->
-        <template #cell-last_login="{ value }">
+        <template #cell-last_login_at="{ value }">
           <span class="text-white">
             {{ formatLastLogin(value) }}
           </span>
         </template>
 
         <!-- Custom formatting for dates -->
-        <template #cell-registered_at="{ item }">
-          <span class="text-white">{{
-            formatDate(item.registered_at, false)
-          }}</span>
+        <template #cell-registered_at="{ value }">
+          <span class="text-white">{{ formatDate(value, false) }}</span>
         </template>
       </tablesDataTable>
     </div>

@@ -5,6 +5,10 @@ import type { TableColumn } from "../types";
 import { useRides } from "../composables/useRides";
 import { formatDate } from "../utils/dateFormatter";
 
+definePageMeta({
+  middleware: "auth",
+});
+
 // Card statistics
 const passengersCount = ref(1);
 const ridesCount = ref(1);
