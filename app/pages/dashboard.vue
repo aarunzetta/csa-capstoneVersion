@@ -1,19 +1,14 @@
 <script setup lang="ts">
 import { Users, IdCard, CarTaxiFront, UserStar } from "lucide-vue-next";
-import { ref, onMounted } from "vue";
+import { onMounted } from "vue";
 import type { TableColumn } from "../types";
 import { useRides } from "../composables/useRides";
+import { useDashboard } from "../composables/useDashboard";
 import { formatDate } from "../utils/dateFormatter";
 
 definePageMeta({
   middleware: "auth",
 });
-
-// Card statistics
-const passengersCount = ref(1);
-const ridesCount = ref(1);
-const driversCount = ref(1);
-const adminsCount = ref(1);
 
 // Define columns for the Rides table
 const columns: TableColumn[] = [
@@ -28,8 +23,12 @@ const columns: TableColumn[] = [
 // Use the rides composable
 const { rides, isLoading, error, fetchRides } = useRides();
 
-// Fetch rides when component mounts
+// Use the dashboard composable
+const { stats, fetchStats } = useDashboard();
+
+// Fetch data when component mounts
 onMounted(() => {
+  fetchStats();
   fetchRides();
 });
 </script>
@@ -43,28 +42,28 @@ onMounted(() => {
       <uiCard
         id="passengers"
         label="Passengers"
-        :value="passengersCount"
+        :value="stats.totalPassengers"
         :icon="Users"
         href="/passengers"
       />
       <uiCard
         id="drivers"
         label="Drivers"
-        :value="driversCount"
+        :value="stats.totalDrivers"
         :icon="IdCard"
         href="/drivers"
       />
       <uiCard
         id="rides"
         label="Rides"
-        :value="ridesCount"
+        :value="stats.totalRides"
         :icon="CarTaxiFront"
         href="/rides"
       />
       <uiCard
         id="admins"
         label="Admins"
-        :value="adminsCount"
+        :value="stats.totalAdmins"
         :icon="UserStar"
         href="/admins"
       />
