@@ -7,6 +7,5 @@ export interface Passenger {
   date_of_birth: Date;
   phone_number: string;
   email: string;
-  password_hash: string;
   registered_at: Date;
 }

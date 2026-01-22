@@ -11,3 +11,5 @@ export type { Passenger } from "./passenger";
 export type { Feedback } from "./feedback";
 
 export type { Admin } from "./admin";
+
+export type { DashboardStat } from "./dashboard";
