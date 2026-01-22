@@ -1,6 +1,6 @@
 # Commuter Security Application - Admin Dashboard
 
-A modern admin dashboard built with **Nuxt 3**, **Vue 3**, **Pinia**, and **TypeScript** for managing a commuter security platform. This application provides comprehensive statistics, user management, and ride tracking capabilities.
+A modern admin dashboard built with **Nuxt 4**, **Vue 3**, **Pinia**, and **TypeScript** for managing a commuter security platform. This application provides comprehensive statistics, user management, and ride tracking capabilities.
 
 ## Features
 
@@ -13,7 +13,7 @@ A modern admin dashboard built with **Nuxt 3**, **Vue 3**, **Pinia**, and **Type
 
 ## Tech Stack
 
-- **Framework**: Nuxt 3
+- **Framework**: Nuxt 4
 - **UI Framework**: Vue 3
 - **Language**: TypeScript
 - **Styling**: TailwindCSS
