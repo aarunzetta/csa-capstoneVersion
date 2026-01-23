@@ -6,8 +6,6 @@ import {
   MessageCircle,
   Users,
   IdCard,
-  QrCode,
-  MapPin,
 } from "lucide-vue-next";
 
 export interface NavItem {
@@ -58,21 +56,6 @@ export const navigationConfig: NavSection[] = [
         label: "Admins",
         path: "/admins",
         icon: UserStar,
-      },
-    ],
-  },
-  {
-    title: "Tools",
-    items: [
-      {
-        label: "QR Code Generator",
-        path: "/qr-code-generator",
-        icon: QrCode,
-      },
-      {
-        label: "Location Finder",
-        path: "/location-finder",
-        icon: MapPin,
       },
     ],
   },

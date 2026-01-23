@@ -15,9 +15,6 @@ const { toggleSidebar } = useSidebar();
       <Menu color="#047857" />
     </button>
 
-    <h1 class="text-primary font-bold text-lg">
-      Commuter Security App Management System
-    </h1>
     <User color="#047857" />
   </div>
 </template>
