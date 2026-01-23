@@ -8,9 +8,7 @@
         <layoutHeader />
       </header>
       <main class="flex-1 overflow-y-auto">
-        <div
-          class="bg-gradient-to-br from-primary-dark via-primary to-primary-light text-white p-6 min-h-full"
-        >
+        <div class="bg-secondary-dark text-white p-6 min-h-full">
           <slot />
         </div>
       </main>

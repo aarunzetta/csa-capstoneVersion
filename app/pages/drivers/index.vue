@@ -88,7 +88,7 @@ const vehicleOwnershipColors: ColorMap = {
       >
         <!-- Custom formatting for driver name -->
         <template #cell-driver_name="{ item }">
-          <span class="text-gray-300 flex flex-col"
+          <span class="flex flex-col"
             >{{ item.last_name }}, {{ item.first_name }}
             {{ item.middle_name }}
             <span class="text-xs">#{{ item.driver_id }}</span>
@@ -115,10 +115,10 @@ const vehicleOwnershipColors: ColorMap = {
 
         <!-- Custom formatting for dates -->
         <template #cell-date_of_birth="{ value }">
-          <span class="text-gray-300">{{ formatDate(value, false) }}</span>
+          <span>{{ formatDate(value, false) }}</span>
         </template>
         <template #cell-registered_at="{ value }">
-          <span class="text-gray-300">{{ formatDate(value, false) }}</span>
+          <span>{{ formatDate(value, false) }}</span>
         </template>
       </tablesDataTable>
     </div>

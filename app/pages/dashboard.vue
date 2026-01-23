@@ -45,6 +45,13 @@ onMounted(() => {
     <!-- Statistics Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <uiCard
+        id="rides"
+        label="Rides"
+        :value="stats.totalRides"
+        :icon="CarTaxiFront"
+        href="/rides"
+      />
+      <uiCard
         id="passengers"
         label="Passengers"
         :value="stats.totalPassengers"
@@ -59,13 +66,6 @@ onMounted(() => {
         href="/drivers"
       />
       <uiCard
-        id="rides"
-        label="Rides"
-        :value="stats.totalRides"
-        :icon="CarTaxiFront"
-        href="/rides"
-      />
-      <uiCard
         id="admins"
         label="Admins"
         :value="stats.totalAdmins"
@@ -75,13 +75,13 @@ onMounted(() => {
     </div>
 
     <!-- Loading State -->
-    <div v-if="isLoading" class="text-white">Loading rides...</div>
+    <div v-if="isLoading" class="text-gray-100">Loading rides...</div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="text-red-500">{{ error }}</div>
+    <div v-else-if="error" class="text-danger">{{ error }}</div>
 
     <div v-else>
-      <h3 class="text-white text-2xl mb-4">View Latest Rides</h3>
+      <h3 class="text-gray-100 text-2xl mb-4">View Latest Rides</h3>
       <!-- Rides Table -->
       <tablesDataTable
         :columns="columns"
@@ -94,18 +94,9 @@ onMounted(() => {
           delete: false,
         }"
       >
-        <!-- Custom formatting for distance -->
-        <template #cell-ride_distance_km="{ value }">
-          <span class="text-blue-400">{{ value.toFixed(2) }} km</span>
-        </template>
-        <!-- Custom formatting for duration -->
-        <template #cell-ride_duration_minutes="{ value }">
-          <span class="text-green-400">{{ value }} min</span>
-        </template>
-
         <!-- Custom formatting for dates -->
         <template #cell-completed_at="{ value }">
-          <span class="text-gray-300">{{ formatDate(value) }}</span>
+          <span>{{ formatDate(value) }}</span>
         </template>
       </tablesDataTable>
     </div>

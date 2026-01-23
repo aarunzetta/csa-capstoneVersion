@@ -27,13 +27,13 @@ onMounted(() => {
 
 <template>
   <div
-    class="bg-white border-r border-[#ddd] h-full flex flex-col gap-4 transition-all duration-300 ease-in-out"
+    class="bg-secondary border-r border-secondary-light h-full flex flex-col transition-all duration-200 ease-in-out"
     :class="isOpen ? 'w-64' : 'w-0 md:w-[88px]'"
   >
     <!-- Header -->
     <NuxtLink
       to="/dashboard"
-      class="flex gap-2 items-center py-4 min-h-[72px] overflow-hidden border-b border-[#ddd]"
+      class="flex gap-2 items-center py-4 min-h-[72px] overflow-hidden border-b border-secondary-light mb-4"
       :class="isOpen ? 'jusitfy-start px-8 ' : 'justify-center px-4'"
     >
       <NuxtImg
@@ -43,16 +43,16 @@ onMounted(() => {
         loading="lazy"
         width="50"
         height="50"
-        class="w-[50px] h-[50px] flex-shrink-0 bg-primary rounded"
+        class="w-[50px] h-[50px] flex-shrink-0"
       />
       <div v-show="isOpen">
         <h1
-          class="text-primary font-bold text-xl whitespace-nowrap transition-opacity duration-300 ease-in-out"
+          class="text-white font-bold text-xl whitespace-nowrap transition-opacity duration-200 ease-in-out"
         >
           ComSecApp
         </h1>
         <p
-          class="text-primary-dark text-xs whitespace-nowrap transition-opacity duration-300 ease-in-out"
+          class="text-gray-400 text-xs whitespace-nowrap transition-opacity duration-200 ease-in-out"
         >
           Management System
         </p>
@@ -60,7 +60,7 @@ onMounted(() => {
     </NuxtLink>
     <!-- Navigation Links -->
     <div
-      class="flex flex-col overflow-y-auto overflow-x-hidden"
+      class="flex flex-col overflow-y-auto overflow-x-hidden mb-4"
       :class="isOpen ? 'gap-8' : 'gap-1'"
     >
       <div v-for="section in navigationConfig" :key="section.title">
@@ -70,20 +70,19 @@ onMounted(() => {
             v-for="item in section.items"
             :key="item.path"
             :to="item.path"
-            class="flex gap-2 items-center cursor-pointer py-3 px-4 transition-colors duration-200 rounded-lg"
+            class="flex gap-3 items-center cursor-pointer py-3 px-4 transition-colors duration-200 rounded-lg"
             :class="
               isActive(item.path)
-                ? 'bg-primary text-white'
-                : 'text-primary-dark hover:bg-gray-100'
+                ? 'bg-primary/10 text-primary'
+                : 'text-gray-400 hover:bg-gray-800 hover:text-white'
             "
           >
             <component
               :is="item.icon"
-              :color="isActive(item.path) ? 'white' : '#047857'"
-              class="flex-shrink-0"
+              class="flex-shrink-0 transition-colors duration-200"
             />
             <span
-              class="whitespace-nowrap transition-opacity duration-300"
+              class="whitespace-nowrap transition-opacity duration-200"
               :class="isOpen ? 'opacity-100' : 'opacity-0'"
             >
               {{ item.label }}
@@ -96,7 +95,7 @@ onMounted(() => {
           <div
             v-if="section.title"
             v-show="isOpen"
-            class="text-sm text-primary px-4 mb-2 transition-opacity duration-300"
+            class="text-sm text-gray-300 px-4 mb-2 transition-opacity duration-200"
           >
             {{ section.title }}
           </div>
@@ -105,20 +104,19 @@ onMounted(() => {
               v-for="item in section.items"
               :key="item.path"
               :to="item.path"
-              class="flex gap-2 items-center cursor-pointer py-3 px-4 rounded-lg transition-colors duration-200"
+              class="flex gap-3 items-center cursor-pointer py-3 px-4 rounded-lg transition-colors duration-200"
               :class="
                 isActive(item.path)
-                  ? 'bg-primary text-white'
-                  : 'text-primary-dark hover:bg-gray-100'
+                  ? 'bg-primary/10 text-primary'
+                  : 'text-gray-400 hover:bg-gray-700 hover:text-white'
               "
             >
               <component
                 :is="item.icon"
-                :color="isActive(item.path) ? 'white' : '#047857'"
-                class="flex-shrink-0"
+                class="flex-shrink-0 transition-colors duration-200"
               />
               <span
-                class="whitespace-nowrap transition-opacity duration-300"
+                class="whitespace-nowrap transition-opacity duration-200"
                 :class="isOpen ? 'opacity-100' : 'opacity-0'"
               >
                 {{ item.label }}
@@ -128,29 +126,29 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <!-- Logout Section at Bottom -->
-    <div class="border-t border-gray-200 mt-auto overflow-hidden">
-      <!-- User Info (optional) -->
-      <div
-        v-if="currentAdmin && isOpen"
-        class="px-8 py-3 border-b border-gray-200"
-      >
-        <p class="text-sm text-primary-dark font-semibold truncate">
+
+    <!-- Admin Info -->
+    <div class="mt-auto overflow-hidden px-4">
+      <!-- Current User Info -->
+      <div v-if="currentAdmin && isOpen" class="px-4 py-3">
+        <p class="text-base text-gray-200 font-semibold truncate">
           {{ currentAdmin.first_name }} {{ currentAdmin.last_name }}
         </p>
-        <p class="text-xs text-secondary-light truncate">
-          {{ currentAdmin.email }}
+        <p class="text-sm text-gray-400 truncate">
+          {{ capitalize(formatRole(currentAdmin.role)) }}
         </p>
       </div>
-      <!-- Logout Button -->
+    </div>
+    <!-- Logout Button -->
+    <div class="px-4 py-4 border-t border-secondary-light overflow-hidden">
       <button
-        class="w-full flex gap-2 items-center cursor-pointer py-3 px-8 text-danger hover:bg-red-50 transition-colors duration-200"
+        class="group w-full flex gap-3 items-center cursor-pointer py-3 px-4 text-gray-400 hover:bg-gray-700 hover:text-white transition-colors duration-200 rounded-lg"
         @click="handleLogout"
       >
-        <LogOut class="flex-shrink-0" :size="20" />
+        <LogOut class="flex-shrink-0 transition-colors" />
         <span
           v-if="isOpen"
-          class="whitespace-nowrap transition-opacity duration-300"
+          class="whitespace-nowrap transition-opacity duration-200"
         >
           Logout
         </span>

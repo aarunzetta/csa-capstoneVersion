@@ -56,7 +56,7 @@ onMounted(() => {
       >
         <!-- Custom formatting for distance -->
         <template #cell-ride_distance_km="{ value }">
-          <span class="text-info">{{ value.toFixed(2) }} km</span>
+          <span class="text-info">{{ value }} km</span>
         </template>
         <!-- Custom formatting for duration -->
         <template #cell-ride_duration_minutes="{ value }">
