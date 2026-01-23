@@ -10,6 +10,7 @@ import {
 } from "../../utils/statusColorFormatter";
 import { Dot } from "lucide-vue-next";
 import { capitalize } from "../../utils/capitalizeFormatter";
+import { formatRole } from "../../utils/roleFormatter";
 
 // Define columns for the admins table
 const columns: TableColumn[] = [
@@ -29,7 +30,7 @@ onMounted(() => {
 });
 
 const roleColors: ColorMap = {
-  superadmin:
+  super_admin:
     "text-success  border border-success py-[6px] px-3 rounded-2xl bg-teal-900",
   admin: "text-info border border-info py-[6px] px-3 rounded-2xl bg-blue-950",
   moderator:
@@ -53,7 +54,12 @@ const getStatusMeta = (value: number) => {
 
 <template>
   <div class="flex flex-col gap-8">
-    <h2 class="text-white text-4xl">Admins</h2>
+    <div>
+      <h2 class="text-white text-4xl">Admins</h2>
+      <p class="text-gray-400 text-base mt-2">
+        Manage administrative users and permissions
+      </p>
+    </div>
     <!-- Loading State -->
     <div v-if="isLoading" class="text-white">Loading admins...</div>
 
@@ -74,7 +80,7 @@ const getStatusMeta = (value: number) => {
       >
         <!-- Custom formatting for admin name -->
         <template #cell-admin_name="{ item }">
-          <span class="text-gray-300 flex flex-col"
+          <span class="flex flex-col"
             >{{ item.first_name }} {{ item.last_name }}
             <span class="text-xs">{{ item.email }}</span>
             <span class="text-xs">#{{ item.admin_id }}</span>
@@ -84,7 +90,7 @@ const getStatusMeta = (value: number) => {
         <!-- Custom formatting for role -->
         <template #cell-role="{ value }">
           <span class="text-sm" :class="getStatusColor(value, roleColors)">{{
-            capitalize(value)
+            capitalize(formatRole(value))
           }}</span>
         </template>
 
@@ -98,14 +104,14 @@ const getStatusMeta = (value: number) => {
 
         <!-- Custom formatting for last login -->
         <template #cell-last_login_at="{ value }">
-          <span class="text-white">
+          <span>
             {{ formatLastLogin(value) }}
           </span>
         </template>
 
         <!-- Custom formatting for dates -->
         <template #cell-registered_at="{ value }">
-          <span class="text-white">{{ formatDate(value, false) }}</span>
+          <span>{{ formatDate(value, false) }}</span>
         </template>
       </tablesDataTable>
     </div>

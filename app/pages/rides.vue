@@ -28,7 +28,12 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col gap-8">
-    <h2 class="text-white text-4xl">Rides</h2>
+    <div>
+      <h2 class="text-white text-4xl">Rides</h2>
+      <p class="text-gray-400 text-base mt-2">
+        Track and view all ride transactions
+      </p>
+    </div>
     <!-- Loading State -->
     <div v-if="isLoading" class="text-white">Loading rides...</div>
 
@@ -51,7 +56,7 @@ onMounted(() => {
       >
         <!-- Custom formatting for distance -->
         <template #cell-ride_distance_km="{ value }">
-          <span class="text-info">{{ value.toFixed(2) }} km</span>
+          <span class="text-info">{{ value }} km</span>
         </template>
         <!-- Custom formatting for duration -->
         <template #cell-ride_duration_minutes="{ value }">

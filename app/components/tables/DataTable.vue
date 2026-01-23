@@ -9,6 +9,7 @@ import {
   Trash2,
   Ellipsis,
   ShieldOff,
+  Search,
 } from "lucide-vue-next";
 import type { T } from "vue-router/dist/router-CWoNjPRp.mjs";
 
@@ -208,14 +209,16 @@ const handleDelete = () => {
 </script>
 
 <template>
-  <div class="w-full bg-secondary-dark p-6 space-y-4">
+  <div
+    class="w-full bg-secondary border border-secondary-light p-6 rounded-lg space-y-4"
+  >
     <!-- Top Controls -->
     <div class="flex justify-between items-center">
       <label class="flex items-center gap-2 text-white">
         Show
         <select
           v-model.number="entriesPerPage"
-          class="text-secondary-dark py-1 px-2 border border-[#ddd] rounded-sm focus:outline-none"
+          class="text-white py-1 px-2 border border-secondary-light rounded-lg focus:outline-none bg-secondary"
           @change="handleEntriesChange"
         >
           <option v-for="o in entriesOptions" :key="o" :value="o">
@@ -225,85 +228,103 @@ const handleDelete = () => {
         entries
       </label>
 
-      <label class="flex items-center gap-2 text-white">
-        Search:
+      <div
+        class="flex items-center gap-2 text-gray-400 border border-secondary-light px-2 rounded-lg"
+      >
+        <Search :size="18" />
         <input
           v-model="searchQuery"
           type="text"
-          class="text-secondary-dark py-1 px-2 border border-[#ddd] rounded-sm focus:outline-none"
+          class="text-white py-1 focus:outline-none bg-secondary text-sm"
+          placeholder="Search"
           @input="handleSearchChange"
         />
-      </label>
+      </div>
     </div>
 
     <!-- Table -->
-    <table class="w-full border-collapse">
-      <thead class="bg-secondary-light text-white">
-        <tr>
-          <th
-            v-for="column in columns"
-            :key="column.key"
-            class="p-2 text-left select-none"
-            :class="column.sortable !== false ? 'cursor-pointer' : ''"
-            @click="column.sortable !== false && handleSort(column.key)"
-          >
-            <div class="flex items-center gap-2">
-              <span>{{ column.label }}</span>
-
-              <!-- Sort Icons -->
-              <span
-                v-if="column.sortable !== false"
-                class="inline-flex items-center text-white/70"
-              >
-                <!-- Active column -->
-                <ArrowUp
-                  v-if="sortKey === column.key && sortOrder === 'asc'"
-                  class="w-4 h-4"
-                />
-                <ArrowDown
-                  v-else-if="sortKey === column.key && sortOrder === 'desc'"
-                  class="w-4 h-4"
-                />
-
-                <!-- Inactive (not sorted) -->
-                <ArrowUpDown v-else class="w-4 h-4" />
-              </span>
-            </div>
-          </th>
-
-          <th v-if="actions" class="p-3 text-left">Action</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr v-for="(item, index) in paginatedData" :key="index">
-          <td
-            v-for="column in columns"
-            :key="column.key"
-            class="p-2 border-b border-[#3a3a3a]"
-          >
-            <slot
-              :name="`cell-${column.key}`"
-              :item="item"
-              :value="item[column.key]"
+    <div class="rounded-t-lg overflow-hidden border border-secondary-light">
+      <table class="w-full border-collapse">
+        <thead class="bg-secondary text-white border-b border-secondary-light">
+          <tr>
+            <th
+              v-for="column in columns"
+              :key="column.key"
+              class="p-2 text-left select-none"
+              :class="column.sortable !== false ? 'cursor-pointer' : ''"
+              @click="column.sortable !== false && handleSort(column.key)"
             >
-              {{ item[column.key] }}
-            </slot>
-          </td>
+              <div class="flex items-center gap-2">
+                <span>{{ column.label }}</span>
 
-          <td v-if="actions" class="p-2 border-b border-[#3a3a3a] relative">
-            <slot name="actions" :item="item">
-              <button
-                class="bg-none border-none cursor-pointer hover:opacity-70 rounded hover:bg-gray-700 transition-colors"
-                @click="openActionModal(item, $event)"
+                <!-- Sort Icons -->
+                <span
+                  v-if="column.sortable !== false"
+                  class="inline-flex items-center text-white/70"
+                >
+                  <!-- Active column -->
+                  <ArrowUp
+                    v-if="sortKey === column.key && sortOrder === 'asc'"
+                    class="w-4 h-4"
+                  />
+                  <ArrowDown
+                    v-else-if="sortKey === column.key && sortOrder === 'desc'"
+                    class="w-4 h-4"
+                  />
+
+                  <!-- Inactive (not sorted) -->
+                  <ArrowUpDown v-else class="w-4 h-4" />
+                </span>
+              </div>
+            </th>
+
+            <th v-if="actions" class="p-3 text-left">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr
+            v-for="(item, index) in paginatedData"
+            :key="index"
+            :class="
+              index !== paginatedData.length - 1
+                ? 'border-b border-secondary-light'
+                : ''
+            "
+            class="text-gray-300"
+          >
+            <td v-for="column in columns" :key="column.key" class="p-2">
+              <slot
+                :name="`cell-${column.key}`"
+                :item="item"
+                :value="item[column.key]"
               >
-                <Ellipsis class="w-5 h-5" />
-              </button>
-            </slot>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+                {{ item[column.key] }}
+              </slot>
+            </td>
+
+            <td v-if="actions" class="p-2 relative">
+              <slot name="actions" :item="item">
+                <button
+                  class="bg-none border-none cursor-pointer hover:opacity-70 rounded hover:bg-gray-700 transition-colors"
+                  @click="openActionModal(item, $event)"
+                >
+                  <Ellipsis class="w-5 h-5" />
+                </button>
+              </slot>
+            </td>
+          </tr>
+          <tr v-if="paginatedData.length === 0">
+            <td
+              :colspan="columns.length + (actions ? 1 : 0)"
+              class="p-2 text-center text-gray-400"
+            >
+              No data available in this table
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- Bottom Controls -->
     <div class="flex justify-between items-center text-white">
@@ -326,7 +347,7 @@ const handleDelete = () => {
           :key="page"
           class="btn-pagination"
           :class="{
-            'bg-primary-dark': currentPage === page,
+            'bg-primary': currentPage === page,
           }"
           @click="goToPage(page)"
         >
@@ -335,7 +356,7 @@ const handleDelete = () => {
 
         <button
           class="btn-pagination disabled:opacity-30 disabled:cursor-not-allowed"
-          :disabled="currentPage === totalPages"
+          :disabled="currentPage === 1"
           @click="goToPage(currentPage + 1)"
         >
           Next

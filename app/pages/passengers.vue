@@ -25,7 +25,12 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col gap-8">
-    <h2 class="text-white text-4xl">Passengers</h2>
+    <div>
+      <h2 class="text-white text-4xl">Passengers</h2>
+      <p class="text-gray-400 text-base mt-2">
+        Manage and view all registered passengers
+      </p>
+    </div>
     <!-- Loading State -->
     <div v-if="isLoading" class="text-white">Loading Passengers...</div>
 

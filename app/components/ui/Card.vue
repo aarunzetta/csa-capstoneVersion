@@ -10,8 +10,8 @@ defineProps<{
 </script>
 
 <template>
-  <div class="bg-secondary-dark rounded-lg shadow-lg p-6">
-    <h5 :for="id" class="block text-lg font-semibold text-secondary-light mb-2">
+  <div class="bg-secondary rounded-lg border border-secondary-light p-6">
+    <h5 :for="id" class="block text-lg font-semibold text-gray-400 mb-2">
       {{ label }}
     </h5>
     <div class="text-4xl font-bold text-white mb-6 text-center">
