@@ -49,7 +49,12 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col gap-8">
-    <h2 class="text-white text-4xl">Feedbacks</h2>
+    <div>
+      <h2 class="text-white text-4xl">Feedbacks</h2>
+      <p class="text-gray-400 text-base mt-2">
+        Review ratings and feedback from rides
+      </p>
+    </div>
     <!-- Loading State -->
     <div v-if="isLoading" class="text-white">Loading feedbacks...</div>
 

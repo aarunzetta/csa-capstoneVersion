@@ -35,7 +35,12 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col gap-8">
-    <h2 class="text-white text-4xl">Dashboard</h2>
+    <div>
+      <h2 class="text-white text-4xl">Dashboard</h2>
+      <p class="text-gray-400 text-base mt-2">
+        Overview of system statistics and recent activity
+      </p>
+    </div>
 
     <!-- Statistics Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

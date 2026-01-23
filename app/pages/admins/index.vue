@@ -53,7 +53,12 @@ const getStatusMeta = (value: number) => {
 
 <template>
   <div class="flex flex-col gap-8">
-    <h2 class="text-white text-4xl">Admins</h2>
+    <div>
+      <h2 class="text-white text-4xl">Admins</h2>
+      <p class="text-gray-400 text-base mt-2">
+        Manage administrative users and permissions
+      </p>
+    </div>
     <!-- Loading State -->
     <div v-if="isLoading" class="text-white">Loading admins...</div>
 
