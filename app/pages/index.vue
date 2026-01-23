@@ -35,11 +35,11 @@ const handleLogin = async () => {
 
 <template>
   <div
-    class="min-h-screen bg-gradient-to-br from-primary-light via-primary to-primary-dark flex items-center justify-center p-4"
+    class="min-h-screen bg-secondary-dark flex items-center justify-center p-4"
   >
     <!-- Card Container -->
     <div
-      class="p-8 w-full max-w-3xl bg-secondary-dark grid grid-cols-1 sm:grid-cols-2 border border-secondary-dark shadow-xl rounded-xl gap-1"
+      class="p-8 w-full max-w-3xl bg-secondary grid grid-cols-1 sm:grid-cols-2 border border-secondary-light shadow-xl rounded-xl gap-1"
     >
       <!-- Left Side -->
       <div class="col-span-1">
@@ -52,7 +52,7 @@ const handleLogin = async () => {
 
         <!-- Error Message -->
         <div v-if="errorMessage" class="mb-4">
-          <p class="text-red-500 text-sm">{{ errorMessage }}</p>
+          <p class="text-danger text-sm">{{ errorMessage }}</p>
         </div>
 
         <!-- Form -->
