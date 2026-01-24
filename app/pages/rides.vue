@@ -27,50 +27,61 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-8">
-    <div>
-      <h2 class="text-white text-4xl">Rides</h2>
-      <p class="text-gray-400 text-base mt-2">
-        Track and view all ride transactions
-      </p>
+  <div class="flex flex-col h-screen overflow-y-auto">
+    <!-- Sticky Header -->
+    <div class="sticky top-0 z-10">
+      <layoutHeader>
+        <template #actions> </template>
+      </layoutHeader>
     </div>
-    <!-- Loading State -->
-    <div v-if="isLoading" class="text-white">Loading rides...</div>
+    <!-- Page Content -->
+    <div class="bg-secondary-dark text-white p-6 flex-1">
+      <div class="flex flex-col gap-8">
+        <div>
+          <h2 class="text-white text-4xl">Rides</h2>
+          <p class="text-gray-400 text-base mt-2">
+            Track and view all ride transactions
+          </p>
+        </div>
+        <!-- Loading State -->
+        <div v-if="isLoading" class="text-white">Loading rides...</div>
 
-    <!-- Error State -->
-    <div v-else-if="error" class="text-red-500">{{ error }}</div>
+        <!-- Error State -->
+        <div v-else-if="error" class="text-red-500">{{ error }}</div>
 
-    <div v-else>
-      <!-- Rides Table -->
-      <tablesDataTable
-        :columns="columns"
-        :data="rides"
-        :actions="true"
-        :default-entries-per-page="10"
-        :action-buttons="{
-          view: true,
-          edit: false,
-          suspend: false,
-          delete: false,
-        }"
-      >
-        <!-- Custom formatting for distance -->
-        <template #cell-ride_distance_km="{ value }">
-          <span class="text-info">{{ value }} km</span>
-        </template>
-        <!-- Custom formatting for duration -->
-        <template #cell-ride_duration_minutes="{ value }">
-          <span class="text-success">{{ value }} min</span>
-        </template>
+        <div v-else>
+          <!-- Rides Table -->
+          <tablesDataTable
+            :columns="columns"
+            :data="rides"
+            :actions="true"
+            :default-entries-per-page="10"
+            :action-buttons="{
+              view: true,
+              edit: false,
+              suspend: false,
+              delete: false,
+            }"
+          >
+            <!-- Custom formatting for distance -->
+            <template #cell-ride_distance_km="{ value }">
+              <span class="text-info">{{ value }} km</span>
+            </template>
+            <!-- Custom formatting for duration -->
+            <template #cell-ride_duration_minutes="{ value }">
+              <span class="text-success">{{ value }} min</span>
+            </template>
 
-        <!-- Custom formatting for dates -->
-        <template #cell-started_at="{ value }">
-          <span class="text-gray-300">{{ formatDate(value) }}</span>
-        </template>
-        <template #cell-completed_at="{ value }">
-          <span class="text-gray-300">{{ formatDate(value) }}</span>
-        </template>
-      </tablesDataTable>
+            <!-- Custom formatting for dates -->
+            <template #cell-started_at="{ value }">
+              <span class="text-gray-300">{{ formatDate(value) }}</span>
+            </template>
+            <template #cell-completed_at="{ value }">
+              <span class="text-gray-300">{{ formatDate(value) }}</span>
+            </template>
+          </tablesDataTable>
+        </div>
+      </div>
     </div>
   </div>
 </template>

@@ -53,67 +53,80 @@ const getStatusMeta = (value: number) => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-8">
-    <div>
-      <h2 class="text-white text-4xl">Admins</h2>
-      <p class="text-gray-400 text-base mt-2">
-        Manage administrative users and permissions
-      </p>
+  <div class="flex flex-col h-screen overflow-y-auto">
+    <!-- Sticky Header -->
+    <div class="sticky top-0 z-10">
+      <layoutHeader>
+        <template #actions> </template>
+      </layoutHeader>
     </div>
-    <!-- Loading State -->
-    <div v-if="isLoading" class="text-white">Loading admins...</div>
+    <!-- Page Content -->
+    <div class="bg-secondary-dark text-white p-6 flex-1">
+      <div class="flex flex-col gap-8">
+        <div>
+          <h2 class="text-white text-4xl">Admins</h2>
+          <p class="text-gray-400 text-base mt-2">
+            Manage administrative users and permissions
+          </p>
+        </div>
+        <!-- Loading State -->
+        <div v-if="isLoading" class="text-white">Loading admins...</div>
 
-    <!-- Error State -->
-    <div v-else-if="error" class="text-red-500">{{ error }}</div>
+        <!-- Error State -->
+        <div v-else-if="error" class="text-red-500">{{ error }}</div>
 
-    <div v-else>
-      <!-- admins Table -->
-      <tablesDataTable
-        :columns="columns"
-        :data="admins"
-        :actions="true"
-        :default-entries-per-page="10"
-        :action-labels="{
-          edit: 'Edit Admin',
-          delete: 'Delete Admin',
-        }"
-      >
-        <!-- Custom formatting for admin name -->
-        <template #cell-admin_name="{ item }">
-          <span class="flex flex-col"
-            >{{ item.first_name }} {{ item.last_name }}
-            <span class="text-xs">{{ item.email }}</span>
-            <span class="text-xs">#{{ item.admin_id }}</span>
-          </span>
-        </template>
+        <div v-else>
+          <!-- admins Table -->
+          <tablesDataTable
+            :columns="columns"
+            :data="admins"
+            :actions="true"
+            :default-entries-per-page="10"
+            :action-labels="{
+              edit: 'Edit Admin',
+              delete: 'Delete Admin',
+            }"
+          >
+            <!-- Custom formatting for admin name -->
+            <template #cell-admin_name="{ item }">
+              <span class="flex flex-col"
+                >{{ item.first_name }} {{ item.last_name }}
+                <span class="text-xs">{{ item.email }}</span>
+                <span class="text-xs">#{{ item.admin_id }}</span>
+              </span>
+            </template>
 
-        <!-- Custom formatting for role -->
-        <template #cell-role="{ value }">
-          <span class="text-sm" :class="getStatusColor(value, roleColors)">{{
-            capitalize(formatRole(value))
-          }}</span>
-        </template>
+            <!-- Custom formatting for role -->
+            <template #cell-role="{ value }">
+              <span
+                class="text-sm"
+                :class="getStatusColor(value, roleColors)"
+                >{{ capitalize(formatRole(value)) }}</span
+              >
+            </template>
 
-        <!-- Custom formatting for status -->
-        <template #cell-is_active="{ value }">
-          <span class="flex items-center gap-1 text-white">
-            <Dot :class="['w-6 h-6', getStatusMeta(value).color]" />
-            <span>{{ getStatusMeta(value).label }}</span>
-          </span>
-        </template>
+            <!-- Custom formatting for status -->
+            <template #cell-is_active="{ value }">
+              <span class="flex items-center gap-1 text-white">
+                <Dot :class="['w-6 h-6', getStatusMeta(value).color]" />
+                <span>{{ getStatusMeta(value).label }}</span>
+              </span>
+            </template>
 
-        <!-- Custom formatting for last login -->
-        <template #cell-last_login_at="{ value }">
-          <span>
-            {{ formatLastLogin(value) }}
-          </span>
-        </template>
+            <!-- Custom formatting for last login -->
+            <template #cell-last_login_at="{ value }">
+              <span>
+                {{ formatLastLogin(value) }}
+              </span>
+            </template>
 
-        <!-- Custom formatting for dates -->
-        <template #cell-registered_at="{ value }">
-          <span>{{ formatDate(value, false) }}</span>
-        </template>
-      </tablesDataTable>
+            <!-- Custom formatting for dates -->
+            <template #cell-registered_at="{ value }">
+              <span>{{ formatDate(value, false) }}</span>
+            </template>
+          </tablesDataTable>
+        </div>
+      </div>
     </div>
   </div>
 </template>
