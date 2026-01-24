@@ -6,3 +6,7 @@
 .btn-pagination {
   @apply px-4 py-2 border border-secondary-light rounded text-white;
 }
+
+.btn-secondary {
+  @apply bg-secondary text-gray-100  font-semibold py-3 border border-secondary-light rounded-lg transition-all duration-200 ease-in-out active:scale-100 hover:bg-gray-700;
+}
