@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Menu } from "lucide-vue-next";
+import { Menu, Bell } from "lucide-vue-next";
 import { useSidebar } from "../../composables/useSidebar";
 const { toggleSidebar } = useSidebar();
 </script>
@@ -15,7 +15,10 @@ const { toggleSidebar } = useSidebar();
       <Menu />
     </button>
 
-    <slot name="actions"></slot>
+    <div class="flex gap-4 items-center">
+      <slot name="actions"></slot>
+      <Bell class="text-gray-400" />
+    </div>
   </div>
 </template>
 

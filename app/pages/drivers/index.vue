@@ -8,6 +8,7 @@ import {
   type ColorMap,
 } from "../../utils/statusColorFormatter";
 import { capitalize } from "../../utils/capitalizeFormatter";
+import { UserPlus } from "lucide-vue-next";
 
 // Define columns for the Drivers table
 const columns: TableColumn[] = [
@@ -59,7 +60,14 @@ const vehicleOwnershipColors: ColorMap = {
     <!-- Sticky Header -->
     <div class="sticky top-0 z-10">
       <layoutHeader>
-        <template #actions> </template>
+        <template #actions>
+          <NuxtLink
+            to="/drivers/register"
+            class="p-3 btn-primary flex items-center gap-2 text-base"
+          >
+            <UserPlus class="w-5 h-5" /><span>Register New Driver</span>
+          </NuxtLink>
+        </template>
       </layoutHeader>
     </div>
     <!-- Page Content -->
