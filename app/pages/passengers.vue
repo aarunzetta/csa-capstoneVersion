@@ -24,53 +24,65 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-8">
-    <div>
-      <h2 class="text-white text-4xl">Passengers</h2>
-      <p class="text-gray-400 text-base mt-2">
-        Manage and view all registered passengers
-      </p>
+  <div class="flex flex-col h-screen overflow-y-auto">
+    <!-- Sticky Header -->
+    <div class="sticky top-0 z-10">
+      <layoutHeader>
+        <template #actions> </template>
+      </layoutHeader>
     </div>
-    <!-- Loading State -->
-    <div v-if="isLoading" class="text-white">Loading Passengers...</div>
+    <!-- Page Content -->
+    <div class="bg-secondary-dark text-white p-6 flex-1">
+      <div class="flex flex-col gap-8">
+        <div>
+          <h2 class="text-white text-4xl">Passengers</h2>
+          <p class="text-gray-400 text-base mt-2">
+            Manage and view all registered passengers
+          </p>
+        </div>
+        <!-- Loading State -->
+        <div v-if="isLoading" class="text-white">Loading Passengers...</div>
 
-    <!-- Error State -->
-    <div v-else-if="error" class="text-red-500">{{ error }}</div>
+        <!-- Error State -->
+        <div v-else-if="error" class="text-red-500">{{ error }}</div>
 
-    <div v-else>
-      <!-- Passengers Table -->
-      <tablesDataTable
-        :columns="columns"
-        :data="passengers"
-        :actions="true"
-        :default-entries-per-page="10"
-        :action-buttons="{
-          view: true,
-          edit: true,
-          suspend: false,
-          delete: true,
-        }"
-        :action-labels="{
-          edit: 'Edit Passenger',
-          delete: 'Delete Passenger',
-        }"
-      >
-        <!-- Custom formatting for passenger name -->
-        <template #cell-passenger_name="{ item }">
-          <span class="text-gray-300 flex flex-col"
-            >{{ item.last_name }}, {{ item.first_name }} {{ item.middle_name }}
-            <span class="text-xs">#{{ item.passenger_id }}</span></span
+        <div v-else>
+          <!-- Passengers Table -->
+          <tablesDataTable
+            :columns="columns"
+            :data="passengers"
+            :actions="true"
+            :default-entries-per-page="10"
+            :action-buttons="{
+              view: true,
+              edit: true,
+              suspend: false,
+              delete: true,
+            }"
+            :action-labels="{
+              edit: 'Edit Passenger',
+              delete: 'Delete Passenger',
+            }"
           >
-        </template>
+            <!-- Custom formatting for passenger name -->
+            <template #cell-passenger_name="{ item }">
+              <span class="text-gray-300 flex flex-col"
+                >{{ item.last_name }}, {{ item.first_name }}
+                {{ item.middle_name }}
+                <span class="text-xs">#{{ item.passenger_id }}</span></span
+              >
+            </template>
 
-        <!-- Custom formatting for dates -->
-        <template #cell-date_of_birth="{ value }">
-          <span class="text-gray-300">{{ formatDate(value, false) }}</span>
-        </template>
-        <template #cell-registered_at="{ value }">
-          <span class="text-gray-300">{{ formatDate(value, false) }}</span>
-        </template>
-      </tablesDataTable>
+            <!-- Custom formatting for dates -->
+            <template #cell-date_of_birth="{ value }">
+              <span class="text-gray-300">{{ formatDate(value, false) }}</span>
+            </template>
+            <template #cell-registered_at="{ value }">
+              <span class="text-gray-300">{{ formatDate(value, false) }}</span>
+            </template>
+          </tablesDataTable>
+        </div>
+      </div>
     </div>
   </div>
 </template>

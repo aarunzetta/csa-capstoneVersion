@@ -55,72 +55,83 @@ const vehicleOwnershipColors: ColorMap = {
 </script>
 
 <template>
-  <div class="flex flex-col gap-8">
-    <div>
-      <h2 class="text-white text-4xl">Drivers</h2>
-      <p class="text-gray-400 text-base mt-1">
-        Manage and monitor all registered drivers
-      </p>
+  <div class="flex flex-col h-screen overflow-y-auto">
+    <!-- Sticky Header -->
+    <div class="sticky top-0 z-10">
+      <layoutHeader>
+        <template #actions> </template>
+      </layoutHeader>
     </div>
-    <!-- Loading State -->
-    <div v-if="isLoading" class="text-white">Loading drivers...</div>
+    <!-- Page Content -->
+    <div class="bg-secondary-dark text-white p-6 flex-1">
+      <div class="flex flex-col gap-8">
+        <div>
+          <h2 class="text-white text-4xl">Drivers</h2>
+          <p class="text-gray-400 text-base mt-1">
+            Manage and monitor all registered drivers
+          </p>
+        </div>
+        <!-- Loading State -->
+        <div v-if="isLoading" class="text-white">Loading drivers...</div>
 
-    <!-- Error State -->
-    <div v-else-if="error" class="text-danger">{{ error }}</div>
+        <!-- Error State -->
+        <div v-else-if="error" class="text-danger">{{ error }}</div>
 
-    <div v-else>
-      <!-- Drivers Table -->
-      <tablesDataTable
-        :columns="columns"
-        :data="drivers"
-        :actions="true"
-        :default-entries-per-page="10"
-        :action-buttons="{
-          view: true,
-          edit: true,
-          suspend: false,
-          delete: true,
-        }"
-        :action-labels="{
-          edit: 'Edit Driver',
-          delete: 'Delete Driver',
-        }"
-      >
-        <!-- Custom formatting for driver name -->
-        <template #cell-driver_name="{ item }">
-          <span class="flex flex-col"
-            >{{ item.last_name }}, {{ item.first_name }}
-            {{ item.middle_name }}
-            <span class="text-xs">#{{ item.driver_id }}</span>
-          </span>
-        </template>
-
-        <!-- Custom formatting for license status -->
-        <template #cell-license_status="{ value }">
-          <span
-            class="text-sm"
-            :class="getStatusColor(value, licenseStatusColors)"
-            >{{ capitalize(value) }}</span
+        <div v-else>
+          <!-- Drivers Table -->
+          <tablesDataTable
+            :columns="columns"
+            :data="drivers"
+            :actions="true"
+            :default-entries-per-page="10"
+            :action-buttons="{
+              view: true,
+              edit: true,
+              suspend: false,
+              delete: true,
+            }"
+            :action-labels="{
+              edit: 'Edit Driver',
+              delete: 'Delete Driver',
+            }"
           >
-        </template>
+            <!-- Custom formatting for driver name -->
+            <template #cell-driver_name="{ item }">
+              <span class="flex flex-col"
+                >{{ item.last_name }}, {{ item.first_name }}
+                {{ item.middle_name }}
+                <span class="text-xs">#{{ item.driver_id }}</span>
+              </span>
+            </template>
 
-        <!-- Custom formatting for vehicle ownership -->
-        <template #cell-vehicle_ownership="{ value }">
-          <span
-            class="text-sm"
-            :class="getStatusColor(value, vehicleOwnershipColors)"
-            >{{ capitalize(value) }}</span
-          >
-        </template>
+            <!-- Custom formatting for license status -->
+            <template #cell-license_status="{ value }">
+              <span
+                class="text-sm"
+                :class="getStatusColor(value, licenseStatusColors)"
+                >{{ capitalize(value) }}</span
+              >
+            </template>
 
-        <!-- Custom formatting for dates -->
-        <template #cell-date_of_birth="{ value }">
-          <span>{{ formatDate(value, false) }}</span>
-        </template>
-        <template #cell-registered_at="{ value }">
-          <span>{{ formatDate(value, false) }}</span>
-        </template>
-      </tablesDataTable>
+            <!-- Custom formatting for vehicle ownership -->
+            <template #cell-vehicle_ownership="{ value }">
+              <span
+                class="text-sm"
+                :class="getStatusColor(value, vehicleOwnershipColors)"
+                >{{ capitalize(value) }}</span
+              >
+            </template>
+
+            <!-- Custom formatting for dates -->
+            <template #cell-date_of_birth="{ value }">
+              <span>{{ formatDate(value, false) }}</span>
+            </template>
+            <template #cell-registered_at="{ value }">
+              <span>{{ formatDate(value, false) }}</span>
+            </template>
+          </tablesDataTable>
+        </div>
+      </div>
     </div>
   </div>
 </template>

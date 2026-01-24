@@ -34,71 +34,82 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-8">
-    <div>
-      <h2 class="text-white text-4xl">Dashboard</h2>
-      <p class="text-gray-400 text-base mt-2">
-        Overview of system statistics and recent activity
-      </p>
+  <div class="flex flex-col h-screen overflow-y-auto">
+    <!-- Sticky Header -->
+    <div class="sticky top-0 z-10">
+      <layoutHeader>
+        <template #actions></template>
+      </layoutHeader>
     </div>
+    <!-- Page Content -->
+    <div class="bg-secondary-dark text-white p-6 flex-1">
+      <div class="flex flex-col gap-8">
+        <div>
+          <h2 class="text-white text-4xl">Dashboard</h2>
+          <p class="text-gray-400 text-base mt-2">
+            Overview of system statistics and recent activity
+          </p>
+        </div>
 
-    <!-- Statistics Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <uiCard
-        id="rides"
-        label="Rides"
-        :value="stats.totalRides"
-        :icon="CarTaxiFront"
-        href="/rides"
-      />
-      <uiCard
-        id="passengers"
-        label="Passengers"
-        :value="stats.totalPassengers"
-        :icon="Users"
-        href="/passengers"
-      />
-      <uiCard
-        id="drivers"
-        label="Drivers"
-        :value="stats.totalDrivers"
-        :icon="IdCard"
-        href="/drivers"
-      />
-      <uiCard
-        id="admins"
-        label="Admins"
-        :value="stats.totalAdmins"
-        :icon="UserStar"
-        href="/admins"
-      />
-    </div>
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <uiCard
+            id="rides"
+            label="Rides"
+            :value="stats.totalRides"
+            :icon="CarTaxiFront"
+            href="/rides"
+          />
+          <uiCard
+            id="passengers"
+            label="Passengers"
+            :value="stats.totalPassengers"
+            :icon="Users"
+            href="/passengers"
+          />
+          <uiCard
+            id="drivers"
+            label="Drivers"
+            :value="stats.totalDrivers"
+            :icon="IdCard"
+            href="/drivers"
+          />
+          <uiCard
+            id="admins"
+            label="Admins"
+            :value="stats.totalAdmins"
+            :icon="UserStar"
+            href="/admins"
+          />
+        </div>
 
-    <!-- Loading State -->
-    <div v-if="isLoading" class="text-gray-100">Loading rides...</div>
+        <!-- Loading State -->
+        <div v-if="isLoading" class="text-gray-100">Loading rides...</div>
 
-    <!-- Error State -->
-    <div v-else-if="error" class="text-danger">{{ error }}</div>
+        <!-- Error State -->
+        <div v-else-if="error" class="text-danger">{{ error }}</div>
 
-    <div v-else>
-      <h3 class="text-gray-100 text-2xl mb-4">View Latest Rides</h3>
-      <!-- Rides Table -->
-      <tablesDataTable
-        :columns="columns"
-        :data="rides"
-        :actions="true"
-        :action-buttons="{
-          view: true,
-          edit: false,
-          suspend: false,
-          delete: false,
-        }"
-      >
-        <!-- Custom formatting for dates -->
-        <template #cell-completed_at="{ value }">
-          <span>{{ formatDate(value) }}</span>
-        </template>
-      </tablesDataTable>
+        <div v-else>
+          <h3 class="text-gray-100 text-2xl mb-4">View Latest Rides</h3>
+          <!-- Rides Table -->
+          <tablesDataTable
+            :columns="columns"
+            :data="rides"
+            :actions="true"
+            :action-buttons="{
+              view: true,
+              edit: false,
+              suspend: false,
+              delete: false,
+            }"
+          >
+            <!-- Custom formatting for dates -->
+            <template #cell-completed_at="{ value }">
+              <span>{{ formatDate(value) }}</span>
+            </template>
+          </tablesDataTable>
+        </div>
+      </div>
     </div>
   </div>
 </template>

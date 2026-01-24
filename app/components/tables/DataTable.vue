@@ -371,7 +371,7 @@ const handleDelete = () => {
     ></div>
     <div
       v-if="isActionModalOpen"
-      class="fixed z-50 bg-secondary-dark rounded-lg p-1 w-48 shadow-xl border border-[#3a3a3a]"
+      class="fixed z-50 bg-secondary rounded-lg p-1 w-48 shadow-xl border border-secondary-light"
       :style="{
         top: `${modalPosition.top}px`,
         left: `${modalPosition.left}px`,
@@ -384,25 +384,25 @@ const handleDelete = () => {
           class="flex flex-col gap-1"
           :class="
             props.actionButtons.suspend || props.actionButtons.delete
-              ? 'border-b border-[#3a3a3a]'
+              ? 'border-b border-secondary-light'
               : ''
           "
         >
           <button
             v-if="props.actionButtons.view"
-            class="flex items-center gap-4 w-full p-2 text-left rounded hover:bg-blue-500 transition-colors text-white text-sm"
+            class="flex items-center gap-4 w-full p-2 text-left rounded hover:bg-gray-700 transition-colors text-white text-sm"
             @click="handleView"
           >
-            <Eye class="w-4 h-4 text-[#9c9c9c]" />
+            <Eye class="w-4 h-4 text-gray-400" />
             <span class="font-medium">View Details</span>
           </button>
 
           <button
             v-if="props.actionButtons.edit"
-            class="flex items-center gap-4 w-full p-2 text-left rounded hover:bg-blue-500 transition-colors text-white text-sm"
+            class="flex items-center gap-4 w-full p-2 text-left rounded hover:bg-gray-700 transition-colors text-white text-sm"
             @click="handleEdit"
           >
-            <Pencil class="w-4 h-4 text-[#9c9c9c]" />
+            <Pencil class="w-4 h-4 text-gray-400" />
             <span class="font-medium">{{ props.actionLabels.edit }}</span>
           </button>
         </div>
@@ -412,18 +412,18 @@ const handleDelete = () => {
         >
           <button
             v-if="props.actionButtons.suspend"
-            class="flex items-center gap-4 w-full p-2 text-left rounded hover:bg-blue-500 transition-colors text-white text-sm"
+            class="flex items-center gap-4 w-full p-2 text-left rounded hover:bg-gray-700 transition-colors text-white text-sm"
             @click="handleSuspend"
           >
-            <ShieldOff class="w-4 h-4 text-[#9c9c9c]" />
+            <ShieldOff class="w-4 h-4 text-gray-400" />
             <span class="font-medium text-warning">Suspend</span>
           </button>
           <button
             v-if="props.actionButtons.delete"
-            class="flex items-center gap-4 w-full p-2 text-left rounded hover:bg-blue-500 transition-colors text-white text-sm"
+            class="flex items-center gap-4 w-full p-2 text-left rounded hover:bg-bg-gray-700 transition-colors text-white text-sm"
             @click="handleDelete"
           >
-            <Trash2 class="w-4 h-4 text-[#9c9c9c]" />
+            <Trash2 class="w-4 h-4 text-gray-400" />
             <span class="font-medium text-danger">{{
               props.actionLabels.delete
             }}</span>
