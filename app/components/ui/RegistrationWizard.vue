@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { User, CarTaxiFront, MapPin, CheckCircle } from "lucide-vue-next";
+import {
+  User,
+  CarTaxiFront,
+  MapPin,
+  CheckCircle,
+  Loader,
+} from "lucide-vue-next";
 
 const emit = defineEmits(["submit"]);
 
@@ -16,7 +22,7 @@ interface FormErrors {
   street?: string;
   city?: string;
   province?: string;
-  baranggay?: string;
+  barangay?: string;
   region?: string;
   termsAgreed?: string;
   privacyAgreed?: string;
@@ -53,7 +59,7 @@ const formData = ref({
   region: "",
   province: "",
   city: "",
-  baranggay: "",
+  barangay: "",
   street: "",
 
   // Review
@@ -96,7 +102,8 @@ const validateStep = (step: number) => {
       isValid = false;
     }
     if (!formData.value.license_expiration_date) {
-      errors.value.license_expiration_date = "License expiry date is required";
+      errors.value.license_expiration_date =
+        "License expiration date is required";
       isValid = false;
     }
   }
@@ -129,8 +136,8 @@ const validateStep = (step: number) => {
       errors.value.region = "Region is required";
       isValid = false;
     }
-    if (!formData.value.baranggay) {
-      errors.value.baranggay = "Baranggay is required";
+    if (!formData.value.barangay) {
+      errors.value.barangay = "Barangay is required";
       isValid = false;
     }
   }
@@ -147,6 +154,43 @@ const validateStep = (step: number) => {
   }
 
   return isValid;
+};
+
+const isCurrentStepValid = () => {
+  const step = currentStep.value;
+
+  if (step === 1) {
+    return (
+      formData.value.first_name.trim() &&
+      formData.value.last_name.trim() &&
+      formData.value.phone_number.trim() &&
+      formData.value.date_of_birth &&
+      formData.value.license_number.trim() &&
+      formData.value.license_expiration_date
+    );
+  }
+
+  if (step === 2) {
+    return (
+      formData.value.ownership && formData.value.vehicle_plate_number.trim()
+    );
+  }
+
+  if (step === 3) {
+    return (
+      formData.value.street.trim() &&
+      formData.value.city.trim() &&
+      formData.value.province &&
+      formData.value.region &&
+      formData.value.barangay
+    );
+  }
+
+  if (step === 4) {
+    return formData.value.termsAgreed && formData.value.privacyAgreed;
+  }
+
+  return true;
 };
 
 const nextStep = () => {
@@ -184,7 +228,7 @@ const handleSubmit = async () => {
     <uiMultiStepWizard :steps="wizardSteps" :current-step="currentStep" />
 
     <!-- Form Content -->
-    <div class="bg-secondary rounded-lg p-8">
+    <div class="bg-secondary rounded-lg p-8 border border-secondary-light">
       <!-- Step 1: Personal Info -->
       <div v-show="currentStep === 1">
         <h3 class="text-2xl font-semibold text-white mb-2">Personal Info</h3>
@@ -200,10 +244,9 @@ const handleSubmit = async () => {
                 v-model="formData.first_name"
                 label="First Name"
                 placeholder="Enter First Name"
+                :required="true"
+                :error="errors.first_name"
               />
-              <p v-if="errors.first_name" class="text-danger text-sm mt-1">
-                {{ errors.first_name }}
-              </p>
             </div>
 
             <div>
@@ -212,10 +255,9 @@ const handleSubmit = async () => {
                 v-model="formData.last_name"
                 label="Last Name"
                 placeholder="Enter Last Name"
+                :required="true"
+                :error="errors.last_name"
               />
-              <p v-if="errors.last_name" class="text-danger text-sm mt-1">
-                {{ errors.last_name }}
-              </p>
             </div>
           </div>
 
@@ -234,24 +276,21 @@ const handleSubmit = async () => {
                 v-model="formData.phone_number"
                 label="Phone Number"
                 placeholder="+63 912 345 6789"
+                :required="true"
+                :error="errors.phone_number"
               />
-              <p v-if="errors.phone_number" class="text-danger text-sm mt-1">
-                {{ errors.phone_number }}
-              </p>
             </div>
           </div>
 
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <uiFormInput
+              <uiFormDateInput
                 id="date_of_birth"
                 v-model="formData.date_of_birth"
                 label="Date of Birth"
-                type="date"
+                :required="true"
+                :error="errors.date_of_birth"
               />
-              <p v-if="errors.date_of_birth" class="text-danger text-sm mt-1">
-                {{ errors.date_of_birth }}
-              </p>
             </div>
             <div>
               <uiFormInput
@@ -259,27 +298,21 @@ const handleSubmit = async () => {
                 v-model="formData.license_number"
                 label="License Number"
                 placeholder="DL-XXXX-XXXXX"
+                :required="true"
+                :error="errors.license_number"
               />
-              <p v-if="errors.license_number" class="text-danger text-sm mt-1">
-                {{ errors.license_number }}
-              </p>
             </div>
           </div>
 
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <uiFormInput
+              <uiFormDateInput
                 id="license_expiration_date"
                 v-model="formData.license_expiration_date"
-                label="License Expiry Date"
-                type="date"
+                label="License Expiration Date"
+                :required="true"
+                :error="errors.license_expiration_date"
               />
-              <p
-                v-if="errors.license_expiration_date"
-                class="text-danger text-sm mt-1"
-              >
-                {{ errors.license_expiration_date }}
-              </p>
             </div>
           </div>
         </div>
@@ -292,26 +325,14 @@ const handleSubmit = async () => {
 
         <div class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-white mb-2">
-              Ownership <span class="text-danger">*</span>
-            </label>
-            <select
+            <uiFormSelect
+              id="ownership"
               v-model="formData.ownership"
-              class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-              :class="{ 'border-red-500': errors.ownership }"
-            >
-              <option value="" disabled>Select ownership type</option>
-              <option
-                v-for="option in ownershipOptions"
-                :key="option.value"
-                :value="option.value"
-              >
-                {{ option.label }}
-              </option>
-            </select>
-            <p v-if="errors.ownership" class="text-danger text-sm mt-1">
-              {{ errors.ownership }}
-            </p>
+              label="Ownership Type"
+              :options="ownershipOptions"
+              :required="true"
+              :error="errors.ownership"
+            />
           </div>
 
           <div>
@@ -320,13 +341,9 @@ const handleSubmit = async () => {
               v-model="formData.vehicle_plate_number"
               label="Plate Number"
               placeholder="ABC-1234"
+              :required="true"
+              :error="errors.vehicle_plate_number"
             />
-            <p
-              v-if="errors.vehicle_plate_number"
-              class="text-danger text-sm mt-1"
-            >
-              {{ errors.vehicle_plate_number }}
-            </p>
           </div>
         </div>
       </div>
@@ -344,10 +361,9 @@ const handleSubmit = async () => {
                 v-model="formData.region"
                 label="Region"
                 placeholder="Enter region"
+                :required="true"
+                :error="errors.region"
               />
-              <p v-if="errors.region" class="text-danger text-sm mt-1">
-                {{ errors.region }}
-              </p>
             </div>
 
             <div>
@@ -356,10 +372,9 @@ const handleSubmit = async () => {
                 v-model="formData.province"
                 label="Province"
                 placeholder="Enter province"
+                :required="true"
+                :error="errors.province"
               />
-              <p v-if="errors.province" class="text-danger text-sm mt-1">
-                {{ errors.province }}
-              </p>
             </div>
           </div>
 
@@ -370,21 +385,19 @@ const handleSubmit = async () => {
                 v-model="formData.city"
                 label="City"
                 placeholder="Enter city"
+                :required="true"
+                :error="errors.city"
               />
-              <p v-if="errors.city" class="text-danger text-sm mt-1">
-                {{ errors.city }}
-              </p>
             </div>
             <div>
               <uiFormInput
-                id="baranggay"
-                v-model="formData.baranggay"
-                label="Baranggay"
-                placeholder="Enter baranggay"
+                id="barangay"
+                v-model="formData.barangay"
+                label="Barangay"
+                placeholder="Enter barangay"
+                :required="true"
+                :error="errors.barangay"
               />
-              <p v-if="errors.baranggay" class="text-danger text-sm mt-1">
-                {{ errors.baranggay }}
-              </p>
             </div>
           </div>
           <div>
@@ -393,10 +406,9 @@ const handleSubmit = async () => {
               v-model="formData.street"
               label="Street"
               placeholder="Enter street"
+              :required="true"
+              :error="errors.street"
             />
-            <p v-if="errors.street" class="text-danger text-sm mt-1">
-              {{ errors.street }}
-            </p>
           </div>
         </div>
       </div>
@@ -410,7 +422,7 @@ const handleSubmit = async () => {
 
         <div class="space-y-6">
           <!-- Personal Info Summary -->
-          <div class="bg-gray-800 rounded-lg p-4">
+          <div class="bg-secondary-light rounded-lg p-4">
             <h4 class="text-lg font-semibold text-white mb-3">
               Personal Information
             </h4>
@@ -448,7 +460,7 @@ const handleSubmit = async () => {
           </div>
 
           <!-- Vehicle Details Summary -->
-          <div class="bg-gray-800 rounded-lg p-4">
+          <div class="bg-secondary-light rounded-lg p-4">
             <h4 class="text-lg font-semibold text-white mb-3">
               Vehicle Details
             </h4>
@@ -469,14 +481,14 @@ const handleSubmit = async () => {
           </div>
 
           <!-- Address Summary -->
-          <div class="bg-gray-800 rounded-lg p-4">
+          <div class="bg-secondary-light rounded-lg p-4">
             <h4 class="text-lg font-semibold text-white mb-3">Address</h4>
             <div class="text-sm">
               <span class="text-gray-400">Full Address:</span>
               <span class="text-white ml-2">
                 {{ formData.region }}, {{ formData.province }},
-                {{ formData.city }}, {{ formData.baranggay }},
-                {{ formData.street }},
+                {{ formData.city }}, {{ formData.barangay }},
+                {{ formData.street }}
               </span>
             </div>
           </div>
@@ -488,11 +500,11 @@ const handleSubmit = async () => {
                 id="terms"
                 v-model="formData.termsAgreed"
                 type="checkbox"
-                class="mt-1 w-4 h-4 rounded bg-gray-800 border-gray-700 text-blue-500 focus:ring-2 focus:ring-blue-500"
+                class="mt-1 w-4 h-4 rounded bg-secondary-dark border-gray-700 text-primary"
               />
               <label for="terms" class="text-sm text-gray-300">
                 I agree to the
-                <a href="#" class="text-blue-500 hover:underline"
+                <a href="#" class="text-primary hover:underline"
                   >Terms and Conditions</a
                 >
               </label>
@@ -506,11 +518,11 @@ const handleSubmit = async () => {
                 id="privacy"
                 v-model="formData.privacyAgreed"
                 type="checkbox"
-                class="mt-1 w-4 h-4 rounded bg-gray-800 border-gray-700 text-blue-500 focus:ring-2 focus:ring-blue-500"
+                class="mt-1 w-4 h-4 rounded bg-secondary-dark border-gray-700 text-primary"
               />
               <label for="privacy" class="text-sm text-gray-300">
                 I agree to the
-                <a href="#" class="text-blue-500 hover:underline"
+                <a href="#" class="text-primary hover:underline"
                   >Privacy Policy</a
                 >
               </label>
@@ -524,7 +536,7 @@ const handleSubmit = async () => {
 
       <!-- Navigation Buttons -->
       <div
-        class="flex items-center justify-between mt-8 pt-6 border-t border-gray-700"
+        class="flex items-center justify-between mt-8 pt-6 border-t border-secondary-light"
       >
         <button
           v-if="currentStep > 1"
@@ -537,7 +549,8 @@ const handleSubmit = async () => {
 
         <button
           v-if="currentStep < totalSteps"
-          class="p-3 btn-primary flex items-center gap-2 text-base"
+          :disabled="!isCurrentStepValid()"
+          class="p-3 btn-primary flex items-center gap-2 text-base disabled:opacity-30 disabled:cursor-not-allowed"
           @click="nextStep"
         >
           Next Step
@@ -545,27 +558,13 @@ const handleSubmit = async () => {
 
         <button
           v-else
-          :disabled="isSubmitting"
-          class="p-3 btn-primary flex items-center gap-2 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+          :disabled="isSubmitting || !isCurrentStepValid()"
+          class="p-3 btn-primary flex items-center gap-2 text-base disabled:opacity-30 disabled:cursor-not-allowed"
           @click="handleSubmit"
         >
           <span v-if="!isSubmitting">Submit Registration</span>
           <span v-else class="flex items-center gap-2">
-            <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-              <circle
-                class="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                stroke-width="4"
-              />
-              <path
-                class="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              />
-            </svg>
+            <Loader class="animate-spin h-5 w-5" />
             Submitting...
           </span>
         </button>
