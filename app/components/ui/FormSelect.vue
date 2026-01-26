@@ -28,8 +28,13 @@ const selectedLabel = computed(() => {
 
 function toggleDropdown() {
   if (!props.disabled) {
-    isOpen.value = !isOpen.value;
     if (isOpen.value) {
+      // If this dropdown is already open, just close it
+      isOpen.value = false;
+    } else {
+      // Close all other dropdowns first, then open this one
+      window.dispatchEvent(new CustomEvent("close-all-dropdowns"));
+      isOpen.value = true;
       dropdownWidth.value = buttonRef.value?.offsetWidth || 0;
     }
   }
@@ -46,12 +51,18 @@ function handleClickOutside(event: MouseEvent) {
   }
 }
 
+function handleCloseAllDropdowns() {
+  isOpen.value = false;
+}
+
 onMounted(() => {
   document.addEventListener("click", handleClickOutside);
+  window.addEventListener("close-all-dropdowns", handleCloseAllDropdowns);
 });
 
 onUnmounted(() => {
   document.removeEventListener("click", handleClickOutside);
+  window.removeEventListener("close-all-dropdowns", handleCloseAllDropdowns);
 });
 </script>
 

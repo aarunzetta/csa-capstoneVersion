@@ -23,11 +23,14 @@ const columns: TableColumn[] = [
 ];
 
 // Use the admins composable
-const { admins, isLoading, error, fetchAdmins } = useAdmins();
+const adminsComposable = useAdmins();
+const { admins, isLoading, error, fetchAdmins } = adminsComposable;
 
 // Modal state
 const isModalOpen = ref(false);
 const selectedAdmin = ref<Admin | null>(null);
+const isEditModalOpen = ref(false);
+const selectedEditAdmin = ref<Admin | null>(null);
 
 const handleViewAdmin = (admin: Admin) => {
   selectedAdmin.value = admin;
@@ -37,6 +40,16 @@ const handleViewAdmin = (admin: Admin) => {
 const closeModal = () => {
   isModalOpen.value = false;
   selectedAdmin.value = null;
+};
+
+const handleEditAdmin = (admin: Admin) => {
+  selectedEditAdmin.value = admin;
+  isEditModalOpen.value = true;
+};
+
+const closeEditModal = () => {
+  isEditModalOpen.value = false;
+  selectedEditAdmin.value = null;
 };
 
 // Fetch admins when component mounts
@@ -102,6 +115,7 @@ const getStatusMeta = (value: number) => {
               delete: 'Delete Admin',
             }"
             @view="handleViewAdmin"
+            @edit="handleEditAdmin"
           >
             <!-- Custom formatting for admin name -->
             <template #cell-admin_name="{ item }">
@@ -148,6 +162,12 @@ const getStatusMeta = (value: number) => {
       :is-open="isModalOpen"
       :admin="selectedAdmin"
       @close="closeModal"
+    />
+    <uiEditAdminModal
+      :is-open="isEditModalOpen"
+      :admin="selectedEditAdmin"
+      :admins-composable="adminsComposable"
+      @close="closeEditModal"
     />
   </div>
 </template>
