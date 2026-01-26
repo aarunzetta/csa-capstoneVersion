@@ -9,11 +9,11 @@ import { ArrowLeft } from "lucide-vue-next";
       <layoutHeader>
         <template #actions>
           <NuxtLink
-            to="/drivers"
+            to="/passengers"
             class="p-3 flex items-center gap-2 text-base text-gray-400 hover:text-white transition-colors duration-200 ease-in-out"
           >
             <ArrowLeft class="w-5 h-5" />
-            <span>Back to Drivers</span>
+            <span>Back to Passengers</span>
           </NuxtLink>
         </template>
       </layoutHeader>
@@ -23,17 +23,15 @@ import { ArrowLeft } from "lucide-vue-next";
       <div class="flex flex-col gap-8">
         <div>
           <h2 class="text-white text-3xl font-semibold">
-            Register New Drivers
+            Register New Passenger
           </h2>
           <p class="text-gray-400 text-base mt-1">
-            Complete the form below to register a new driver
+            Complete the form below to register a new passenger
           </p>
         </div>
 
-        <!-- Indicator -->
-
         <!-- FORM-->
-        <uiDriverRegistrationWizard />
+        <uiPassengerRegistrationWizard />
       </div>
     </div>
   </div>

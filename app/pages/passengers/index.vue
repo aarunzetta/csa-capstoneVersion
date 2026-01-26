@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import type { TableColumn } from "../types";
-import type { Passenger } from "../types/passenger";
-import { usePassengers } from "../composables/usePassengers";
-import { formatDate } from "../utils/dateFormatter";
+import type { TableColumn } from "../../types";
+import type { Passenger } from "../../types/passenger";
+import { usePassengers } from "../../composables/usePassengers";
+import { formatDate } from "../../utils/dateFormatter";
+import { UserPlus } from "lucide-vue-next";
 
 // Define columns for the Passengers table
 const columns: TableColumn[] = [
@@ -56,7 +57,14 @@ onMounted(() => {
     <!-- Sticky Header -->
     <div class="sticky top-0 z-10">
       <layoutHeader>
-        <template #actions> </template>
+        <template #actions>
+          <NuxtLink
+            to="/passengers/register"
+            class="p-3 btn-primary flex items-center gap-2 text-base"
+          >
+            <UserPlus class="w-5 h-5" /><span>Register New Passenger</span>
+          </NuxtLink></template
+        >
       </layoutHeader>
     </div>
     <!-- Page Content -->
