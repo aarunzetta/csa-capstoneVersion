@@ -12,6 +12,10 @@ export interface Ride {
   ride_duration_minutes: number;
   started_at: Date;
   completed_at: Date;
+  driver_first_name: string;
+  driver_last_name: string;
+  passenger_first_name: string;
+  passenger_last_name: string;
 }
 
 export interface RideFormData {
