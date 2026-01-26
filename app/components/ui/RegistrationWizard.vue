@@ -7,8 +7,8 @@ import {
   CheckCircle,
   Loader,
 } from "lucide-vue-next";
-
-const emit = defineEmits(["submit"]);
+import { useDrivers } from "../../composables/useDrivers";
+import { useToast } from "../../composables/useToast";
 
 interface FormErrors {
   first_name?: string;
@@ -212,10 +212,55 @@ const handleSubmit = async () => {
   if (validateStep(currentStep.value)) {
     isSubmitting.value = true;
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      emit("submit", formData.value);
-    } finally {
+      const { createDriver } = useDrivers();
+      const { success, error: showError } = useToast();
+
+      // Map form data to driver payload (exclude checkboxes)
+      const driverPayload = {
+        first_name: formData.value.first_name,
+        last_name: formData.value.last_name,
+        middle_name: formData.value.middleName || undefined,
+        date_of_birth: new Date(formData.value.date_of_birth),
+        phone_number: formData.value.phone_number,
+        license_number: formData.value.license_number,
+        license_expiration_date: new Date(
+          formData.value.license_expiration_date,
+        ),
+        license_status: "active" as const,
+        vehicle_ownership: formData.value.ownership as
+          | "owned"
+          | "rented"
+          | "company"
+          | "other",
+        vehicle_plate_number: formData.value.vehicle_plate_number,
+        address_region: formData.value.region,
+        address_province: formData.value.province,
+        address_city: formData.value.city,
+        address_barangay: formData.value.barangay,
+        address_street: formData.value.street,
+      };
+
+      const result = await createDriver(driverPayload);
+
+      if (result.success) {
+        // Show success toast and redirect
+        success("Driver created successfully!");
+        setTimeout(() => {
+          // Redirect to drivers page (toast will persist across navigation)
+          window.location.href = "/drivers";
+        }, 2000);
+      } else {
+        // Show error toast
+        console.error("Create driver failed:", result.message);
+        showError(result.message || "Failed to create driver");
+        isSubmitting.value = false;
+      }
+    } catch (error) {
+      console.error("Submit error:", error);
+      const { error: showError } = useToast();
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      showError(errorMessage);
       isSubmitting.value = false;
     }
   }
