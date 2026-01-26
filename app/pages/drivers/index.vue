@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import type { TableColumn } from "../../types";
+import type { Driver } from "../../types/driver";
 import { useDrivers } from "../../composables/useDrivers";
 import { formatDate } from "../../utils/dateFormatter";
 import {
@@ -53,6 +54,18 @@ const vehicleOwnershipColors: ColorMap = {
   other:
     "text-secondary-light border border-secondary-light py-[6px] px-3 rounded-2xl bg-slate-300",
 };
+
+const isModalOpen = ref(false);
+const selectedDriver = ref<Driver | null>(null);
+
+const handleViewDriver = (driver: Driver) => {
+  selectedDriver.value = driver;
+  isModalOpen.value = true;
+};
+const closeModal = () => {
+  isModalOpen.value = false;
+  selectedDriver.value = null;
+};
 </script>
 
 <template>
@@ -102,6 +115,7 @@ const vehicleOwnershipColors: ColorMap = {
               edit: 'Edit Driver',
               delete: 'Delete Driver',
             }"
+            @view="handleViewDriver"
           >
             <!-- Custom formatting for driver name -->
             <template #cell-driver_name="{ item }">
@@ -141,5 +155,10 @@ const vehicleOwnershipColors: ColorMap = {
         </div>
       </div>
     </div>
+    <uiDriverDetailsModal
+      :is-open="isModalOpen"
+      :driver="selectedDriver"
+      @close="closeModal"
+    />
   </div>
 </template>
