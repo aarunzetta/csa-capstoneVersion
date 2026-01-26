@@ -1,4 +1,6 @@
-export const formatLastLogin = (dateValue: string | Date): string => {
+export const formatLastLogin = (
+  dateValue: string | Date | undefined,
+): string => {
   if (!dateValue) return "Never";
 
   const now = new Date();

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import type { TableColumn } from "../../types";
+import type { Admin } from "../../types/admin";
 import { useAdmins } from "../../composables/useAdmins";
 import { formatDate } from "../../utils/dateFormatter";
 import { formatLastLogin } from "../../utils/lastLoginFormatter";
@@ -23,6 +24,20 @@ const columns: TableColumn[] = [
 
 // Use the admins composable
 const { admins, isLoading, error, fetchAdmins } = useAdmins();
+
+// Modal state
+const isModalOpen = ref(false);
+const selectedAdmin = ref<Admin | null>(null);
+
+const handleViewAdmin = (admin: Admin) => {
+  selectedAdmin.value = admin;
+  isModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+  selectedAdmin.value = null;
+};
 
 // Fetch admins when component mounts
 onMounted(() => {
@@ -86,6 +101,7 @@ const getStatusMeta = (value: number) => {
               edit: 'Edit Admin',
               delete: 'Delete Admin',
             }"
+            @view="handleViewAdmin"
           >
             <!-- Custom formatting for admin name -->
             <template #cell-admin_name="{ item }">
@@ -128,5 +144,10 @@ const getStatusMeta = (value: number) => {
         </div>
       </div>
     </div>
+    <uiAdminDetailsModal
+      :is-open="isModalOpen"
+      :admin="selectedAdmin"
+      @close="closeModal"
+    />
   </div>
 </template>
