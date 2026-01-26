@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import type { TableColumn } from "../types";
+import type { Passenger } from "../types/passenger";
 import { usePassengers } from "../composables/usePassengers";
 import { formatDate } from "../utils/dateFormatter";
 
@@ -16,6 +17,20 @@ const columns: TableColumn[] = [
 
 // Use the passenger composable
 const { passengers, isLoading, error, fetchPassengers } = usePassengers();
+
+// Modal state
+const isModalOpen = ref(false);
+const selectedPassenger = ref<Passenger | null>(null);
+
+const handleViewPassenger = (passenger: Passenger) => {
+  selectedPassenger.value = passenger;
+  isModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+  selectedPassenger.value = null;
+};
 
 // Fetch passengers when component mounts
 onMounted(() => {
@@ -63,6 +78,7 @@ onMounted(() => {
               edit: 'Edit Passenger',
               delete: 'Delete Passenger',
             }"
+            @view="handleViewPassenger"
           >
             <!-- Custom formatting for passenger name -->
             <template #cell-passenger_name="{ item }">
@@ -84,5 +100,10 @@ onMounted(() => {
         </div>
       </div>
     </div>
+    <uiPassengerDetailsModal
+      :is-open="isModalOpen"
+      :passenger="selectedPassenger"
+      @close="closeModal"
+    />
   </div>
 </template>
