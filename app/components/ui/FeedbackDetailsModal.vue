@@ -90,7 +90,7 @@ const getSentimentColor = (rating: number) => {
                   {{ feedback.passenger_middle_name }}
                   {{ feedback.passenger_last_name }}
                 </p>
-                <p class="text-gray-400 text-sm">Passenger</p>
+                <p class="text-gray-400 text-sm font-medium">Passenger</p>
               </div>
             </div>
           </div>
@@ -169,7 +169,7 @@ const getSentimentColor = (rating: number) => {
             <div class="bg-secondary-light rounded-lg p-4">
               <div class="flex items-center gap-2 mb-2">
                 <CarTaxiFront class="text-gray-400 w-5 h-5" />
-                <p class="text-gray-400 text-sm">Ride ID</p>
+                <p class="text-gray-400 text-sm font-semibold">Ride ID</p>
               </div>
               <p class="text-white font-medium">#{{ feedback.ride_id }}</p>
             </div>
@@ -177,7 +177,7 @@ const getSentimentColor = (rating: number) => {
             <div class="bg-secondary-light rounded-lg p-4">
               <div class="flex items-center gap-2 mb-2">
                 <Calendar class="text-gray-400 w-5 h-5" />
-                <p class="text-gray-400 text-sm">Date</p>
+                <p class="text-gray-400 text-sm font-semibold">Date</p>
               </div>
               <p class="text-white font-medium">
                 {{ formatDate(feedback.created_at) }}

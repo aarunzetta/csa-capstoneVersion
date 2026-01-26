@@ -8,9 +8,8 @@ import { Star } from "lucide-vue-next";
 
 // Define columns for the feedbacks table
 const columns: TableColumn[] = [
-  { key: "passenger_id", label: "Passenger ID", sortable: true },
-  { key: "driver_id", label: "Driver ID", sortable: true },
-  { key: "ride_id", label: "Ride ID", sortable: true },
+  { key: "passenger_name", label: "Passenger", sortable: true },
+  { key: "driver_name", label: "Driver", sortable: true },
   { key: "rating", label: "Rating", sortable: true },
   { key: "sentiment", label: "Sentiment", sortable: false },
   { key: "comments", label: "Comments", sortable: false },
@@ -100,6 +99,22 @@ onMounted(() => {
             }"
             @view="handleViewFeedback"
           >
+            <!-- Custom formatting for passenger name -->
+            <template #cell-passenger_name="{ item }">
+              <span class="text-gray-300 flex flex-col"
+                >{{ item.passenger_last_name }}, {{ item.passenger_first_name }}
+                <span class="text-xs">#{{ item.passenger_id }}</span></span
+              >
+            </template>
+
+            <!-- Custom formatting for driver name -->
+            <template #cell-driver_name="{ item }">
+              <span class="text-gray-300 flex flex-col"
+                >{{ item.driver_last_name }}, {{ item.driver_first_name }}
+                <span class="text-xs">#{{ item.driver_id }}</span></span
+              >
+            </template>
+
             <!-- Custom formatting for rating with stars -->
             <template #cell-rating="{ item }">
               <div class="flex items-center">
