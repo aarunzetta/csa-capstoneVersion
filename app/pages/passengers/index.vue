@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
-import type { TableColumn } from "../types";
-import { usePassengers } from "../composables/usePassengers";
-import { formatDate } from "../utils/dateFormatter";
+import { onMounted, ref } from "vue";
+import type { TableColumn } from "../../types";
+import type { Passenger } from "../../types/passenger";
+import { usePassengers } from "../../composables/usePassengers";
+import { formatDate } from "../../utils/dateFormatter";
+import { UserPlus } from "lucide-vue-next";
 
 // Define columns for the Passengers table
 const columns: TableColumn[] = [
@@ -15,7 +17,34 @@ const columns: TableColumn[] = [
 ];
 
 // Use the passenger composable
-const { passengers, isLoading, error, fetchPassengers } = usePassengers();
+const passengersComposable = usePassengers();
+const { passengers, isLoading, error, fetchPassengers } = passengersComposable;
+
+// Modal state
+const isModalOpen = ref(false);
+const selectedPassenger = ref<Passenger | null>(null);
+const isEditModalOpen = ref(false);
+const selectedEditPassenger = ref<Passenger | null>(null);
+
+const handleViewPassenger = (passenger: Passenger) => {
+  selectedPassenger.value = passenger;
+  isModalOpen.value = true;
+};
+
+const handleEditPassenger = (passenger: Passenger) => {
+  selectedEditPassenger.value = passenger;
+  isEditModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+  selectedPassenger.value = null;
+};
+
+const closeEditModal = () => {
+  isEditModalOpen.value = false;
+  selectedEditPassenger.value = null;
+};
 
 // Fetch passengers when component mounts
 onMounted(() => {
@@ -28,7 +57,14 @@ onMounted(() => {
     <!-- Sticky Header -->
     <div class="sticky top-0 z-10">
       <layoutHeader>
-        <template #actions> </template>
+        <template #actions>
+          <NuxtLink
+            to="/passengers/register"
+            class="p-3 btn-primary flex items-center gap-2 text-base"
+          >
+            <UserPlus class="w-5 h-5" /><span>Register New Passenger</span>
+          </NuxtLink></template
+        >
       </layoutHeader>
     </div>
     <!-- Page Content -->
@@ -63,6 +99,8 @@ onMounted(() => {
               edit: 'Edit Passenger',
               delete: 'Delete Passenger',
             }"
+            @view="handleViewPassenger"
+            @edit="handleEditPassenger"
           >
             <!-- Custom formatting for passenger name -->
             <template #cell-passenger_name="{ item }">
@@ -84,5 +122,16 @@ onMounted(() => {
         </div>
       </div>
     </div>
+    <uiPassengerDetailsModal
+      :is-open="isModalOpen"
+      :passenger="selectedPassenger"
+      @close="closeModal"
+    />
+    <uiEditPassengerModal
+      :is-open="isEditModalOpen"
+      :passenger="selectedEditPassenger"
+      :passengers-composable="passengersComposable"
+      @close="closeEditModal"
+    />
   </div>
 </template>
