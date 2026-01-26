@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import type { TableColumn } from "../types";
+import type { Feedback } from "../types/feedback";
 import { useFeedbacks } from "../composables/useFeedbacks";
 import { formatDate } from "../utils/dateFormatter";
 import { Star } from "lucide-vue-next";
@@ -18,6 +19,20 @@ const columns: TableColumn[] = [
 
 // Use the feedback composable
 const { feedbacks, isLoading, error, fetchFeedbacks } = useFeedbacks();
+
+// Modal state
+const isModalOpen = ref(false);
+const selectedFeedback = ref<Feedback | null>(null);
+
+const handleViewFeedback = (feedback: Feedback) => {
+  selectedFeedback.value = feedback;
+  isModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+  selectedFeedback.value = null;
+};
 
 // Function to get sentiment based on rating
 const getSentiment = (rating: number) => {
@@ -83,6 +98,7 @@ onMounted(() => {
               suspend: false,
               delete: false,
             }"
+            @view="handleViewFeedback"
           >
             <!-- Custom formatting for rating with stars -->
             <template #cell-rating="{ item }">
@@ -112,7 +128,7 @@ onMounted(() => {
             <!-- Custom formatting for comments with truncation -->
             <template #cell-comments="{ item }">
               <span class="text-white">{{
-                truncateComment(item.comments)
+                truncateComment(item.comment)
               }}</span>
             </template>
 
@@ -124,5 +140,10 @@ onMounted(() => {
         </div>
       </div>
     </div>
+    <uiFeedbackDetailsModal
+      :is-open="isModalOpen"
+      :feedback="selectedFeedback"
+      @close="closeModal"
+    />
   </div>
 </template>

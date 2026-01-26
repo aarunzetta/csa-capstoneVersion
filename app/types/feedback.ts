@@ -1,9 +1,30 @@
 export interface Feedback {
   feedback_id: number;
-  ride_id: number;
-  passenger_id: number;
-  driver_id: number;
   rating: number;
-  comments?: string;
+  comment?: string;
   created_at: Date;
+  ride_id: number;
+  pickup_latitude: number;
+  pickup_longitude: number;
+  pickup_address: string;
+  dropoff_latitude: number;
+  dropoff_longitude: number;
+  dropoff_address: string;
+  ride_distance_km: number;
+  ride_duration_minutes: number;
+  ride_started_at: Date;
+  ride_completed_at: Date;
+  driver_id: number;
+  driver_first_name: string;
+  driver_last_name: string;
+  driver_middle_name: string;
+  driver_phone: string;
+  license_number: string;
+  vehicle_plate_number: string;
+  passenger_id: number;
+  passenger_first_name: string;
+  passenger_last_name: string;
+  passenger_middle_name: string;
+  passenger_phone: string;
+  passenger_email: string;
 }
