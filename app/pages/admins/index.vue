@@ -12,6 +12,7 @@ import {
 import { Dot } from "lucide-vue-next";
 import { capitalize } from "../../utils/capitalizeFormatter";
 import { formatRole } from "../../utils/roleFormatter";
+import { useToast } from "../../composables/useToast";
 
 // Define columns for the admins table
 const columns: TableColumn[] = [
@@ -50,6 +51,30 @@ const handleEditAdmin = (admin: Admin) => {
 const closeEditModal = () => {
   isEditModalOpen.value = false;
   selectedEditAdmin.value = null;
+};
+
+const handleSuspendAdmin = async (admin: Admin) => {
+  const { updateAdmin } = adminsComposable;
+  const { success, error: showError } = useToast();
+
+  try {
+    // Toggle the admin status
+    const newStatus = admin.is_active === 1 ? 0 : 1;
+    const result = await updateAdmin(admin.admin_id, { is_active: newStatus });
+
+    if (result.success) {
+      const action = newStatus === 1 ? "activated" : "suspended";
+      success(`Admin ${action} successfully!`);
+    } else {
+      showError(
+        result.message ||
+          `Failed to ${newStatus === 1 ? "activate" : "suspend"} admin`,
+      );
+    }
+  } catch (err: unknown) {
+    console.error("Suspend/activate admin error:", err);
+    showError("An unexpected error occurred");
+  }
 };
 
 // Fetch admins when component mounts
@@ -113,9 +138,11 @@ const getStatusMeta = (value: number) => {
             :action-labels="{
               edit: 'Edit Admin',
               delete: 'Delete Admin',
+              suspend: 'Suspend',
             }"
             @view="handleViewAdmin"
             @edit="handleEditAdmin"
+            @suspend="handleSuspendAdmin"
           >
             <!-- Custom formatting for admin name -->
             <template #cell-admin_name="{ item }">
