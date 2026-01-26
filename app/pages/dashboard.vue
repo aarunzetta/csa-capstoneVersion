@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Users, IdCard, CarTaxiFront, UserStar } from "lucide-vue-next";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import type { TableColumn } from "../types";
+import type { Ride } from "../types/ride";
 import { useRides } from "../composables/useRides";
 import { useDashboard } from "../composables/useDashboard";
 import { formatDate } from "../utils/dateFormatter";
@@ -13,12 +14,26 @@ definePageMeta({
 // Define columns for the Rides table
 const columns: TableColumn[] = [
   { key: "ride_id", label: "Ride ID", sortable: true },
-  { key: "driver_id", label: "Driver ID", sortable: true },
-  { key: "passenger_id", label: "Passenger ID", sortable: true },
+  { key: "driver_name", label: "Driver", sortable: true },
+  { key: "passenger_name", label: "Passenger", sortable: true },
   { key: "pickup_address", label: "Pickup Location", sortable: false },
   { key: "dropoff_address", label: "Dropoff Location", sortable: false },
   { key: "completed_at", label: "Completed At", sortable: true },
 ];
+
+// Modal state
+const isModalOpen = ref(false);
+const selectedRide = ref<Ride | null>(null);
+
+const handleViewRide = (ride: Ride) => {
+  selectedRide.value = ride;
+  isModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+  selectedRide.value = null;
+};
 
 // Use the rides composable
 const { rides, isLoading, error, fetchRides } = useRides();
@@ -102,7 +117,23 @@ onMounted(() => {
               suspend: false,
               delete: false,
             }"
+            @view="handleViewRide"
           >
+            <!-- Custom formatting for passenger -->
+            <template #cell-passenger_name="{ item }">
+              <span class="text-gray-300 flex flex-col"
+                >{{ item.passenger_last_name }}, {{ item.passenger_first_name }}
+                <span class="text-xs">#{{ item.passenger_id }}</span></span
+              >
+            </template>
+
+            <!-- Custom formatting for driver -->
+            <template #cell-driver_name="{ item }">
+              <span class="text-gray-300 flex flex-col"
+                >{{ item.driver_last_name }}, {{ item.driver_first_name }}
+                <span class="text-xs">#{{ item.driver_id }}</span></span
+              >
+            </template>
             <!-- Custom formatting for dates -->
             <template #cell-completed_at="{ value }">
               <span>{{ formatDate(value) }}</span>
@@ -111,5 +142,10 @@ onMounted(() => {
         </div>
       </div>
     </div>
+    <uiRideDetailsModal
+      :is-open="isModalOpen"
+      :ride="selectedRide"
+      @close="closeModal"
+    />
   </div>
 </template>

@@ -291,7 +291,7 @@ const handleDelete = () => {
                 ? 'border-b border-secondary-light'
                 : ''
             "
-            class="text-gray-300"
+            class="text-gray-400"
           >
             <td v-for="column in columns" :key="column.key" class="p-2">
               <slot
