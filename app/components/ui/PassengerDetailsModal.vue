@@ -105,11 +105,8 @@ const handleModalClick = (e: MouseEvent) => {
           </div>
         </div>
 
-        <!-- Registration Information Section -->
+        <!-- Date Section -->
         <div class="border-t border-secondary-light pt-6">
-          <h3 class="text-lg font-semibold text-white mb-4">
-            Registration Information
-          </h3>
           <div class="grid grid-cols-2 gap-4">
             <div>
               <p class="text-gray-400 text-sm">Registered At</p>
