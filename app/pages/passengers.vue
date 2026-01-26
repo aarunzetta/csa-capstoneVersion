@@ -16,20 +16,33 @@ const columns: TableColumn[] = [
 ];
 
 // Use the passenger composable
-const { passengers, isLoading, error, fetchPassengers } = usePassengers();
+const passengersComposable = usePassengers();
+const { passengers, isLoading, error, fetchPassengers } = passengersComposable;
 
 // Modal state
 const isModalOpen = ref(false);
 const selectedPassenger = ref<Passenger | null>(null);
+const isEditModalOpen = ref(false);
+const selectedEditPassenger = ref<Passenger | null>(null);
 
 const handleViewPassenger = (passenger: Passenger) => {
   selectedPassenger.value = passenger;
   isModalOpen.value = true;
 };
 
+const handleEditPassenger = (passenger: Passenger) => {
+  selectedEditPassenger.value = passenger;
+  isEditModalOpen.value = true;
+};
+
 const closeModal = () => {
   isModalOpen.value = false;
   selectedPassenger.value = null;
+};
+
+const closeEditModal = () => {
+  isEditModalOpen.value = false;
+  selectedEditPassenger.value = null;
 };
 
 // Fetch passengers when component mounts
@@ -79,6 +92,7 @@ onMounted(() => {
               delete: 'Delete Passenger',
             }"
             @view="handleViewPassenger"
+            @edit="handleEditPassenger"
           >
             <!-- Custom formatting for passenger name -->
             <template #cell-passenger_name="{ item }">
@@ -104,6 +118,12 @@ onMounted(() => {
       :is-open="isModalOpen"
       :passenger="selectedPassenger"
       @close="closeModal"
+    />
+    <uiEditPassengerModal
+      :is-open="isEditModalOpen"
+      :passenger="selectedEditPassenger"
+      :passengers-composable="passengersComposable"
+      @close="closeEditModal"
     />
   </div>
 </template>
