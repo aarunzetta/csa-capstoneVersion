@@ -27,7 +27,8 @@ const columns: TableColumn[] = [
 ];
 
 // Use the drivers composable
-const { drivers, isLoading, error, fetchDrivers } = useDrivers();
+const driversComposable = useDrivers();
+const { drivers, isLoading, error, fetchDrivers } = driversComposable;
 
 // Fetch drivers when component mounts
 onMounted(() => {
@@ -57,14 +58,27 @@ const vehicleOwnershipColors: ColorMap = {
 
 const isModalOpen = ref(false);
 const selectedDriver = ref<Driver | null>(null);
+const isEditModalOpen = ref(false);
+const selectedEditDriver = ref<Driver | null>(null);
 
 const handleViewDriver = (driver: Driver) => {
   selectedDriver.value = driver;
   isModalOpen.value = true;
 };
+
+const handleEditDriver = (driver: Driver) => {
+  selectedEditDriver.value = driver;
+  isEditModalOpen.value = true;
+};
+
 const closeModal = () => {
   isModalOpen.value = false;
   selectedDriver.value = null;
+};
+
+const closeEditModal = () => {
+  isEditModalOpen.value = false;
+  selectedEditDriver.value = null;
 };
 </script>
 
@@ -116,6 +130,7 @@ const closeModal = () => {
               delete: 'Delete Driver',
             }"
             @view="handleViewDriver"
+            @edit="handleEditDriver"
           >
             <!-- Custom formatting for driver name -->
             <template #cell-driver_name="{ item }">
@@ -159,6 +174,12 @@ const closeModal = () => {
       :is-open="isModalOpen"
       :driver="selectedDriver"
       @close="closeModal"
+    />
+    <uiEditDriverModal
+      :is-open="isEditModalOpen"
+      :driver="selectedEditDriver"
+      :drivers-composable="driversComposable"
+      @close="closeEditModal"
     />
   </div>
 </template>
