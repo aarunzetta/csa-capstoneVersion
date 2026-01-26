@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import type { TableColumn } from "../types";
+import type { Feedback } from "../types/feedback";
 import { useFeedbacks } from "../composables/useFeedbacks";
 import { formatDate } from "../utils/dateFormatter";
 import { Star } from "lucide-vue-next";
 
 // Define columns for the feedbacks table
 const columns: TableColumn[] = [
-  { key: "passenger_id", label: "Passenger ID", sortable: true },
-  { key: "driver_id", label: "Driver ID", sortable: true },
-  { key: "ride_id", label: "Ride ID", sortable: true },
+  { key: "passenger_name", label: "Passenger", sortable: true },
+  { key: "driver_name", label: "Driver", sortable: true },
   { key: "rating", label: "Rating", sortable: true },
   { key: "sentiment", label: "Sentiment", sortable: false },
   { key: "comments", label: "Comments", sortable: false },
@@ -18,6 +18,20 @@ const columns: TableColumn[] = [
 
 // Use the feedback composable
 const { feedbacks, isLoading, error, fetchFeedbacks } = useFeedbacks();
+
+// Modal state
+const isModalOpen = ref(false);
+const selectedFeedback = ref<Feedback | null>(null);
+
+const handleViewFeedback = (feedback: Feedback) => {
+  selectedFeedback.value = feedback;
+  isModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+  selectedFeedback.value = null;
+};
 
 // Function to get sentiment based on rating
 const getSentiment = (rating: number) => {
@@ -83,7 +97,24 @@ onMounted(() => {
               suspend: false,
               delete: false,
             }"
+            @view="handleViewFeedback"
           >
+            <!-- Custom formatting for passenger name -->
+            <template #cell-passenger_name="{ item }">
+              <span class="text-gray-300 flex flex-col"
+                >{{ item.passenger_last_name }}, {{ item.passenger_first_name }}
+                <span class="text-xs">#{{ item.passenger_id }}</span></span
+              >
+            </template>
+
+            <!-- Custom formatting for driver name -->
+            <template #cell-driver_name="{ item }">
+              <span class="text-gray-300 flex flex-col"
+                >{{ item.driver_last_name }}, {{ item.driver_first_name }}
+                <span class="text-xs">#{{ item.driver_id }}</span></span
+              >
+            </template>
+
             <!-- Custom formatting for rating with stars -->
             <template #cell-rating="{ item }">
               <div class="flex items-center">
@@ -112,7 +143,7 @@ onMounted(() => {
             <!-- Custom formatting for comments with truncation -->
             <template #cell-comments="{ item }">
               <span class="text-white">{{
-                truncateComment(item.comments)
+                truncateComment(item.comment)
               }}</span>
             </template>
 
@@ -124,5 +155,10 @@ onMounted(() => {
         </div>
       </div>
     </div>
+    <uiFeedbackDetailsModal
+      :is-open="isModalOpen"
+      :feedback="selectedFeedback"
+      @close="closeModal"
+    />
   </div>
 </template>
