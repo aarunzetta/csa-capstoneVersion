@@ -326,7 +326,7 @@ watch(isActionModalOpen, (isOpen) => {
             <th
               v-for="column in columns"
               :key="column.key"
-              class="p-2 text-left select-none"
+              class="p-2 text-left select-none bg-secondary-dark/20"
               :class="column.sortable !== false ? 'cursor-pointer' : ''"
               @click="column.sortable !== false && handleSort(column.key)"
             >
@@ -354,7 +354,9 @@ watch(isActionModalOpen, (isOpen) => {
               </div>
             </th>
 
-            <th v-if="actions" class="p-3 text-left">Action</th>
+            <th v-if="actions" class="p-3 text-left bg-secondary-dark/20">
+              Action
+            </th>
           </tr>
         </thead>
 
@@ -367,7 +369,7 @@ watch(isActionModalOpen, (isOpen) => {
                 ? 'border-b border-secondary-light'
                 : ''
             "
-            class="text-gray-400"
+            class="text-gray-400 hover:bg-secondary-dark/20 transition-colors"
           >
             <td v-for="column in columns" :key="column.key" class="p-2">
               <slot
@@ -382,7 +384,7 @@ watch(isActionModalOpen, (isOpen) => {
             <td v-if="actions" class="p-2 relative">
               <slot name="actions" :item="item">
                 <button
-                  class="bg-none border-none cursor-pointer hover:opacity-70 rounded hover:bg-gray-700 transition-colors"
+                  class="p-1 bg-none border-none cursor-pointer hover:opacity-70 rounded hover:bg-primary hover:text-white transition-colors"
                   @click="openActionModal(item, $event)"
                 >
                   <Ellipsis class="w-5 h-5" />
