@@ -388,7 +388,7 @@ const handleDelete = () => {
 
         <button
           class="btn-pagination disabled:opacity-30 disabled:cursor-not-allowed"
-          :disabled="currentPage === 1"
+          :disabled="currentPage >= totalPages"
           @click="goToPage(currentPage + 1)"
         >
           Next
