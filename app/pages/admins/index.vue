@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import type { TableColumn } from "../../types";
+import type { Admin } from "../../types/admin";
 import { useAdmins } from "../../composables/useAdmins";
 import { formatDate } from "../../utils/dateFormatter";
 import { formatLastLogin } from "../../utils/lastLoginFormatter";
@@ -8,9 +9,10 @@ import {
   getStatusColor,
   type ColorMap,
 } from "../../utils/statusColorFormatter";
-import { Dot } from "lucide-vue-next";
+import { Dot, Plus } from "lucide-vue-next";
 import { capitalize } from "../../utils/capitalizeFormatter";
 import { formatRole } from "../../utils/roleFormatter";
+import { useToast } from "../../composables/useToast";
 
 // Define columns for the admins table
 const columns: TableColumn[] = [
@@ -22,7 +24,58 @@ const columns: TableColumn[] = [
 ];
 
 // Use the admins composable
-const { admins, isLoading, error, fetchAdmins } = useAdmins();
+const adminsComposable = useAdmins();
+const { admins, isLoading, error, fetchAdmins } = adminsComposable;
+
+// Modal state
+const isModalOpen = ref(false);
+const selectedAdmin = ref<Admin | null>(null);
+const isEditModalOpen = ref(false);
+const selectedEditAdmin = ref<Admin | null>(null);
+
+const handleViewAdmin = (admin: Admin) => {
+  selectedAdmin.value = admin;
+  isModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+  selectedAdmin.value = null;
+};
+
+const handleEditAdmin = (admin: Admin) => {
+  selectedEditAdmin.value = admin;
+  isEditModalOpen.value = true;
+};
+
+const closeEditModal = () => {
+  isEditModalOpen.value = false;
+  selectedEditAdmin.value = null;
+};
+
+const handleSuspendAdmin = async (admin: Admin) => {
+  const { updateAdmin } = adminsComposable;
+  const { success, error: showError } = useToast();
+
+  try {
+    // Toggle the admin status
+    const newStatus = admin.is_active === 1 ? 0 : 1;
+    const result = await updateAdmin(admin.admin_id, { is_active: newStatus });
+
+    if (result.success) {
+      const action = newStatus === 1 ? "activated" : "suspended";
+      success(`Admin ${action} successfully!`);
+    } else {
+      showError(
+        result.message ||
+          `Failed to ${newStatus === 1 ? "activate" : "suspend"} admin`,
+      );
+    }
+  } catch (err: unknown) {
+    console.error("Suspend/activate admin error:", err);
+    showError("An unexpected error occurred");
+  }
+};
 
 // Fetch admins when component mounts
 onMounted(() => {
@@ -57,7 +110,14 @@ const getStatusMeta = (value: number) => {
     <!-- Sticky Header -->
     <div class="sticky top-0 z-10">
       <layoutHeader>
-        <template #actions> </template>
+        <template #actions>
+          <NuxtLink
+            to="/admins/register"
+            class="p-3 btn-primary flex items-center gap-2 text-base"
+          >
+            <Plus class="w-5 h-5" /><span>Add Admin</span>
+          </NuxtLink></template
+        >
       </layoutHeader>
     </div>
     <!-- Page Content -->
@@ -85,7 +145,11 @@ const getStatusMeta = (value: number) => {
             :action-labels="{
               edit: 'Edit Admin',
               delete: 'Delete Admin',
+              suspend: 'Suspend',
             }"
+            @view="handleViewAdmin"
+            @edit="handleEditAdmin"
+            @suspend="handleSuspendAdmin"
           >
             <!-- Custom formatting for admin name -->
             <template #cell-admin_name="{ item }">
@@ -128,5 +192,16 @@ const getStatusMeta = (value: number) => {
         </div>
       </div>
     </div>
+    <uiAdminDetailsModal
+      :is-open="isModalOpen"
+      :admin="selectedAdmin"
+      @close="closeModal"
+    />
+    <uiEditAdminModal
+      :is-open="isEditModalOpen"
+      :admin="selectedEditAdmin"
+      :admins-composable="adminsComposable"
+      @close="closeEditModal"
+    />
   </div>
 </template>

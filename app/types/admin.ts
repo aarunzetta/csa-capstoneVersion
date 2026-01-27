@@ -7,6 +7,6 @@ export interface Admin {
   phone_number?: string;
   role: "super_admin" | "admin" | "moderator";
   is_active: number;
-  registered_at: Date | string;
-  last_login_at?: Date | string;
+  registered_at: Date;
+  last_login_at?: Date;
 }

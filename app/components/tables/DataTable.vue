@@ -10,6 +10,7 @@ import {
   Ellipsis,
   ShieldOff,
   Search,
+  ShieldCheck,
 } from "lucide-vue-next";
 import type { T } from "vue-router/dist/router-CWoNjPRp.mjs";
 
@@ -29,6 +30,7 @@ export interface ActionButtons {
 export interface ActionLabels {
   edit?: string;
   delete?: string;
+  suspend?: string | ((item: T) => string);
 }
 
 const props = withDefaults(
@@ -67,6 +69,36 @@ const emit = defineEmits<{
 const isActionModalOpen = ref(false);
 const selectedItem = ref<T | null>(null);
 const modalPosition = ref({ top: 0, left: 0 });
+
+// Computed suspend label
+const suspendLabel = computed(() => {
+  if (!selectedItem.value) return "Suspend";
+
+  // Check if the selected item has is_active property and determine label accordingly
+  if (
+    "is_active" in selectedItem.value &&
+    typeof selectedItem.value.is_active === "number"
+  ) {
+    return selectedItem.value.is_active === 1 ? "Suspend" : "Activate";
+  }
+
+  return "Suspend";
+});
+
+// Computed suspend button color class
+const suspendColorClass = computed(() => {
+  if (!selectedItem.value) return "text-warning";
+
+  // Check if the selected item has is_active property and determine color accordingly
+  if (
+    "is_active" in selectedItem.value &&
+    typeof selectedItem.value.is_active === "number"
+  ) {
+    return selectedItem.value.is_active === 1 ? "text-warning" : "text-success";
+  }
+
+  return "text-warning";
+});
 
 // Pagination
 const currentPage = ref(1);
@@ -415,8 +447,14 @@ const handleDelete = () => {
             class="flex items-center gap-4 w-full p-2 text-left rounded hover:bg-gray-700 transition-colors text-white text-sm"
             @click="handleSuspend"
           >
-            <ShieldOff class="w-4 h-4 text-gray-400" />
-            <span class="font-medium text-warning">Suspend</span>
+            <ShieldCheck
+              v-if="suspendLabel === 'Activate'"
+              class="w-4 h-4 text-gray-400"
+            />
+            <ShieldOff v-else class="w-4 h-4 text-gray-400" />
+            <span class="font-medium" :class="suspendColorClass">{{
+              suspendLabel
+            }}</span>
           </button>
           <button
             v-if="props.actionButtons.delete"
