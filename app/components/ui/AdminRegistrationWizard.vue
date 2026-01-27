@@ -292,9 +292,11 @@ const handleSubmit = async () => {
 
       <!-- Step 2: Account Setup -->
       <div v-if="currentStep === 2" class="space-y-6">
-        <div class="flex items-center gap-3 mb-6">
-          <Shield class="w-6 h-6 text-primary" />
-          <h2 class="text-xl font-semibold text-white">Account Setup</h2>
+        <div>
+          <h3 class="text-2xl font-semibold text-white mb-2">Account Setup</h3>
+          <p class="text-gray-400 mb-6">
+            Enter the admin's account information
+          </p>
         </div>
 
         <div>
@@ -357,9 +359,11 @@ const handleSubmit = async () => {
 
       <!-- Step 3: Review -->
       <div v-if="currentStep === 3" class="space-y-6">
-        <div class="flex items-center gap-3 mb-6">
-          <CheckCircle class="w-6 h-6 text-primary" />
-          <h2 class="text-xl font-semibold text-white">Review Information</h2>
+        <div>
+          <h3 class="text-2xl font-semibold text-white mb-2">
+            Review Information
+          </h3>
+          <p class="text-gray-400 mb-6">Review the admin's information</p>
         </div>
 
         <!-- Personal Information Summary -->
