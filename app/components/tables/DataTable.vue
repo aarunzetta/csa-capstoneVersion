@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends Record<string, any>">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import {
   ArrowUp,
   ArrowDown,
@@ -238,6 +238,50 @@ const handleDelete = () => {
     closeActionModal();
   }
 };
+
+// Disable/enable page scrolling when modal opens/closes
+const disableScroll = () => {
+  // Disable scrolling on body
+  document.body.style.overflow = "hidden";
+  document.body.style.position = "fixed";
+  document.body.style.width = "100%";
+
+  // Also try to disable on main scroll containers
+  const scrollContainers = document.querySelectorAll(
+    'html, body, .overflow-y-auto, [class*="overflow"]',
+  );
+  scrollContainers.forEach((container) => {
+    if (container instanceof HTMLElement) {
+      container.style.overflow = "hidden";
+    }
+  });
+};
+
+const enableScroll = () => {
+  // Re-enable scrolling on body
+  document.body.style.overflow = "";
+  document.body.style.position = "";
+  document.body.style.width = "";
+
+  // Re-enable on main scroll containers
+  const scrollContainers = document.querySelectorAll(
+    'html, body, .overflow-y-auto, [class*="overflow"]',
+  );
+  scrollContainers.forEach((container) => {
+    if (container instanceof HTMLElement) {
+      container.style.overflow = "";
+    }
+  });
+};
+
+// Watch modal state to control scrolling
+watch(isActionModalOpen, (isOpen) => {
+  if (isOpen) {
+    disableScroll();
+  } else {
+    enableScroll();
+  }
+});
 </script>
 
 <template>
@@ -282,7 +326,7 @@ const handleDelete = () => {
             <th
               v-for="column in columns"
               :key="column.key"
-              class="p-2 text-left select-none"
+              class="p-2 text-left select-none bg-secondary-dark/20"
               :class="column.sortable !== false ? 'cursor-pointer' : ''"
               @click="column.sortable !== false && handleSort(column.key)"
             >
@@ -310,7 +354,9 @@ const handleDelete = () => {
               </div>
             </th>
 
-            <th v-if="actions" class="p-3 text-left">Action</th>
+            <th v-if="actions" class="p-3 text-left bg-secondary-dark/20">
+              Action
+            </th>
           </tr>
         </thead>
 
@@ -323,7 +369,7 @@ const handleDelete = () => {
                 ? 'border-b border-secondary-light'
                 : ''
             "
-            class="text-gray-400"
+            class="text-gray-400 hover:bg-secondary-dark/20 transition-colors"
           >
             <td v-for="column in columns" :key="column.key" class="p-2">
               <slot
@@ -338,7 +384,7 @@ const handleDelete = () => {
             <td v-if="actions" class="p-2 relative">
               <slot name="actions" :item="item">
                 <button
-                  class="bg-none border-none cursor-pointer hover:opacity-70 rounded hover:bg-gray-700 transition-colors"
+                  class="p-1 bg-none border-none cursor-pointer hover:opacity-70 rounded hover:bg-primary hover:text-white transition-colors"
                   @click="openActionModal(item, $event)"
                 >
                   <Ellipsis class="w-5 h-5" />
