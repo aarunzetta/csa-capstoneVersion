@@ -142,9 +142,14 @@ const getStatusMeta = (value: number) => {
             :data="admins"
             :actions="true"
             :default-entries-per-page="10"
+            :action-buttons="{
+              view: true,
+              edit: true,
+              suspend: true,
+              delete: false,
+            }"
             :action-labels="{
               edit: 'Edit Admin',
-              delete: 'Delete Admin',
               suspend: 'Suspend',
             }"
             @view="handleViewAdmin"

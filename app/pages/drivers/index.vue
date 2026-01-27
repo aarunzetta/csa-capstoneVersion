@@ -123,7 +123,7 @@ const closeEditModal = () => {
               view: true,
               edit: true,
               suspend: false,
-              delete: true,
+              delete: false,
             }"
             :action-labels="{
               edit: 'Edit Driver',
