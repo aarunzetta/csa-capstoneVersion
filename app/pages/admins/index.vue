@@ -9,7 +9,7 @@ import {
   getStatusColor,
   type ColorMap,
 } from "../../utils/statusColorFormatter";
-import { Dot, Plus } from "lucide-vue-next";
+import { Dot, Plus, Download } from "lucide-vue-next";
 import { capitalize } from "../../utils/capitalizeFormatter";
 import { formatRole } from "../../utils/roleFormatter";
 import { useToast } from "../../composables/useToast";
@@ -111,6 +111,9 @@ const getStatusMeta = (value: number) => {
     <div class="sticky top-0 z-10">
       <layoutHeader>
         <template #actions>
+          <button class="p-3 btn-secondary flex items-center gap-2 text-base">
+            <Download class="w-5 h-5" /><span>Export</span>
+          </button>
           <NuxtLink
             to="/admins/register"
             class="p-3 btn-primary flex items-center gap-2 text-base"

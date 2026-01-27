@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { Users, IdCard, CarTaxiFront, UserStar } from "lucide-vue-next";
+import {
+  Users,
+  IdCard,
+  CarTaxiFront,
+  UserStar,
+  Download,
+} from "lucide-vue-next";
 import { onMounted, ref } from "vue";
 import type { TableColumn } from "../types";
 import type { Ride } from "../types/ride";
@@ -53,7 +59,11 @@ onMounted(() => {
     <!-- Sticky Header -->
     <div class="sticky top-0 z-10">
       <layoutHeader>
-        <template #actions></template>
+        <template #actions>
+          <button class="p-3 btn-secondary flex items-center gap-2 text-base">
+            <Download class="w-5 h-5" /><span>Export</span>
+          </button>
+        </template>
       </layoutHeader>
     </div>
     <!-- Page Content -->
