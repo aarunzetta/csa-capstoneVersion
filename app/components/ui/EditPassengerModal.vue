@@ -207,6 +207,7 @@ const handleSubmit = async () => {
                 v-model="formData.date_of_birth"
                 label="Date of Birth"
                 :required="true"
+                position="bottom"
               />
             </div>
           </div>

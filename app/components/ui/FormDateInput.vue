@@ -8,6 +8,7 @@ const props = defineProps<{
   modelValue: string;
   required?: boolean;
   error?: string;
+  position?: "top" | "bottom";
 }>();
 
 const emit = defineEmits<{
@@ -46,9 +47,25 @@ const months = [
   "December",
 ];
 
+// Computed property for calendar position classes
+const calendarPositionClasses = computed(() => {
+  const position = props.position || "top"; // Default to "top"
+
+  if (position === "bottom") {
+    return "top-full mt-2"; // Position below with margin
+  }
+
+  return "bottom-full mb-2"; // Default: position above with margin
+});
+
 function togglePicker() {
-  isOpen.value = !isOpen.value;
   if (isOpen.value) {
+    // If this calendar is already open, just close it
+    isOpen.value = false;
+  } else {
+    // Close all other dropdowns and calendars first, then open this one
+    dispatchCloseAllDropdowns();
+    isOpen.value = true;
     calendarWidth.value = buttonRef.value?.offsetWidth || 0;
   }
 }
@@ -123,12 +140,43 @@ function handleClickOutside(event: MouseEvent) {
   }
 }
 
+function handleCloseAllCalendars() {
+  isOpen.value = false;
+  isMonthDropdownOpen.value = false;
+  isYearDropdownOpen.value = false;
+}
+
+// Helper function to dispatch close event
+function dispatchCloseAllDropdowns() {
+  const event = new CustomEvent("close-all-dropdowns");
+  window.dispatchEvent(event);
+}
+
+// Helper functions for dropdown toggles
+function toggleMonthDropdown() {
+  isMonthDropdownOpen.value = !isMonthDropdownOpen.value;
+  isYearDropdownOpen.value = false;
+  if (isMonthDropdownOpen.value) {
+    dispatchCloseAllDropdowns();
+  }
+}
+
+function toggleYearDropdown() {
+  isYearDropdownOpen.value = !isYearDropdownOpen.value;
+  isMonthDropdownOpen.value = false;
+  if (isYearDropdownOpen.value) {
+    dispatchCloseAllDropdowns();
+  }
+}
+
 onMounted(() => {
   document.addEventListener("click", handleClickOutside);
+  window.addEventListener("close-all-dropdowns", handleCloseAllCalendars);
 });
 
 onUnmounted(() => {
   document.removeEventListener("click", handleClickOutside);
+  window.removeEventListener("close-all-dropdowns", handleCloseAllCalendars);
 });
 </script>
 
@@ -155,7 +203,7 @@ onUnmounted(() => {
       <!-- Calendar Modal -->
       <div
         v-if="isOpen"
-        class="absolute bg-secondary border border-secondary-light rounded-lg shadow-2xl z-10 bottom-full mb-2"
+        :class="`absolute bg-secondary border border-secondary-light rounded-lg shadow-2xl z-10 ${calendarPositionClasses}`"
         :style="{
           width: calendarWidth + 'px',
         }"
@@ -168,10 +216,7 @@ onUnmounted(() => {
               <button
                 type="button"
                 class="w-full px-3 py-2 bg-secondary-light border border-secondary-light rounded text-white text-sm focus:outline-none transition text-left flex items-center justify-between"
-                @click="
-                  isMonthDropdownOpen = !isMonthDropdownOpen;
-                  isYearDropdownOpen = false;
-                "
+                @click="toggleMonthDropdown"
               >
                 <span>{{ months[currentMonth.getMonth()] }}</span>
                 <ChevronDown
@@ -213,10 +258,7 @@ onUnmounted(() => {
               <button
                 type="button"
                 class="w-full px-3 py-2 bg-secondary-light border border-secondary-light rounded text-white text-sm focus:outline-none transition text-left flex items-center justify-between"
-                @click="
-                  isYearDropdownOpen = !isYearDropdownOpen;
-                  isMonthDropdownOpen = false;
-                "
+                @click="toggleYearDropdown"
               >
                 <span>{{ currentMonth.getFullYear() }}</span>
                 <ChevronDown

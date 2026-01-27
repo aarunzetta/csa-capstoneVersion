@@ -254,6 +254,7 @@ const handleSubmit = async () => {
                 v-model="formData.date_of_birth"
                 label="Date of Birth"
                 :required="true"
+                position="bottom"
               />
               <uiFormInput
                 id="edit_phone_number"
@@ -283,6 +284,7 @@ const handleSubmit = async () => {
                 v-model="formData.license_expiration_date"
                 label="License Expiration Date"
                 :required="true"
+                position="bottom"
               />
             </div>
             <div class="grid grid-cols-2 gap-4 mt-4">
