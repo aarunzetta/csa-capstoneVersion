@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends Record<string, any>">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import {
   ArrowUp,
   ArrowDown,
@@ -238,6 +238,50 @@ const handleDelete = () => {
     closeActionModal();
   }
 };
+
+// Disable/enable page scrolling when modal opens/closes
+const disableScroll = () => {
+  // Disable scrolling on body
+  document.body.style.overflow = "hidden";
+  document.body.style.position = "fixed";
+  document.body.style.width = "100%";
+
+  // Also try to disable on main scroll containers
+  const scrollContainers = document.querySelectorAll(
+    'html, body, .overflow-y-auto, [class*="overflow"]',
+  );
+  scrollContainers.forEach((container) => {
+    if (container instanceof HTMLElement) {
+      container.style.overflow = "hidden";
+    }
+  });
+};
+
+const enableScroll = () => {
+  // Re-enable scrolling on body
+  document.body.style.overflow = "";
+  document.body.style.position = "";
+  document.body.style.width = "";
+
+  // Re-enable on main scroll containers
+  const scrollContainers = document.querySelectorAll(
+    'html, body, .overflow-y-auto, [class*="overflow"]',
+  );
+  scrollContainers.forEach((container) => {
+    if (container instanceof HTMLElement) {
+      container.style.overflow = "";
+    }
+  });
+};
+
+// Watch modal state to control scrolling
+watch(isActionModalOpen, (isOpen) => {
+  if (isOpen) {
+    disableScroll();
+  } else {
+    enableScroll();
+  }
+});
 </script>
 
 <template>
