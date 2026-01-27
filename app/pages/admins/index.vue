@@ -9,7 +9,7 @@ import {
   getStatusColor,
   type ColorMap,
 } from "../../utils/statusColorFormatter";
-import { Dot } from "lucide-vue-next";
+import { Dot, Plus } from "lucide-vue-next";
 import { capitalize } from "../../utils/capitalizeFormatter";
 import { formatRole } from "../../utils/roleFormatter";
 import { useToast } from "../../composables/useToast";
@@ -110,7 +110,14 @@ const getStatusMeta = (value: number) => {
     <!-- Sticky Header -->
     <div class="sticky top-0 z-10">
       <layoutHeader>
-        <template #actions> </template>
+        <template #actions>
+          <NuxtLink
+            to="/admins/register"
+            class="p-3 btn-primary flex items-center gap-2 text-base"
+          >
+            <Plus class="w-5 h-5" /><span>Add Admin</span>
+          </NuxtLink></template
+        >
       </layoutHeader>
     </div>
     <!-- Page Content -->
