@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends Record<string, any>">
-import { computed, ref } from "vue";
+import { computed, ref, watch, onMounted, onUnmounted } from "vue";
 import {
   ArrowUp,
   ArrowDown,
@@ -11,6 +11,8 @@ import {
   ShieldOff,
   Search,
   ShieldCheck,
+  X,
+  ChevronDown,
 } from "lucide-vue-next";
 import type { T } from "vue-router/dist/router-CWoNjPRp.mjs";
 
@@ -33,16 +35,31 @@ export interface ActionLabels {
   suspend?: string | ((item: T) => string);
 }
 
+export interface FilterOption {
+  label: string;
+  value: string;
+}
+
+export interface TableFilter {
+  key: string;
+  label: string;
+  options: FilterOption[];
+  customFilter?: (item: T, filterValue: string) => boolean;
+}
+
 const props = withDefaults(
   defineProps<{
     columns: TableColumn[];
     data: T[];
     actions?: boolean;
+    showEntriesOptions?: boolean;
     defaultEntriesPerPage?: number;
     actionButtons?: ActionButtons;
     actionLabels?: ActionLabels;
+    filters?: TableFilter[];
   }>(),
   {
+    showEntriesOptions: true,
     actions: true,
     defaultEntriesPerPage: 5,
     actionButtons: () => ({
@@ -55,6 +72,7 @@ const props = withDefaults(
       edit: "Edit",
       delete: "Delete",
     }),
+    filters: () => [],
   },
 );
 
@@ -103,25 +121,55 @@ const suspendColorClass = computed(() => {
 // Pagination
 const currentPage = ref(1);
 const entriesPerPage = ref(props.defaultEntriesPerPage);
-const entriesOptions = [5, 10, 15, 20];
+const entriesOptions = props.showEntriesOptions ? [5, 10, 15, 20] : [];
 
 // Search
 const searchQuery = ref("");
+
+// Filters
+const activeFilters = ref<Record<string, string>>({});
+const filterDropdownStates = ref<Record<string, boolean>>({});
 
 // Sorting
 const sortKey = ref<string>("");
 const sortOrder = ref<"asc" | "desc">("asc");
 
-// Filtered data based on search
+// Filtered data based on search and filters
 const filteredData = computed(() => {
-  if (!searchQuery.value) return props.data;
+  let filtered = props.data;
 
-  const query = searchQuery.value.toLowerCase();
-  return props.data.filter((item) => {
-    return Object.values(item).some((value) => {
-      return String(value).toLowerCase().includes(query);
+  // Apply search filter
+  if (searchQuery.value) {
+    const query = searchQuery.value.toLowerCase();
+    filtered = filtered.filter((item) => {
+      return Object.values(item).some((value) => {
+        return String(value).toLowerCase().includes(query);
+      });
     });
+  }
+
+  // Apply active filters
+  Object.entries(activeFilters.value).forEach(([filterKey, filterValue]) => {
+    if (filterValue) {
+      const filterConfig = props.filters.find((f) => f.key === filterKey);
+
+      if (filterConfig?.customFilter) {
+        // Use custom filter function
+        filtered = filtered.filter((item) =>
+          filterConfig.customFilter!(item, filterValue),
+        );
+      } else {
+        // Use default filter logic
+        filtered = filtered.filter((item) => {
+          return (
+            String(item[filterKey]).toLowerCase() === filterValue.toLowerCase()
+          );
+        });
+      }
+    }
   });
+
+  return filtered;
 });
 
 // Sorted data
@@ -192,6 +240,74 @@ const handleSearchChange = () => {
   currentPage.value = 1;
 };
 
+// Clear search
+const clearSearch = () => {
+  searchQuery.value = "";
+  currentPage.value = 1;
+};
+
+const clearAllFilters = () => {
+  Object.keys(activeFilters.value).forEach((key) => {
+    activeFilters.value[key] = "";
+  });
+  currentPage.value = 1;
+};
+
+const hasActiveFilters = computed(() => {
+  return Object.values(activeFilters.value).some((value) => value !== "");
+});
+
+// Filter dropdown functions
+const toggleFilterDropdown = (filterKey: string) => {
+  // Close all other dropdowns first
+  Object.keys(filterDropdownStates.value).forEach((key) => {
+    if (key !== filterKey) {
+      filterDropdownStates.value[key] = false;
+    }
+  });
+
+  // Toggle current dropdown
+  filterDropdownStates.value[filterKey] =
+    !filterDropdownStates.value[filterKey];
+};
+
+const selectFilterOption = (filterKey: string, value: string) => {
+  activeFilters.value[filterKey] = value;
+  filterDropdownStates.value[filterKey] = false;
+  currentPage.value = 1;
+};
+
+const getFilterSelectedLabel = (filterKey: string) => {
+  const filter = props.filters.find((f) => f.key === filterKey);
+  const value = activeFilters.value[filterKey];
+
+  if (!value || !filter) return "All";
+
+  const selected = filter.options.find((opt) => opt.value === value);
+  return selected?.label || "All";
+};
+
+// Close all filter dropdowns when clicking outside
+const handleFilterClickOutside = (event: MouseEvent) => {
+  const target = event.target as HTMLElement;
+  const isFilterDropdown = target.closest("[data-filter-dropdown]");
+
+  if (!isFilterDropdown) {
+    Object.keys(filterDropdownStates.value).forEach((key) => {
+      filterDropdownStates.value[key] = false;
+    });
+  }
+};
+
+// Add click outside listener
+onMounted(() => {
+  document.addEventListener("click", handleFilterClickOutside);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("click", handleFilterClickOutside);
+});
+
 // Action modal methods
 const openActionModal = (item: T, event: MouseEvent) => {
   selectedItem.value = item;
@@ -238,6 +354,50 @@ const handleDelete = () => {
     closeActionModal();
   }
 };
+
+// Disable/enable page scrolling when modal opens/closes
+const disableScroll = () => {
+  // Disable scrolling on body
+  document.body.style.overflow = "hidden";
+  document.body.style.position = "fixed";
+  document.body.style.width = "100%";
+
+  // Also try to disable on main scroll containers
+  const scrollContainers = document.querySelectorAll(
+    'html, body, .overflow-y-auto, [class*="overflow"]',
+  );
+  scrollContainers.forEach((container) => {
+    if (container instanceof HTMLElement) {
+      container.style.overflow = "hidden";
+    }
+  });
+};
+
+const enableScroll = () => {
+  // Re-enable scrolling on body
+  document.body.style.overflow = "";
+  document.body.style.position = "";
+  document.body.style.width = "";
+
+  // Re-enable on main scroll containers
+  const scrollContainers = document.querySelectorAll(
+    'html, body, .overflow-y-auto, [class*="overflow"]',
+  );
+  scrollContainers.forEach((container) => {
+    if (container instanceof HTMLElement) {
+      container.style.overflow = "";
+    }
+  });
+};
+
+// Watch modal state to control scrolling
+watch(isActionModalOpen, (isOpen) => {
+  if (isOpen) {
+    disableScroll();
+  } else {
+    enableScroll();
+  }
+});
 </script>
 
 <template>
@@ -246,7 +406,7 @@ const handleDelete = () => {
   >
     <!-- Top Controls -->
     <div class="flex justify-between items-center">
-      <label class="flex items-center gap-2 text-white">
+      <div v-if="showEntriesOptions" class="flex items-center gap-2 text-white">
         Show
         <select
           v-model.number="entriesPerPage"
@@ -258,19 +418,109 @@ const handleDelete = () => {
           </option>
         </select>
         entries
-      </label>
+      </div>
+      <div class="flex gap-4">
+        <!-- Filters Section -->
+        <div
+          v-if="filters.length > 0"
+          class="flex flex-wrap gap-3 items-center"
+        >
+          <!-- Clear All Filters Button -->
+          <button
+            v-if="hasActiveFilters"
+            type="button"
+            class="flex items-center gap-1 px-3 py-1 text-xs text-gray-400 border border-secondary-light rounded-lg hover:text-white hover:border-white transition-colors duration-200"
+            @click="clearAllFilters"
+          >
+            <X :size="12" />
+            Clear All Filters
+          </button>
+          <div
+            v-for="filter in filters"
+            :key="filter.key"
+            class="flex items-center gap-2"
+            data-filter-dropdown
+          >
+            <label class="text-gray-400 text-sm">{{ filter.label }}:</label>
+            <div class="relative">
+              <button
+                type="button"
+                class="px-3 py-1.5 bg-secondary border border-secondary-light rounded-lg text-white focus:outline-none transition text-left flex items-center justify-between min-w-[120px]"
+                @click="toggleFilterDropdown(filter.key)"
+              >
+                <span class="text-sm">{{
+                  getFilterSelectedLabel(filter.key)
+                }}</span>
+                <ChevronDown
+                  class="h-4 w-4 text-gray-400 transition-transform"
+                  :class="{ 'rotate-180': filterDropdownStates[filter.key] }"
+                />
+              </button>
 
-      <div
-        class="flex items-center gap-2 text-gray-400 border border-secondary-light px-2 rounded-lg"
-      >
-        <Search :size="18" />
-        <input
-          v-model="searchQuery"
-          type="text"
-          class="text-white py-1 focus:outline-none bg-secondary text-sm"
-          placeholder="Search"
-          @input="handleSearchChange"
-        />
+              <!-- Dropdown Options -->
+              <div
+                v-if="filterDropdownStates[filter.key]"
+                class="absolute bg-secondary border border-secondary-light rounded-lg shadow-2xl z-10 top-full mt-1"
+              >
+                <div class="max-h-60 overflow-y-auto">
+                  <button
+                    type="button"
+                    class="w-full px-3 py-1.5 text-left transition text-sm"
+                    :class="{
+                      'text-gray-400 hover:bg-gray-700 hover:text-white':
+                        !activeFilters[filter.key],
+                      'bg-primary/10 text-primary hover:bg-primary/10':
+                        activeFilters[filter.key] === '',
+                      'rounded-t-lg': true,
+                      'rounded-b-lg': filter.options.length === 0,
+                    }"
+                    @click="selectFilterOption(filter.key, '')"
+                  >
+                    All
+                  </button>
+                  <button
+                    v-for="(option, index) in filter.options"
+                    :key="option.value"
+                    type="button"
+                    class="w-full px-3 py-1.5 text-left transition text-sm"
+                    :class="{
+                      'text-gray-400 hover:bg-gray-700 hover:text-white':
+                        activeFilters[filter.key] !== option.value,
+                      'bg-primary/10 text-primary hover:bg-primary/10':
+                        activeFilters[filter.key] === option.value,
+                      'rounded-b-lg': index === filter.options.length - 1,
+                    }"
+                    @click="selectFilterOption(filter.key, option.value)"
+                  >
+                    {{ option.label }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="flex items-center gap-2 text-gray-400 border border-secondary-light px-2 rounded-lg"
+        >
+          <Search :size="18" />
+          <input
+            v-model="searchQuery"
+            type="text"
+            class="text-white py-1 focus:outline-none bg-secondary text-sm flex-1"
+            placeholder="Search"
+            @input="handleSearchChange"
+          />
+          <button
+            v-if="searchQuery"
+            type="button"
+            class="p-1 text-gray-400 hover:text-white transition-colors duration-200"
+            title="Clear search"
+            @click="clearSearch"
+          >
+            <X :size="16" />
+          </button>
+        </div>
       </div>
     </div>
 
@@ -282,7 +532,7 @@ const handleDelete = () => {
             <th
               v-for="column in columns"
               :key="column.key"
-              class="p-2 text-left select-none"
+              class="p-2 text-left select-none bg-secondary-dark/20"
               :class="column.sortable !== false ? 'cursor-pointer' : ''"
               @click="column.sortable !== false && handleSort(column.key)"
             >
@@ -310,7 +560,9 @@ const handleDelete = () => {
               </div>
             </th>
 
-            <th v-if="actions" class="p-3 text-left">Action</th>
+            <th v-if="actions" class="p-3 text-left bg-secondary-dark/20">
+              Action
+            </th>
           </tr>
         </thead>
 
@@ -323,7 +575,7 @@ const handleDelete = () => {
                 ? 'border-b border-secondary-light'
                 : ''
             "
-            class="text-gray-400"
+            class="text-gray-400 hover:bg-secondary-dark/20 transition-colors"
           >
             <td v-for="column in columns" :key="column.key" class="p-2">
               <slot
@@ -338,7 +590,7 @@ const handleDelete = () => {
             <td v-if="actions" class="p-2 relative">
               <slot name="actions" :item="item">
                 <button
-                  class="bg-none border-none cursor-pointer hover:opacity-70 rounded hover:bg-gray-700 transition-colors"
+                  class="p-1 bg-none border-none cursor-pointer hover:opacity-70 rounded hover:bg-primary hover:text-white transition-colors"
                   @click="openActionModal(item, $event)"
                 >
                   <Ellipsis class="w-5 h-5" />
@@ -388,7 +640,7 @@ const handleDelete = () => {
 
         <button
           class="btn-pagination disabled:opacity-30 disabled:cursor-not-allowed"
-          :disabled="currentPage === 1"
+          :disabled="currentPage >= totalPages"
           @click="goToPage(currentPage + 1)"
         >
           Next

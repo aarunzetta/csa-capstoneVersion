@@ -9,7 +9,7 @@ import {
   getStatusColor,
   type ColorMap,
 } from "../../utils/statusColorFormatter";
-import { Dot, Plus } from "lucide-vue-next";
+import { Dot, Plus, Download } from "lucide-vue-next";
 import { capitalize } from "../../utils/capitalizeFormatter";
 import { formatRole } from "../../utils/roleFormatter";
 import { useToast } from "../../composables/useToast";
@@ -21,6 +21,18 @@ const columns: TableColumn[] = [
   { key: "is_active", label: "Status", sortable: false },
   { key: "last_login_at", label: "Last Login", sortable: true },
   { key: "registered_at", label: "Registered At", sortable: true },
+];
+
+const filters = [
+  {
+    key: "role",
+    label: "Role",
+    options: [
+      { label: "Admin", value: "admin" },
+      { label: "Moderator", value: "moderator" },
+      { label: "Super Admin", value: "super_admin" },
+    ],
+  },
 ];
 
 // Use the admins composable
@@ -111,6 +123,9 @@ const getStatusMeta = (value: number) => {
     <div class="sticky top-0 z-10">
       <layoutHeader>
         <template #actions>
+          <button class="p-3 btn-secondary flex items-center gap-2 text-base">
+            <Download class="w-5 h-5" /><span>Export</span>
+          </button>
           <NuxtLink
             to="/admins/register"
             class="p-3 btn-primary flex items-center gap-2 text-base"
@@ -124,7 +139,7 @@ const getStatusMeta = (value: number) => {
     <div class="bg-secondary-dark text-white p-6 flex-1">
       <div class="flex flex-col gap-8">
         <div>
-          <h2 class="text-white text-4xl">Admins</h2>
+          <h2 class="text-white text-4xl font-semibold">Admins</h2>
           <p class="text-gray-400 text-base mt-2">
             Manage administrative users and permissions
           </p>
@@ -142,9 +157,15 @@ const getStatusMeta = (value: number) => {
             :data="admins"
             :actions="true"
             :default-entries-per-page="10"
+            :filters="filters"
+            :action-buttons="{
+              view: true,
+              edit: true,
+              suspend: true,
+              delete: false,
+            }"
             :action-labels="{
               edit: 'Edit Admin',
-              delete: 'Delete Admin',
               suspend: 'Suspend',
             }"
             @view="handleViewAdmin"

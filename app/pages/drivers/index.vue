@@ -9,7 +9,7 @@ import {
   type ColorMap,
 } from "../../utils/statusColorFormatter";
 import { capitalize } from "../../utils/capitalizeFormatter";
-import { UserPlus } from "lucide-vue-next";
+import { UserPlus, Download } from "lucide-vue-next";
 
 // Define columns for the Drivers table
 const columns: TableColumn[] = [
@@ -24,6 +24,30 @@ const columns: TableColumn[] = [
   },
   { key: "vehicle_ownership", label: "Vehicle Ownership", sortable: true },
   { key: "registered_at", label: "Registered At", sortable: true },
+];
+
+// Define filters for the Drivers table
+const filters = [
+  {
+    key: "license_status",
+    label: "License Status",
+    options: [
+      { label: "Active", value: "active" },
+      { label: "Suspended", value: "suspended" },
+      { label: "Expired", value: "expired" },
+      { label: "Revoked", value: "revoked" },
+    ],
+  },
+  {
+    key: "vehicle_ownership",
+    label: "Vehicle Ownership",
+    options: [
+      { label: "Owned", value: "owned" },
+      { label: "Rented", value: "rented" },
+      { label: "Company", value: "company" },
+      { label: "Other", value: "other" },
+    ],
+  },
 ];
 
 // Use the drivers composable
@@ -88,6 +112,9 @@ const closeEditModal = () => {
     <div class="sticky top-0 z-10">
       <layoutHeader>
         <template #actions>
+          <button class="p-3 btn-secondary flex items-center gap-2 text-base">
+            <Download class="w-5 h-5" /><span>Export</span>
+          </button>
           <NuxtLink
             to="/drivers/register"
             class="p-3 btn-primary flex items-center gap-2 text-base"
@@ -101,7 +128,7 @@ const closeEditModal = () => {
     <div class="bg-secondary-dark text-white p-6 flex-1">
       <div class="flex flex-col gap-8">
         <div>
-          <h2 class="text-white text-4xl">Drivers</h2>
+          <h2 class="text-white text-4xl font-semibold">Drivers</h2>
           <p class="text-gray-400 text-base mt-1">
             Manage and monitor all registered drivers
           </p>
@@ -119,11 +146,12 @@ const closeEditModal = () => {
             :data="drivers"
             :actions="true"
             :default-entries-per-page="10"
+            :filters="filters"
             :action-buttons="{
               view: true,
               edit: true,
               suspend: false,
-              delete: true,
+              delete: false,
             }"
             :action-labels="{
               edit: 'Edit Driver',

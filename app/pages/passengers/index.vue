@@ -4,7 +4,7 @@ import type { TableColumn } from "../../types";
 import type { Passenger } from "../../types/passenger";
 import { usePassengers } from "../../composables/usePassengers";
 import { formatDate } from "../../utils/dateFormatter";
-import { UserPlus } from "lucide-vue-next";
+import { UserPlus, Download } from "lucide-vue-next";
 
 // Define columns for the Passengers table
 const columns: TableColumn[] = [
@@ -58,6 +58,9 @@ onMounted(() => {
     <div class="sticky top-0 z-10">
       <layoutHeader>
         <template #actions>
+          <button class="p-3 btn-secondary flex items-center gap-2 text-base">
+            <Download class="w-5 h-5" /><span>Export</span>
+          </button>
           <NuxtLink
             to="/passengers/register"
             class="p-3 btn-primary flex items-center gap-2 text-base"
@@ -71,7 +74,7 @@ onMounted(() => {
     <div class="bg-secondary-dark text-white p-6 flex-1">
       <div class="flex flex-col gap-8">
         <div>
-          <h2 class="text-white text-4xl">Passengers</h2>
+          <h2 class="text-white text-4xl font-semibold">Passengers</h2>
           <p class="text-gray-400 text-base mt-2">
             Manage and view all registered passengers
           </p>
@@ -93,7 +96,7 @@ onMounted(() => {
               view: true,
               edit: true,
               suspend: false,
-              delete: true,
+              delete: false,
             }"
             :action-labels="{
               edit: 'Edit Passenger',

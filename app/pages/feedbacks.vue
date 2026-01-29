@@ -4,7 +4,7 @@ import type { TableColumn } from "../types";
 import type { Feedback } from "../types/feedback";
 import { useFeedbacks } from "../composables/useFeedbacks";
 import { formatDate } from "../utils/dateFormatter";
-import { Star } from "lucide-vue-next";
+import { Star, Download } from "lucide-vue-next";
 
 // Define columns for the feedbacks table
 const columns: TableColumn[] = [
@@ -14,6 +14,39 @@ const columns: TableColumn[] = [
   { key: "sentiment", label: "Sentiment", sortable: false },
   { key: "comments", label: "Comments", sortable: false },
   { key: "created_at", label: "Date", sortable: true },
+];
+
+const filters = [
+  {
+    key: "sentiment",
+    label: "Sentiment",
+    options: [
+      { label: "Positive", value: "positive" },
+      { label: "Neutral", value: "neutral" },
+      { label: "Negative", value: "negative" },
+    ],
+    customFilter: (item: unknown, filterValue: string) => {
+      const rating = (item as Feedback).rating;
+      const sentiment = getSentiment(rating).toLowerCase();
+      return sentiment === filterValue;
+    },
+  },
+  {
+    key: "rating",
+    label: "Rating",
+    options: [
+      { label: "1+ Stars", value: "1" },
+      { label: "2+ Stars", value: "2" },
+      { label: "3+ Stars", value: "3" },
+      { label: "4+ Stars", value: "4" },
+      { label: "5 Stars", value: "5" },
+    ],
+    customFilter: (item: unknown, filterValue: string) => {
+      const rating = (item as Feedback).rating;
+      const minRating = parseInt(filterValue);
+      return rating >= minRating;
+    },
+  },
 ];
 
 // Use the feedback composable
@@ -66,14 +99,18 @@ onMounted(() => {
     <!-- Sticky Header -->
     <div class="sticky top-0 z-10">
       <layoutHeader>
-        <template #actions> </template>
+        <template #actions>
+          <button class="p-3 btn-secondary flex items-center gap-2 text-base">
+            <Download class="w-5 h-5" /><span>Export</span>
+          </button>
+        </template>
       </layoutHeader>
     </div>
     <!-- Page Content -->
     <div class="bg-secondary-dark text-white p-6 flex-1">
       <div class="flex flex-col gap-8">
         <div>
-          <h2 class="text-white text-4xl">Feedbacks</h2>
+          <h2 class="text-white text-4xl font-semibold">Feedbacks</h2>
           <p class="text-gray-400 text-base mt-2">
             Review ratings and feedback from rides
           </p>
@@ -91,6 +128,7 @@ onMounted(() => {
             :data="feedbacks"
             :actions="true"
             :default-entries-per-page="10"
+            :filters="filters"
             :action-buttons="{
               view: true,
               edit: false,
