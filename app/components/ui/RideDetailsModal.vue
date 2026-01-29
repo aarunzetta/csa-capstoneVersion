@@ -61,23 +61,27 @@ const handleModalClick = (e: MouseEvent) => {
           <div class="grid grid-cols-2 gap-4">
             <div class="bg-secondary-light rounded-lg p-4">
               <div class="flex items-center gap-2 mb-2">
-                <CarTaxiFront class="text-info w-5 h-5" />
+                <CarTaxiFront class="text-gray-400 w-5 h-5" />
                 <p class="text-gray-400 text-sm">Driver</p>
               </div>
               <p class="text-white font-medium">
                 {{ ride.driver_first_name }} {{ ride.driver_last_name }}
               </p>
-              <p class="text-white font-sm">#{{ ride.driver_id }}</p>
+              <p class="text-white text-xs font-medium">
+                #{{ ride.driver_id }}
+              </p>
             </div>
             <div class="bg-secondary-light rounded-lg p-4">
               <div class="flex items-center gap-2 mb-2">
-                <User class="text-warning w-5 h-5" />
+                <User class="text-gray-400 w-5 h-5" />
                 <p class="text-gray-400 text-sm">Passenger</p>
               </div>
               <p class="text-white font-medium">
                 {{ ride.passenger_first_name }} {{ ride.passenger_last_name }}
               </p>
-              <p class="text-white font-medium">#{{ ride.passenger_id }}</p>
+              <p class="text-white text-xs font-medium">
+                #{{ ride.passenger_id }}
+              </p>
             </div>
           </div>
         </div>
