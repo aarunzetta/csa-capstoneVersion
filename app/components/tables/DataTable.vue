@@ -38,11 +38,13 @@ const props = withDefaults(
     columns: TableColumn[];
     data: T[];
     actions?: boolean;
+    showEntriesOptions?: boolean;
     defaultEntriesPerPage?: number;
     actionButtons?: ActionButtons;
     actionLabels?: ActionLabels;
   }>(),
   {
+    showEntriesOptions: true,
     actions: true,
     defaultEntriesPerPage: 5,
     actionButtons: () => ({
@@ -103,7 +105,7 @@ const suspendColorClass = computed(() => {
 // Pagination
 const currentPage = ref(1);
 const entriesPerPage = ref(props.defaultEntriesPerPage);
-const entriesOptions = [5, 10, 15, 20];
+const entriesOptions = props.showEntriesOptions ? [5, 10, 15, 20] : [];
 
 // Search
 const searchQuery = ref("");
@@ -290,7 +292,10 @@ watch(isActionModalOpen, (isOpen) => {
   >
     <!-- Top Controls -->
     <div class="flex justify-between items-center">
-      <label class="flex items-center gap-2 text-white">
+      <label
+        v-if="showEntriesOptions"
+        class="flex items-center gap-2 text-white"
+      >
         Show
         <select
           v-model.number="entriesPerPage"
