@@ -1,5 +1,15 @@
 <script setup lang="ts">
-import { X, Shield, Dot, CircleUser } from "lucide-vue-next";
+import {
+  X,
+  Shield,
+  Dot,
+  CircleUser,
+  User,
+  Mail,
+  Phone,
+  Clock,
+  Calendar,
+} from "lucide-vue-next";
 import type { Admin } from "../../types/admin";
 import { formatDate } from "../../utils/dateFormatter";
 import { formatLastLogin } from "../../utils/lastLoginFormatter";
@@ -110,29 +120,54 @@ const getStatusMeta = (value: number) => {
         <!-- Personal Information Section -->
 
         <div class="flex flex-col gap-4">
-          <div>
-            <p class="text-gray-400 text-sm">Username</p>
-            <p class="text-info font-medium">@{{ admin.username }}</p>
+          <div class="flex gap-3 items-center">
+            <div class="bg-secondary-light p-2 rounded-lg">
+              <User class="text-gray-400 w-5 h-5" />
+            </div>
+            <div>
+              <p class="text-gray-400 text-sm">Username</p>
+              <p class="text-info font-medium">@{{ admin.username }}</p>
+            </div>
           </div>
-          <div>
-            <p class="text-gray-400 text-sm">Email</p>
-            <p class="text-white font-medium">{{ admin.email }}</p>
+          <div class="flex gap-3 items-center">
+            <div class="bg-secondary-light p-2 rounded-lg">
+              <Mail class="text-gray-400 w-5 h-5" />
+            </div>
+            <div>
+              <p class="text-gray-400 text-sm">Email</p>
+              <p class="text-white font-medium">{{ admin.email }}</p>
+            </div>
           </div>
-          <div v-if="admin.phone_number">
-            <p class="text-gray-400 text-sm">Phone</p>
-            <p class="text-white font-medium">{{ admin.phone_number }}</p>
+          <div v-if="admin.phone_number" class="flex gap-3 items-center">
+            <div class="bg-secondary-light p-2 rounded-lg">
+              <Phone class="text-gray-400 w-5 h-5" />
+            </div>
+            <div>
+              <p class="text-gray-400 text-sm">Phone</p>
+              <p class="text-white font-medium">{{ admin.phone_number }}</p>
+            </div>
           </div>
-          <div>
-            <p class="text-gray-400 text-sm">Last Login</p>
-            <p class="text-white font-medium">
-              {{ formatLastLogin(admin.last_login_at) }}
-            </p>
+          <div class="flex gap-3 items-center">
+            <div class="bg-secondary-light p-2 rounded-lg">
+              <Clock class="text-gray-400 w-5 h-5" />
+            </div>
+            <div>
+              <p class="text-gray-400 text-sm">Last Login</p>
+              <p class="text-white font-medium">
+                {{ formatLastLogin(admin.last_login_at) }}
+              </p>
+            </div>
           </div>
-          <div>
-            <p class="text-gray-400 text-sm">Account Created</p>
-            <p class="text-white font-medium">
-              {{ formatDate(admin.registered_at, false) }}
-            </p>
+          <div class="flex gap-3 items-center">
+            <div class="bg-secondary-light p-2 rounded-lg">
+              <Calendar class="text-gray-400 w-5 h-5" />
+            </div>
+            <div>
+              <p class="text-gray-400 text-sm">Account Created</p>
+              <p class="text-white font-medium">
+                {{ formatDate(admin.registered_at, false) }}
+              </p>
+            </div>
           </div>
         </div>
 

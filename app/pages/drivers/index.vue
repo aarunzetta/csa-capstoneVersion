@@ -104,7 +104,7 @@ const closeEditModal = () => {
     <div class="bg-secondary-dark text-white p-6 flex-1">
       <div class="flex flex-col gap-8">
         <div>
-          <h2 class="text-white text-4xl">Drivers</h2>
+          <h2 class="text-white text-4xl font-semibold">Drivers</h2>
           <p class="text-gray-400 text-base mt-1">
             Manage and monitor all registered drivers
           </p>
