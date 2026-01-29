@@ -11,6 +11,7 @@ import {
   ShieldOff,
   Search,
   ShieldCheck,
+  X,
 } from "lucide-vue-next";
 import type { T } from "vue-router/dist/router-CWoNjPRp.mjs";
 
@@ -194,6 +195,12 @@ const handleSearchChange = () => {
   currentPage.value = 1;
 };
 
+// Clear search
+const clearSearch = () => {
+  searchQuery.value = "";
+  currentPage.value = 1;
+};
+
 // Action modal methods
 const openActionModal = (item: T, event: MouseEvent) => {
   selectedItem.value = item;
@@ -316,10 +323,19 @@ watch(isActionModalOpen, (isOpen) => {
         <input
           v-model="searchQuery"
           type="text"
-          class="text-white py-1 focus:outline-none bg-secondary text-sm"
+          class="text-white py-1 focus:outline-none bg-secondary text-sm flex-1"
           placeholder="Search"
           @input="handleSearchChange"
         />
+        <button
+          v-if="searchQuery"
+          type="button"
+          class="p-1 text-gray-400 hover:text-white transition-colors duration-200"
+          title="Clear search"
+          @click="clearSearch"
+        >
+          <X :size="16" />
+        </button>
       </div>
     </div>
 
