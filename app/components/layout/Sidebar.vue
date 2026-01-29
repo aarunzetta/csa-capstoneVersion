@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { navigationConfig } from "../../config/navigation";
 import { useSidebar } from "../../composables/useSidebar";
 import { LogOut } from "lucide-vue-next";
@@ -10,14 +10,24 @@ const route = useRoute();
 const { isOpen } = useSidebar();
 const { logout, currentAdmin, fetchCurrentAdmin } = useAuth();
 
+// Confirmation modal state
+const isLogoutModalOpen = ref(false);
+
 const isActive = (path: string) => {
   return route.path === path || route.path.startsWith(path + "/");
 };
 
-const handleLogout = async () => {
-  if (confirm("Are you sure you want to logout?")) {
-    await logout();
-  }
+const handleLogout = () => {
+  isLogoutModalOpen.value = true;
+};
+
+const confirmLogout = async () => {
+  isLogoutModalOpen.value = false;
+  await logout();
+};
+
+const cancelLogout = () => {
+  isLogoutModalOpen.value = false;
 };
 
 onMounted(() => {
@@ -155,4 +165,18 @@ onMounted(() => {
       </button>
     </div>
   </div>
+
+  <!-- Confirmation Modal -->
+  <Teleport to="body">
+    <uiConfirmationModal
+      :is-open="isLogoutModalOpen"
+      message="You will need to login again to access the system."
+      title="Are you sure you want to logout?"
+      confirm-text="Logout"
+      cancel-text="Cancel"
+      type="confirmation"
+      @confirm="confirmLogout"
+      @cancel="cancelLogout"
+    />
+  </Teleport>
 </template>
