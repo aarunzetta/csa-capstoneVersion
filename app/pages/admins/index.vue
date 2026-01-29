@@ -23,6 +23,18 @@ const columns: TableColumn[] = [
   { key: "registered_at", label: "Registered At", sortable: true },
 ];
 
+const filters = [
+  {
+    key: "role",
+    label: "Role",
+    options: [
+      { label: "Admin", value: "admin" },
+      { label: "Moderator", value: "moderator" },
+      { label: "Super Admin", value: "super_admin" },
+    ],
+  },
+];
+
 // Use the admins composable
 const adminsComposable = useAdmins();
 const { admins, isLoading, error, fetchAdmins } = adminsComposable;
@@ -145,6 +157,7 @@ const getStatusMeta = (value: number) => {
             :data="admins"
             :actions="true"
             :default-entries-per-page="10"
+            :filters="filters"
             :action-buttons="{
               view: true,
               edit: true,

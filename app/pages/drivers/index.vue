@@ -26,6 +26,30 @@ const columns: TableColumn[] = [
   { key: "registered_at", label: "Registered At", sortable: true },
 ];
 
+// Define filters for the Drivers table
+const filters = [
+  {
+    key: "license_status",
+    label: "License Status",
+    options: [
+      { label: "Active", value: "active" },
+      { label: "Suspended", value: "suspended" },
+      { label: "Expired", value: "expired" },
+      { label: "Revoked", value: "revoked" },
+    ],
+  },
+  {
+    key: "vehicle_ownership",
+    label: "Vehicle Ownership",
+    options: [
+      { label: "Owned", value: "owned" },
+      { label: "Rented", value: "rented" },
+      { label: "Company", value: "company" },
+      { label: "Other", value: "other" },
+    ],
+  },
+];
+
 // Use the drivers composable
 const driversComposable = useDrivers();
 const { drivers, isLoading, error, fetchDrivers } = driversComposable;
@@ -122,6 +146,7 @@ const closeEditModal = () => {
             :data="drivers"
             :actions="true"
             :default-entries-per-page="10"
+            :filters="filters"
             :action-buttons="{
               view: true,
               edit: true,

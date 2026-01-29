@@ -16,6 +16,39 @@ const columns: TableColumn[] = [
   { key: "created_at", label: "Date", sortable: true },
 ];
 
+const filters = [
+  {
+    key: "sentiment",
+    label: "Sentiment",
+    options: [
+      { label: "Positive", value: "positive" },
+      { label: "Neutral", value: "neutral" },
+      { label: "Negative", value: "negative" },
+    ],
+    customFilter: (item: unknown, filterValue: string) => {
+      const rating = (item as Feedback).rating;
+      const sentiment = getSentiment(rating).toLowerCase();
+      return sentiment === filterValue;
+    },
+  },
+  {
+    key: "rating",
+    label: "Rating",
+    options: [
+      { label: "1+ Stars", value: "1" },
+      { label: "2+ Stars", value: "2" },
+      { label: "3+ Stars", value: "3" },
+      { label: "4+ Stars", value: "4" },
+      { label: "5 Stars", value: "5" },
+    ],
+    customFilter: (item: unknown, filterValue: string) => {
+      const rating = (item as Feedback).rating;
+      const minRating = parseInt(filterValue);
+      return rating >= minRating;
+    },
+  },
+];
+
 // Use the feedback composable
 const { feedbacks, isLoading, error, fetchFeedbacks } = useFeedbacks();
 
@@ -95,6 +128,7 @@ onMounted(() => {
             :data="feedbacks"
             :actions="true"
             :default-entries-per-page="10"
+            :filters="filters"
             :action-buttons="{
               view: true,
               edit: false,
