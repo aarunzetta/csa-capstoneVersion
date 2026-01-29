@@ -70,7 +70,7 @@ onMounted(() => {
     <div class="bg-secondary-dark text-white p-6 flex-1">
       <div class="flex flex-col gap-8">
         <div>
-          <h2 class="text-white text-4xl">Dashboard</h2>
+          <h2 class="text-white text-4xl font-semibold">Dashboard</h2>
           <p class="text-gray-400 text-base mt-2">
             Overview of system statistics and recent activity
           </p>
