@@ -193,7 +193,7 @@ function generateMockData(): ChartDataPoint[] {
     date.setDate(date.getDate() - i);
 
     data.push({
-      date: date.toISOString().split("T")[0],
+      date: date.toISOString().split("T")[0]!,
       rides: Math.floor(Math.random() * 50) + 20,
       passengers: Math.floor(Math.random() * 30) + 10,
       drivers: Math.floor(Math.random() * 20) + 5,
