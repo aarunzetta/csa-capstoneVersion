@@ -1,8 +1,31 @@
 # Commuter Security Application - Admin Dashboard
 
-A modern admin dashboard built with **Nuxt 4**, **Vue 3**, **Pinia**, and **TypeScript** for managing a commuter security platform. This application provides comprehensive statistics, user management, and ride tracking capabilities.
+A modern admin dashboard built with **Nuxt 4**, **Vue 3**, **Pinia**, and **TypeScript** for managing a commuter security platform. This application serves as the management system for the CSA mobile app, providing comprehensive statistics, user management, and ride tracking capabilities.
 
-## Features
+## 🌐 Live Demo
+
+**[View Live Demo](https://csa-management-system.vercel.app/)**
+
+## 📸 Screenshot
+
+![Dashboard](public/screenshots/dashboard.png)
+
+## 🏗️ System Architecture
+
+```
+┌─────────────────┐     ┌──────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│   Mobile App    │────▶│   Database   │◀────│  Backend API    │◀────│  Admin Panel    │
+│  (Passengers &  │     │  (Ride Data) │     │  (REST API)     │     │  (This Project) │
+│    Drivers)     │     └──────────────┘     └─────────────────┘     └─────────────────┘
+└─────────────────┘
+```
+
+- **Mobile App** - Passengers request rides, drivers accept and complete them
+- **Database** - Stores all ride data, user information, and transactions
+- **Backend API** - Processes data and exposes endpoints for the admin panel
+- **Admin Panel** - This project; manages users, monitors rides, and views analytics
+
+## ✨ Features
 
 - **Dashboard Analytics** - Real-time statistics for passengers, drivers, rides, and admins
 - **User Management** - Manage passengers, drivers, and admin accounts
@@ -11,7 +34,7 @@ A modern admin dashboard built with **Nuxt 4**, **Vue 3**, **Pinia**, and **Type
 - **Responsive Design** - Mobile-friendly UI with TailwindCSS
 - **Type Safety** - Full TypeScript support for better development experience
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 - **Framework**: Nuxt 4
 - **UI Framework**: Vue 3
@@ -20,7 +43,7 @@ A modern admin dashboard built with **Nuxt 4**, **Vue 3**, **Pinia**, and **Type
 - **Icons**: Lucide Vue Next
 - **API Client**: Custom composables with error handling
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 app/
@@ -32,7 +55,7 @@ app/
 └── middleware/      # Route middleware (auth, etc.)
 ```
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
@@ -73,7 +96,7 @@ Locally preview the production build:
 npm run preview
 ```
 
-## API Integration
+## 🔌 API Integration
 
 The dashboard integrates with a backend API for:
 
@@ -97,20 +120,20 @@ The dashboard integrates with a backend API for:
 }
 ```
 
-## Key Composables
+## 🧩 Key Composables
 
 - **useDashboard** - Manages dashboard statistics and data fetching
 - **useRides** - Handles ride data retrieval and management
 - **useApi** - Custom API client with error handling
 
-## Authentication
+## 🔐 Authentication
 
 Routes are protected with the `auth` middleware. Ensure users are authenticated before accessing protected pages.
 
-## Deployment
+## 🌍 Deployment
 
 For deployment information, check out the [Nuxt deployment documentation](https://nuxt.com/docs/getting-started/deployment).
 
-## License
+## 📄 License
 
 This project is part of the CSA Capstone program.
