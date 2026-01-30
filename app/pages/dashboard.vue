@@ -27,6 +27,9 @@ const columns: TableColumn[] = [
   { key: "completed_at", label: "Completed At", sortable: true },
 ];
 
+// Reactive variable
+const selectedDateRange = ref("30days");
+
 // Modal state
 const isModalOpen = ref(false);
 const selectedRide = ref<Ride | null>(null);
@@ -69,39 +72,42 @@ onMounted(() => {
     <!-- Page Content -->
     <div class="bg-secondary-dark text-white p-6 flex-1">
       <div class="flex flex-col gap-8">
-        <div>
-          <h2 class="text-white text-4xl font-semibold">Dashboard</h2>
-          <p class="text-gray-400 text-base mt-2">
-            Overview of system statistics and recent activity
-          </p>
+        <div class="flex justify-between">
+          <div>
+            <h2 class="text-white text-4xl font-semibold">Dashboard</h2>
+            <p class="text-gray-400 text-base mt-2">
+              Overview of system statistics and recent activity
+            </p>
+          </div>
+          <uiDateRangePicker id="dateRange" v-model="selectedDateRange" />
         </div>
 
         <!-- Statistics Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <uiCard
-            id="rides"
-            label="Rides"
-            :value="stats.totalRides"
-            :icon="CarTaxiFront"
-            href="/rides"
-          />
-          <uiCard
             id="passengers"
-            label="Passengers"
+            label="Total Passengers"
             :value="stats.totalPassengers"
             :icon="Users"
             href="/passengers"
           />
           <uiCard
             id="drivers"
-            label="Drivers"
+            label="Total Drivers"
             :value="stats.totalDrivers"
             :icon="IdCard"
             href="/drivers"
           />
           <uiCard
+            id="rides"
+            label="Total Rides"
+            :value="stats.totalRides"
+            :icon="CarTaxiFront"
+            href="/rides"
+          />
+          <uiCard
             id="admins"
-            label="Admins"
+            label="Total Admins"
             :value="stats.totalAdmins"
             :icon="UserStar"
             href="/admins"
