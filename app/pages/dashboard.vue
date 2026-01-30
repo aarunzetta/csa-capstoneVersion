@@ -29,6 +29,7 @@ const columns: TableColumn[] = [
 
 // Reactive variable
 const selectedDateRange = ref("30days");
+const activityData = ref([]);
 
 // Modal state
 const isModalOpen = ref(false);
@@ -111,6 +112,15 @@ onMounted(() => {
             :value="stats.totalAdmins"
             :icon="UserStar"
             href="/admins"
+          />
+        </div>
+        <div class="grid grid-cols-4 gap-4">
+          <widgetsActivityChart
+            :data="activityData"
+            :time-range="selectedDateRange"
+            :height="350"
+            title="Activity Trends"
+            class="col-span-3"
           />
         </div>
 
