@@ -5,6 +5,8 @@ import {
   CarTaxiFront,
   UserStar,
   Download,
+  UserPlus,
+  FileText,
 } from "lucide-vue-next";
 import { onMounted, ref } from "vue";
 import type { TableColumn } from "../types";
@@ -17,6 +19,32 @@ definePageMeta({
   middleware: "auth",
 });
 
+const quickActions = [
+  {
+    label: "Register Driver",
+    icon: UserPlus,
+    variant: "secondary" as const,
+    action: () => {
+      navigateTo("/drivers/register");
+    },
+  },
+  {
+    label: "Register Passenger",
+    icon: UserPlus,
+    variant: "secondary" as const,
+    action: () => {
+      navigateTo("/passengers/register");
+    },
+  },
+  {
+    label: "View Reports",
+    icon: FileText,
+    variant: "secondary" as const,
+    action: () => {
+      navigateTo("/feedbacks");
+    },
+  },
+];
 // Define columns for the Rides table
 const columns: TableColumn[] = [
   { key: "ride_id", label: "Ride ID", sortable: true },
@@ -114,7 +142,7 @@ onMounted(() => {
             href="/admins"
           />
         </div>
-        <div class="grid grid-cols-4 gap-4">
+        <div class="grid grid-cols-4 gap-6">
           <widgetsActivityChart
             :data="activityData"
             :time-range="selectedDateRange"
@@ -122,6 +150,7 @@ onMounted(() => {
             title="Activity Trends"
             class="col-span-3"
           />
+          <widgetsQuickActions :actions="quickActions" />
         </div>
 
         <!-- Loading State -->
