@@ -5,6 +5,8 @@ import {
   CarTaxiFront,
   UserStar,
   Download,
+  UserPlus,
+  FileText,
 } from "lucide-vue-next";
 import { onMounted, ref } from "vue";
 import type { TableColumn } from "../types";
@@ -17,6 +19,32 @@ definePageMeta({
   middleware: "auth",
 });
 
+const quickActions = [
+  {
+    label: "Register Driver",
+    icon: UserPlus,
+    variant: "secondary" as const,
+    action: () => {
+      navigateTo("/drivers/register");
+    },
+  },
+  {
+    label: "Register Passenger",
+    icon: UserPlus,
+    variant: "secondary" as const,
+    action: () => {
+      navigateTo("/passengers/register");
+    },
+  },
+  {
+    label: "View Reports",
+    icon: FileText,
+    variant: "secondary" as const,
+    action: () => {
+      navigateTo("/feedbacks");
+    },
+  },
+];
 // Define columns for the Rides table
 const columns: TableColumn[] = [
   { key: "ride_id", label: "Ride ID", sortable: true },
@@ -26,6 +54,10 @@ const columns: TableColumn[] = [
   { key: "dropoff_address", label: "Dropoff Location", sortable: false },
   { key: "completed_at", label: "Completed At", sortable: true },
 ];
+
+// Reactive variable
+const selectedDateRange = ref("30days");
+const activityData = ref([]);
 
 // Modal state
 const isModalOpen = ref(false);
@@ -69,43 +101,56 @@ onMounted(() => {
     <!-- Page Content -->
     <div class="bg-secondary-dark text-white p-6 flex-1">
       <div class="flex flex-col gap-8">
-        <div>
-          <h2 class="text-white text-4xl font-semibold">Dashboard</h2>
-          <p class="text-gray-400 text-base mt-2">
-            Overview of system statistics and recent activity
-          </p>
+        <div class="flex justify-between">
+          <div>
+            <h2 class="text-white text-4xl font-semibold">Dashboard</h2>
+            <p class="text-gray-400 text-base mt-2">
+              Overview of system statistics and recent activity
+            </p>
+          </div>
+          <uiDateRangePicker id="dateRange" v-model="selectedDateRange" />
         </div>
 
         <!-- Statistics Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <uiCard
-            id="rides"
-            label="Rides"
-            :value="stats.totalRides"
-            :icon="CarTaxiFront"
-            href="/rides"
-          />
-          <uiCard
             id="passengers"
-            label="Passengers"
+            label="Total Passengers"
             :value="stats.totalPassengers"
             :icon="Users"
             href="/passengers"
           />
           <uiCard
             id="drivers"
-            label="Drivers"
+            label="Total Drivers"
             :value="stats.totalDrivers"
             :icon="IdCard"
             href="/drivers"
           />
           <uiCard
+            id="rides"
+            label="Total Rides"
+            :value="stats.totalRides"
+            :icon="CarTaxiFront"
+            href="/rides"
+          />
+          <uiCard
             id="admins"
-            label="Admins"
+            label="Total Admins"
             :value="stats.totalAdmins"
             :icon="UserStar"
             href="/admins"
           />
+        </div>
+        <div class="grid grid-cols-4 gap-6">
+          <widgetsActivityChart
+            :data="activityData"
+            :time-range="selectedDateRange"
+            :height="350"
+            title="Activity Trends"
+            class="col-span-3"
+          />
+          <widgetsQuickActions :actions="quickActions" />
         </div>
 
         <!-- Loading State -->
