@@ -134,7 +134,9 @@ const closeEditModal = () => {
           </p>
         </div>
         <!-- Loading State -->
-        <div v-if="isLoading" class="text-white">Loading drivers...</div>
+        <div v-if="isLoading">
+          <skeletonTableSkeleton :rows="8" :columns="6" />
+        </div>
 
         <!-- Error State -->
         <div v-else-if="error" class="text-danger">{{ error }}</div>
