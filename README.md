@@ -50,7 +50,7 @@ app/
 ├── pages/           # Page components (dashboard, passengers, drivers, etc.)
 ├── composables/     # Reusable logic (useRides, useDashboard, useApi, etc.)
 ├── components/      # Reusable UI components
-├── utils/           # Utility functions (date formatting, etc.)
+├── utils/           # Utility functions (date formatting, text formatting, etc.)
 ├── types/           # TypeScript type definitions
 └── middleware/      # Route middleware (auth, etc.)
 ```
