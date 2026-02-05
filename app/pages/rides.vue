@@ -88,7 +88,7 @@ onMounted(() => {
           <h2 class="text-white text-2xl md:text-3xl lg:text-4xl font-semibold">
             Rides
           </h2>
-          <p class="text-gray-400 text-base mt-2">
+          <p class="text-gray-400 text-sm md:text-base mt-2">
             Track and view all ride transactions
           </p>
         </div>
