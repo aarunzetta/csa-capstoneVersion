@@ -102,7 +102,10 @@ onMounted(() => {
       <layoutHeader>
         <template #actions>
           <button class="p-3 btn-secondary flex items-center gap-2 text-base">
-            <Download class="w-5 h-5" /><span>Export</span>
+            <Download class="w-4 h-4 lg:w-5 lg:h-5" /><span
+              class="text-sm lg:text-base"
+              >Export</span
+            >
           </button>
         </template>
       </layoutHeader>
@@ -123,7 +126,11 @@ onMounted(() => {
               Overview of system statistics and recent activity
             </p>
           </div>
-          <uiDateRangePicker id="dateRange" v-model="selectedDateRange" />
+          <uiDateRangePicker
+            id="dateRange"
+            v-model="selectedDateRange"
+            class="hidden lg:block"
+          />
         </div>
 
         <!-- Statistics Cards -->
