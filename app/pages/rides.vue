@@ -8,15 +8,39 @@ import { Download } from "lucide-vue-next";
 
 // Define columns for the Rides table
 const columns: TableColumn[] = [
-  { key: "ride_id", label: "Ride ID", sortable: true },
+  { key: "ride_id", label: "Ride ID", sortable: true, hideOn: "mobile" },
   { key: "driver_name", label: "Driver", sortable: true },
-  { key: "passenger_name", label: "Passenger", sortable: true },
-  { key: "pickup_address", label: "Pickup Location", sortable: false },
-  { key: "dropoff_address", label: "Dropoff Location", sortable: false },
+  {
+    key: "passenger_name",
+    label: "Passenger",
+    sortable: true,
+  },
+  {
+    key: "pickup_address",
+    label: "Pickup Location",
+    sortable: false,
+    hideOn: "mobile",
+  },
+  {
+    key: "dropoff_address",
+    label: "Dropoff Location",
+    sortable: false,
+    hideOn: "mobile",
+  },
   { key: "ride_distance_km", label: "Distance (km)", sortable: false },
   { key: "ride_duration_minutes", label: "Duration (min)", sortable: false },
-  { key: "started_at", label: "Started At", sortable: true },
-  { key: "completed_at", label: "Completed At", sortable: true },
+  {
+    key: "started_at",
+    label: "Started At",
+    sortable: true,
+    hideOn: "mobile-tablet",
+  },
+  {
+    key: "completed_at",
+    label: "Completed At",
+    sortable: true,
+    hideOn: "mobile-tablet",
+  },
 ];
 
 // Use the rides composable
@@ -49,7 +73,10 @@ onMounted(() => {
       <layoutHeader>
         <template #actions>
           <button class="p-3 btn-secondary flex items-center gap-2 text-base">
-            <Download class="w-5 h-5" /><span>Export</span>
+            <Download class="w-4 h-4 lg:w-5 lg:h-5" /><span
+              class="text-sm lg:text-base"
+              >Export</span
+            >
           </button></template
         >
       </layoutHeader>
@@ -58,7 +85,9 @@ onMounted(() => {
     <div class="bg-secondary-dark text-white p-6 flex-1">
       <div class="flex flex-col gap-8">
         <div>
-          <h2 class="text-white text-4xl font-semibold">Rides</h2>
+          <h2 class="text-white text-2xl md:text-3xl lg:text-4xl font-semibold">
+            Rides
+          </h2>
           <p class="text-gray-400 text-base mt-2">
             Track and view all ride transactions
           </p>
