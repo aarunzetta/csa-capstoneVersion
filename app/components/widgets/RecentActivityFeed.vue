@@ -157,7 +157,7 @@ function generateMockActivities(): ActivityItem[] {
       <div
         v-for="activity in activities"
         :key="activity.id"
-        class="flex items-start gap-3 p-3 rounded-lg hover:bg-secondary-dark/20 transition-colors"
+        class="flex items-start md:items-center lg:items-start gap-3 p-3 rounded-lg hover:bg-secondary-dark/20 transition-colors"
       >
         <!-- Activity Icon -->
         <div
@@ -180,7 +180,9 @@ function generateMockActivities(): ActivityItem[] {
         </div>
 
         <!-- Activity Content -->
-        <div class="flex-1 min-w-0">
+        <div
+          class="md:flex md:items-center md:gap-4 lg:flex-col lg:gap-0 lg:items-start min-w-0"
+        >
           <div class="flex items-center gap-2 mb-1">
             <p class="text-sm font-medium text-white">
               {{ activity.action }}

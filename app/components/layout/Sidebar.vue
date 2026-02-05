@@ -87,12 +87,12 @@ onMounted(() => {
       />
       <div v-show="isOpen">
         <h1
-          class="text-white font-bold text-2xl lg:text-xl whitespace-nowrap transition-opacity duration-200 ease-in-out"
+          class="text-white font-bold text-xl whitespace-nowrap transition-opacity duration-200 ease-in-out"
         >
           ComSecApp
         </h1>
         <p
-          class="text-gray-400 text-sm lg:text-xs whitespace-nowrap transition-opacity duration-200 ease-in-out"
+          class="text-gray-400 text-xs whitespace-nowrap transition-opacity duration-200 ease-in-out"
         >
           Management System
         </p>
@@ -122,7 +122,7 @@ onMounted(() => {
               class="flex-shrink-0 transition-colors duration-200"
             />
             <span
-              class="whitespace-nowrap transition-opacity duration-200 text-xl lg:text-base"
+              class="whitespace-nowrap transition-opacity duration-200 text-base"
               :class="isOpen ? 'opacity-100' : 'opacity-0'"
             >
               {{ item.label }}
@@ -135,7 +135,7 @@ onMounted(() => {
           <div
             v-if="section.title"
             v-show="isOpen"
-            class="text-lg lg:text-sm text-gray-300 px-4 mb-2 transition-opacity duration-200"
+            class="text-sm text-gray-300 px-4 mb-2 transition-opacity duration-200"
           >
             {{ section.title }}
           </div>
@@ -156,7 +156,7 @@ onMounted(() => {
                 class="flex-shrink-0 transition-colors duration-200"
               />
               <span
-                class="whitespace-nowrap transition-opacity duration-200 text-xl lg:text-base"
+                class="whitespace-nowrap transition-opacity duration-200 text-base"
                 :class="isOpen ? 'opacity-100' : 'opacity-0'"
               >
                 {{ item.label }}
@@ -171,10 +171,10 @@ onMounted(() => {
     <div class="mt-auto overflow-hidden px-4">
       <!-- Current User Info -->
       <div v-if="currentAdmin && isOpen" class="px-4 py-3">
-        <p class="text-2xl lg:text-base text-gray-200 font-semibold truncate">
+        <p class="text-base text-gray-200 font-semibold truncate">
           {{ currentAdmin.first_name }} {{ currentAdmin.last_name }}
         </p>
-        <p class="text-base lg:text-sm text-gray-400 truncate">
+        <p class="text-sm text-gray-400 truncate">
           {{ capitalize(formatRole(currentAdmin.role)) }}
         </p>
       </div>
@@ -188,7 +188,7 @@ onMounted(() => {
         <LogOut class="flex-shrink-0 transition-colors" />
         <span
           v-if="isOpen"
-          class="whitespace-nowrap transition-opacity duration-200 text-xl lg:text-base"
+          class="whitespace-nowrap transition-opacity duration-200 text-base"
         >
           Logout
         </span>
