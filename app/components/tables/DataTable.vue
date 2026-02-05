@@ -553,7 +553,7 @@ watch(isActionModalOpen, (isOpen) => {
                 <!-- Sort Icons -->
                 <span
                   v-if="column.sortable !== false"
-                  class="inline-flex items-center text-white/70"
+                  class="hidden md:inline-flex items-center text-white/70"
                 >
                   <!-- Active column -->
                   <ArrowUp
@@ -571,7 +571,10 @@ watch(isActionModalOpen, (isOpen) => {
               </div>
             </th>
 
-            <th v-if="actions" class="p-3 text-left bg-secondary-dark/20">
+            <th
+              v-if="actions"
+              class="p-3 text-left bg-secondary-dark/20 text-xs md:text-sm"
+            >
               Action
             </th>
           </tr>
@@ -639,7 +642,7 @@ watch(isActionModalOpen, (isOpen) => {
         {{ totalEntries }} entries
       </div>
 
-      <div class="flex gap-1 justify-center md:justify-end">
+      <div class="flex gap-1 justify-end">
         <button
           class="btn-pagination disabled:opacity-30 disabled:cursor-not-allowed"
           :disabled="currentPage === 1"
