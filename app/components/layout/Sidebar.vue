@@ -1,14 +1,21 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { navigationConfig } from "../../config/navigation";
 import { useSidebar } from "../../composables/useSidebar";
-import { LogOut } from "lucide-vue-next";
+import { LogOut, X } from "lucide-vue-next";
 import { useAuth } from "../../composables/useAuth";
 
 const route = useRoute();
-const { isOpen } = useSidebar();
+const { isOpen, closeSidebar } = useSidebar();
 const { logout, currentAdmin, fetchCurrentAdmin } = useAuth();
+
+// Auto-close sidebar on route change for mobile/tablet
+watch(route, () => {
+  if (typeof window !== "undefined" && window.innerWidth < 1024) {
+    closeSidebar();
+  }
+});
 
 // Confirmation modal state
 const isLogoutModalOpen = ref(false);
@@ -36,15 +43,38 @@ onMounted(() => {
 </script>
 
 <template>
+  <!-- Backdrop overlay for mobile/tablet -->
   <div
-    class="bg-secondary border-r border-secondary-light h-full flex flex-col transition-all duration-200 ease-in-out"
-    :class="isOpen ? 'w-64' : 'w-0 md:w-[88px]'"
+    v-if="isOpen"
+    class="fixed inset-0 bg-black/50 z-40 lg:hidden"
+    @click="closeSidebar"
+  ></div>
+
+  <!-- Sidebar -->
+  <div
+    class="bg-secondary border-r border-secondary-light h-full flex flex-col transition-all duration-300 ease-in-out fixed top-0 left-0 z-50 w-full md:w-80 lg:relative lg:z-auto"
+    :class="[
+      isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
+      isOpen ? 'lg:w-64' : 'lg:w-[88px]',
+    ]"
   >
+    <!-- Close button for mobile/tablet -->
+    <button
+      class="absolute top-4 right-4 p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors lg:hidden"
+      @click="closeSidebar"
+    >
+      <X />
+    </button>
+
     <!-- Header -->
     <NuxtLink
       to="/dashboard"
       class="flex gap-2 items-center py-4 min-h-[72px] overflow-hidden border-b border-secondary-light mb-4"
-      :class="isOpen ? 'jusitfy-start px-8 ' : 'justify-center px-4'"
+      :class="
+        isOpen
+          ? 'justify-start px-8'
+          : 'lg:justify-center lg:px-4 justify-start px-8'
+      "
     >
       <NuxtImg
         src="/cma_logo.png"
@@ -57,12 +87,12 @@ onMounted(() => {
       />
       <div v-show="isOpen">
         <h1
-          class="text-white font-bold text-xl whitespace-nowrap transition-opacity duration-200 ease-in-out"
+          class="text-white font-bold text-2xl lg:text-xl whitespace-nowrap transition-opacity duration-200 ease-in-out"
         >
           ComSecApp
         </h1>
         <p
-          class="text-gray-400 text-xs whitespace-nowrap transition-opacity duration-200 ease-in-out"
+          class="text-gray-400 text-sm lg:text-xs whitespace-nowrap transition-opacity duration-200 ease-in-out"
         >
           Management System
         </p>
@@ -92,7 +122,7 @@ onMounted(() => {
               class="flex-shrink-0 transition-colors duration-200"
             />
             <span
-              class="whitespace-nowrap transition-opacity duration-200"
+              class="whitespace-nowrap transition-opacity duration-200 text-xl lg:text-base"
               :class="isOpen ? 'opacity-100' : 'opacity-0'"
             >
               {{ item.label }}
@@ -105,7 +135,7 @@ onMounted(() => {
           <div
             v-if="section.title"
             v-show="isOpen"
-            class="text-sm text-gray-300 px-4 mb-2 transition-opacity duration-200"
+            class="text-lg lg:text-sm text-gray-300 px-4 mb-2 transition-opacity duration-200"
           >
             {{ section.title }}
           </div>
@@ -126,7 +156,7 @@ onMounted(() => {
                 class="flex-shrink-0 transition-colors duration-200"
               />
               <span
-                class="whitespace-nowrap transition-opacity duration-200"
+                class="whitespace-nowrap transition-opacity duration-200 text-xl lg:text-base"
                 :class="isOpen ? 'opacity-100' : 'opacity-0'"
               >
                 {{ item.label }}
@@ -141,10 +171,10 @@ onMounted(() => {
     <div class="mt-auto overflow-hidden px-4">
       <!-- Current User Info -->
       <div v-if="currentAdmin && isOpen" class="px-4 py-3">
-        <p class="text-base text-gray-200 font-semibold truncate">
+        <p class="text-2xl lg:text-base text-gray-200 font-semibold truncate">
           {{ currentAdmin.first_name }} {{ currentAdmin.last_name }}
         </p>
-        <p class="text-sm text-gray-400 truncate">
+        <p class="text-base lg:text-sm text-gray-400 truncate">
           {{ capitalize(formatRole(currentAdmin.role)) }}
         </p>
       </div>
@@ -158,7 +188,7 @@ onMounted(() => {
         <LogOut class="flex-shrink-0 transition-colors" />
         <span
           v-if="isOpen"
-          class="whitespace-nowrap transition-opacity duration-200"
+          class="whitespace-nowrap transition-opacity duration-200 text-xl lg:text-base"
         >
           Logout
         </span>

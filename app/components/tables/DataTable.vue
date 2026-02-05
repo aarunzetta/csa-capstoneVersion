@@ -20,6 +20,7 @@ export interface TableColumn {
   key: string;
   label: string;
   sortable?: boolean;
+  hideOn?: "mobile" | "tablet" | "mobile-tablet";
 }
 
 export interface ActionButtons {
@@ -402,15 +403,20 @@ watch(isActionModalOpen, (isOpen) => {
 
 <template>
   <div
-    class="w-full bg-secondary border border-secondary-light p-6 rounded-lg space-y-4"
+    class="w-full bg-secondary border border-secondary-light p-4 md:p-6 rounded-lg space-y-4"
   >
     <!-- Top Controls -->
-    <div class="flex justify-between items-center">
-      <div v-if="showEntriesOptions" class="flex items-center gap-2 text-white">
+    <div
+      class="flex flex-col md:flex-row md:justify-between md:items-center gap-4"
+    >
+      <div
+        v-if="showEntriesOptions"
+        class="flex items-center gap-2 text-white text-sm md:text-base"
+      >
         Show
         <select
           v-model.number="entriesPerPage"
-          class="text-white py-1 px-2 border border-secondary-light rounded-lg focus:outline-none bg-secondary"
+          class="text-white py-1 px-2 border border-secondary-light rounded-lg focus:outline-none bg-secondary text-sm"
           @change="handleEntriesChange"
         >
           <option v-for="o in entriesOptions" :key="o" :value="o">
@@ -419,11 +425,11 @@ watch(isActionModalOpen, (isOpen) => {
         </select>
         entries
       </div>
-      <div class="flex gap-4">
+      <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
         <!-- Filters Section -->
         <div
           v-if="filters.length > 0"
-          class="flex flex-wrap gap-3 items-center"
+          class="flex flex-wrap gap-2 md:gap-3 items-center"
         >
           <!-- Clear All Filters Button -->
           <button
@@ -501,13 +507,13 @@ watch(isActionModalOpen, (isOpen) => {
         </div>
 
         <div
-          class="flex items-center gap-2 text-gray-400 border border-secondary-light px-2 rounded-lg"
+          class="flex items-center gap-2 text-gray-400 border border-secondary-light px-2 rounded-lg w-full md:w-auto"
         >
-          <Search :size="18" />
+          <Search :size="16" />
           <input
             v-model="searchQuery"
             type="text"
-            class="text-white py-1 focus:outline-none bg-secondary text-sm flex-1"
+            class="text-white py-2 md:py-1 focus:outline-none bg-secondary text-sm flex-1"
             placeholder="Search"
             @input="handleSearchChange"
           />
@@ -525,15 +531,20 @@ watch(isActionModalOpen, (isOpen) => {
     </div>
 
     <!-- Table -->
-    <div class="rounded-t-lg overflow-hidden border border-secondary-light">
-      <table class="w-full border-collapse">
+    <div class="rounded-t-lg overflow-x-auto border border-secondary-light">
+      <table class="w-full border-collapse min-w-full">
         <thead class="bg-secondary text-white border-b border-secondary-light">
           <tr>
             <th
               v-for="column in columns"
               :key="column.key"
-              class="p-2 text-left select-none bg-secondary-dark/20"
-              :class="column.sortable !== false ? 'cursor-pointer' : ''"
+              class="p-2 text-left select-none bg-secondary-dark/20 text-xs md:text-sm"
+              :class="[
+                column.sortable !== false ? 'cursor-pointer' : '',
+                column.hideOn === 'mobile' ? 'hidden md:table-cell' : '',
+                column.hideOn === 'tablet' ? 'hidden lg:table-cell' : '',
+                column.hideOn === 'mobile-tablet' ? 'hidden lg:table-cell' : '',
+              ]"
               @click="column.sortable !== false && handleSort(column.key)"
             >
               <div class="flex items-center gap-2">
@@ -577,7 +588,16 @@ watch(isActionModalOpen, (isOpen) => {
             "
             class="text-gray-400 hover:bg-secondary-dark/20 transition-colors"
           >
-            <td v-for="column in columns" :key="column.key" class="p-2">
+            <td
+              v-for="column in columns"
+              :key="column.key"
+              class="p-2 text-xs md:text-sm"
+              :class="[
+                column.hideOn === 'mobile' ? 'hidden md:table-cell' : '',
+                column.hideOn === 'tablet' ? 'hidden lg:table-cell' : '',
+                column.hideOn === 'mobile-tablet' ? 'hidden lg:table-cell' : '',
+              ]"
+            >
               <slot
                 :name="`cell-${column.key}`"
                 :item="item"
@@ -611,13 +631,15 @@ watch(isActionModalOpen, (isOpen) => {
     </div>
 
     <!-- Bottom Controls -->
-    <div class="flex justify-between items-center text-white">
-      <div>
+    <div
+      class="flex flex-col md:flex-row md:justify-between md:items-center text-white gap-4"
+    >
+      <div class="hidden md:block text-sm">
         Showing {{ showingFrom }} to {{ showingTo }} of
         {{ totalEntries }} entries
       </div>
 
-      <div class="flex gap-1">
+      <div class="flex gap-1 justify-center md:justify-end">
         <button
           class="btn-pagination disabled:opacity-30 disabled:cursor-not-allowed"
           :disabled="currentPage === 1"

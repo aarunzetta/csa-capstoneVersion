@@ -49,8 +49,18 @@ const quickActions = [
 const columns: TableColumn[] = [
   { key: "driver_name", label: "Driver", sortable: true },
   { key: "passenger_name", label: "Passenger", sortable: true },
-  { key: "pickup_address", label: "Pickup Location", sortable: false },
-  { key: "dropoff_address", label: "Dropoff Location", sortable: false },
+  {
+    key: "pickup_address",
+    label: "Pickup Location",
+    sortable: false,
+    hideOn: "mobile-tablet",
+  },
+  {
+    key: "dropoff_address",
+    label: "Dropoff Location",
+    sortable: false,
+    hideOn: "mobile-tablet",
+  },
   { key: "completed_at", label: "Completed At", sortable: true },
 ];
 
@@ -98,12 +108,18 @@ onMounted(() => {
       </layoutHeader>
     </div>
     <!-- Page Content -->
-    <div class="bg-secondary-dark text-white p-6 flex-1">
-      <div class="flex flex-col gap-8">
-        <div class="flex justify-between">
+    <div class="bg-secondary-dark text-white p-4 md:p-6 flex-1">
+      <div class="flex flex-col gap-6 md:gap-8">
+        <div
+          class="flex flex-col md:flex-row md:justify-between md:items-start gap-4"
+        >
           <div>
-            <h2 class="text-white text-4xl font-semibold">Dashboard</h2>
-            <p class="text-gray-400 text-base mt-2">
+            <h2
+              class="text-white text-2xl md:text-3xl lg:text-4xl font-semibold"
+            >
+              Dashboard
+            </h2>
+            <p class="text-gray-400 text-sm md:text-base mt-2">
               Overview of system statistics and recent activity
             </p>
           </div>
@@ -141,13 +157,13 @@ onMounted(() => {
             href="/admins"
           />
         </div>
-        <div class="grid grid-cols-4 gap-6">
+        <div class="hidden lg:grid lg:grid-cols-4 gap-6">
           <widgetsActivityChart
             :data="activityData"
             :time-range="selectedDateRange"
-            :height="350"
+            :height="300"
             title="Activity Trends"
-            class="col-span-3"
+            class="lg:col-span-3"
           />
           <widgetsQuickActions :actions="quickActions" />
         </div>
@@ -161,11 +177,11 @@ onMounted(() => {
         <div v-else-if="error" class="text-danger">{{ error }}</div>
 
         <div v-else>
-          <div class="grid grid-cols-4 gap-6">
-            <widgetsRecentActivityFeed :max-items="4" class="col-span-1" />
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <widgetsRecentActivityFeed :max-items="4" class="lg:col-span-1" />
             <!-- Rides Table -->
             <tablesDataTable
-              class="col-span-3"
+              class="lg:col-span-3"
               :columns="columns"
               :data="rides"
               :actions="true"
