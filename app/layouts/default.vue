@@ -1,6 +1,6 @@
 <template>
   <div class="flex min-h-screen">
-    <aside class="sticky top-0 h-screen overflow-y-auto">
+    <aside class="lg:sticky top-0 h-screen overflow-y-auto">
       <layoutSidebar />
     </aside>
     <div class="flex-1 flex flex-col min-w-0">
