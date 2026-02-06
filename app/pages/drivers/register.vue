@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ArrowLeft } from "lucide-vue-next";
+import { useSeoTitle } from "../../composables/useSeoTitle";
+
+useSeoTitle("Register Driver");
 </script>
 
 <template>

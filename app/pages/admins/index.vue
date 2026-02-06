@@ -13,6 +13,9 @@ import { Dot, Plus, Download } from "lucide-vue-next";
 import { capitalize } from "../../utils/capitalizeFormatter";
 import { formatRole } from "../../utils/roleFormatter";
 import { useToast } from "../../composables/useToast";
+import { useSeoTitle } from "../../composables/useSeoTitle";
+
+useSeoTitle("Admins");
 
 // Define columns for the admins table
 const columns: TableColumn[] = [

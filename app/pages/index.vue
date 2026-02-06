@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useAuth } from "../composables/useAuth";
+import { useSeoTitle } from "../composables/useSeoTitle";
+
+useSeoTitle("Login");
 
 definePageMeta({
   layout: false,
