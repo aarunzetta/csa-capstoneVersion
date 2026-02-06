@@ -70,14 +70,16 @@ const getStatusMeta = (value: number) => {
 
     <!-- Modal -->
     <div
-      class="relative bg-secondary rounded-lg shadow-2xl max-w-xl w-full mx-4 border border-secondary-light"
+      class="relative bg-secondary rounded-lg shadow-2xl max-w-sm md:max-w-xl w-full mx-4 border border-secondary-light"
       @click="handleModalClick"
     >
       <!-- Header -->
       <div
-        class="flex items-center justify-between p-6 border-b border-secondary-light"
+        class="flex items-center justify-between p-4 md:p-6 border-b border-secondary-light"
       >
-        <h2 class="text-2xl font-semibold text-white">Admin Details</h2>
+        <h2 class="text-lg md:text-2xl font-semibold text-white">
+          Admin Details
+        </h2>
         <button
           class="text-gray-400 hover:text-white transition-colors"
           @click="handleBackdropClick"
@@ -89,15 +91,19 @@ const getStatusMeta = (value: number) => {
       <!-- Content -->
       <div
         v-if="admin"
-        class="p-6 space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto"
+        class="p-4 md:p-6 space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto"
       >
         <!-- Admin Overview Section -->
         <div>
-          <div class="flex items-center gap-2">
-            <div><CircleUser class="text-primary w-20 h-20" /></div>
+          <div
+            class="flex flex-col md:flex-row items-center md:items-start gap-4"
+          >
+            <div>
+              <CircleUser class="text-primary w-16 md:w-20 h-16 md:h-20" />
+            </div>
 
             <div>
-              <p class="text-white font-medium text-lg">
+              <p class="text-white font-medium text-base md:text-lg">
                 {{ admin.first_name }} {{ admin.last_name }}
               </p>
               <div class="flex items-center gap-1">
@@ -120,51 +126,60 @@ const getStatusMeta = (value: number) => {
         <!-- Personal Information Section -->
 
         <div class="flex flex-col gap-4">
-          <div class="flex gap-3 items-center">
-            <div class="bg-secondary-light p-2 rounded-lg">
-              <User class="text-gray-400 w-5 h-5" />
+          <div class="flex gap-3 items-start md:items-center">
+            <div class="bg-secondary-light p-2 rounded-lg flex-shrink-0">
+              <User class="text-gray-400 w-4 md:w-5 h-4 md:h-5" />
             </div>
             <div>
-              <p class="text-gray-400 text-sm">Username</p>
-              <p class="text-info font-medium">@{{ admin.username }}</p>
+              <p class="text-gray-400 text-xs md:text-sm">Username</p>
+              <p class="text-info font-medium text-sm md:text-base">
+                @{{ admin.username }}
+              </p>
             </div>
           </div>
-          <div class="flex gap-3 items-center">
-            <div class="bg-secondary-light p-2 rounded-lg">
-              <Mail class="text-gray-400 w-5 h-5" />
+          <div class="flex gap-3 items-start md:items-center">
+            <div class="bg-secondary-light p-2 rounded-lg flex-shrink-0">
+              <Mail class="text-gray-400 w-4 md:w-5 h-4 md:h-5" />
             </div>
             <div>
-              <p class="text-gray-400 text-sm">Email</p>
-              <p class="text-white font-medium">{{ admin.email }}</p>
+              <p class="text-gray-400 text-xs md:text-sm">Email</p>
+              <p class="text-white font-medium text-sm md:text-base break-all">
+                {{ admin.email }}
+              </p>
             </div>
           </div>
-          <div v-if="admin.phone_number" class="flex gap-3 items-center">
-            <div class="bg-secondary-light p-2 rounded-lg">
-              <Phone class="text-gray-400 w-5 h-5" />
+          <div
+            v-if="admin.phone_number"
+            class="flex gap-3 items-start md:items-center"
+          >
+            <div class="bg-secondary-light p-2 rounded-lg flex-shrink-0">
+              <Phone class="text-gray-400 w-4 md:w-5 h-4 md:h-5" />
             </div>
             <div>
-              <p class="text-gray-400 text-sm">Phone</p>
-              <p class="text-white font-medium">{{ admin.phone_number }}</p>
+              <p class="text-gray-400 text-xs md:text-sm">Phone</p>
+              <p class="text-white font-medium text-sm md:text-base">
+                {{ admin.phone_number }}
+              </p>
             </div>
           </div>
-          <div class="flex gap-3 items-center">
-            <div class="bg-secondary-light p-2 rounded-lg">
-              <Clock class="text-gray-400 w-5 h-5" />
+          <div class="flex gap-3 items-start md:items-center">
+            <div class="bg-secondary-light p-2 rounded-lg flex-shrink-0">
+              <Clock class="text-gray-400 w-4 md:w-5 h-4 md:h-5" />
             </div>
             <div>
-              <p class="text-gray-400 text-sm">Last Login</p>
-              <p class="text-white font-medium">
+              <p class="text-gray-400 text-xs md:text-sm">Last Login</p>
+              <p class="text-white font-medium text-sm md:text-base">
                 {{ formatLastLogin(admin.last_login_at) }}
               </p>
             </div>
           </div>
-          <div class="flex gap-3 items-center">
-            <div class="bg-secondary-light p-2 rounded-lg">
-              <Calendar class="text-gray-400 w-5 h-5" />
+          <div class="flex gap-3 items-start md:items-center">
+            <div class="bg-secondary-light p-2 rounded-lg flex-shrink-0">
+              <Calendar class="text-gray-400 w-4 md:w-5 h-4 md:h-5" />
             </div>
             <div>
-              <p class="text-gray-400 text-sm">Account Created</p>
-              <p class="text-white font-medium">
+              <p class="text-gray-400 text-xs md:text-sm">Account Created</p>
+              <p class="text-white font-medium text-sm md:text-base">
                 {{ formatDate(admin.registered_at, false) }}
               </p>
             </div>
@@ -174,11 +189,13 @@ const getStatusMeta = (value: number) => {
         <!-- Role & Permissions Section -->
         <div class="border-t border-secondary-light pt-6">
           <div class="flex items-center gap-2 mb-4">
-            <Shield class="text-primary w-6 h-6" />
-            <h3 class="text-lg font-semibold text-white">Permissions</h3>
+            <Shield class="text-primary w-5 md:w-6 h-5 md:h-6" />
+            <h3 class="text-base md:text-lg font-semibold text-white">
+              Permissions
+            </h3>
           </div>
           <div class="bg-secondary-light rounded-lg p-4">
-            <div class="text-sm text-gray-300">
+            <div class="text-xs md:text-sm text-gray-300">
               <p v-if="admin.role === 'super_admin'" class="mb-2">
                 <strong>Super Admin</strong> has full system access including:
               </p>

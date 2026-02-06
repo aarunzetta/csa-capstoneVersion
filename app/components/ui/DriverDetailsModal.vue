@@ -47,14 +47,16 @@ const licenseStatusColors: ColorMap = {
 
     <!-- Modal -->
     <div
-      class="relative bg-secondary rounded-lg shadow-2xl max-w-2xl w-full mx-4 border border-secondary-light"
+      class="relative bg-secondary rounded-lg shadow-2xl max-w-sm md:max-w-2xl w-full mx-4 border border-secondary-light"
       @click="handleModalClick"
     >
       <!-- Header -->
       <div
-        class="flex items-center justify-between p-6 border-b border-secondary-light"
+        class="flex items-center justify-between p-4 md:p-6 border-b border-secondary-light"
       >
-        <h2 class="text-2xl font-semibold text-white">Driver Details</h2>
+        <h2 class="text-lg md:text-2xl font-semibold text-white">
+          Driver Details
+        </h2>
         <button
           class="text-gray-400 hover:text-white transition-colors"
           @click="handleBackdropClick"
@@ -66,17 +68,19 @@ const licenseStatusColors: ColorMap = {
       <!-- Content -->
       <div
         v-if="driver"
-        class="p-6 space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto"
+        class="p-4 md:p-6 space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto"
       >
         <!-- Personal Information Section -->
         <div>
-          <div class="flex items-center gap-2">
+          <div
+            class="flex flex-col md:flex-row items-center md:items-start gap-4"
+          >
             <div>
-              <CircleUser class="text-primary w-20 h-20" />
+              <CircleUser class="text-primary w-16 md:w-20 h-16 md:h-20" />
             </div>
-            <div>
+            <div class="w-full">
               <div class="flex items-center gap-2">
-                <p class="text-white font-medium text-lg">
+                <p class="text-white font-medium text-base md:text-lg">
                   {{ driver.first_name }} {{ driver.middle_name }}
                   {{ driver.last_name }}
                 </p>
@@ -90,15 +94,17 @@ const licenseStatusColors: ColorMap = {
                 </p>
               </div>
               <div class="flex items-center gap-2">
-                <p class="text-gray-400 text-sm">License ID:</p>
-                <p class="text-white font-medium">
+                <p class="text-gray-400 text-xs md:text-sm">License ID:</p>
+                <p class="text-white font-medium text-sm md:text-base">
                   {{ driver.license_number }}
                 </p>
               </div>
 
               <div class="flex items-center gap-2">
-                <p class="text-gray-400 text-sm">Driver ID:</p>
-                <p class="text-white font-medium">#{{ driver.driver_id }}</p>
+                <p class="text-gray-400 text-xs md:text-sm">Driver ID:</p>
+                <p class="text-white font-medium text-sm md:text-base">
+                  #{{ driver.driver_id }}
+                </p>
               </div>
             </div>
           </div>
@@ -106,25 +112,27 @@ const licenseStatusColors: ColorMap = {
 
         <!-- Personal and Contact Information Section -->
         <div>
-          <h3 class="text-lg font-semibold text-white mb-4">
+          <h3 class="text-base md:text-lg font-semibold text-white mb-4">
             Personal and Contact Information
           </h3>
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <p class="text-gray-400 text-sm">Date of Birth</p>
-              <p class="font-medium text-white">
+              <p class="text-gray-400 text-xs md:text-sm">Date of Birth</p>
+              <p class="font-medium text-white text-sm md:text-base">
                 {{ formatDate(driver.date_of_birth, false) }}
               </p>
             </div>
 
             <div>
-              <p class="text-gray-400 text-sm">Phone Number</p>
-              <p class="text-white font-medium">{{ driver.phone_number }}</p>
+              <p class="text-gray-400 text-xs md:text-sm">Phone Number</p>
+              <p class="text-white font-medium text-sm md:text-base">
+                {{ driver.phone_number }}
+              </p>
             </div>
 
-            <div class="col-span-2">
-              <p class="text-gray-400 text-sm">Street</p>
-              <p class="text-white font-medium">
+            <div class="col-span-1 md:col-span-2">
+              <p class="text-gray-400 text-xs md:text-sm">Street</p>
+              <p class="text-white font-medium text-sm md:text-base">
                 {{ driver.address_street }}, {{ driver.address_barangay }},
                 {{ driver.address_city }}, {{ driver.address_province }},
                 {{ driver.address_region }}
@@ -135,19 +143,19 @@ const licenseStatusColors: ColorMap = {
 
         <!-- Vehicle Information Section -->
         <div>
-          <h3 class="text-lg font-semibold text-white mb-4">
+          <h3 class="text-base md:text-lg font-semibold text-white mb-4">
             Vehicle Information
           </h3>
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <p class="text-gray-400 text-sm">Plate Number</p>
-              <p class="text-white font-medium">
+              <p class="text-gray-400 text-xs md:text-sm">Plate Number</p>
+              <p class="text-white font-medium text-sm md:text-base">
                 {{ driver.vehicle_plate_number }}
               </p>
             </div>
             <div>
-              <p class="text-gray-400 text-sm">Ownership</p>
-              <p class="text-white font-medium">
+              <p class="text-gray-400 text-xs md:text-sm">Ownership</p>
+              <p class="text-white font-medium text-sm md:text-base">
                 {{ capitalize(driver.vehicle_ownership) }}
               </p>
             </div>
@@ -156,16 +164,16 @@ const licenseStatusColors: ColorMap = {
 
         <!-- Date Section -->
         <div class="border-t border-secondary-light pt-6">
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <p class="text-gray-400 text-sm">Registered At</p>
-              <p class="text-white font-medium">
+              <p class="text-gray-400 text-xs md:text-sm">Registered At</p>
+              <p class="text-white font-medium text-sm md:text-base">
                 {{ formatDate(driver.registered_at, false) }}
               </p>
             </div>
             <div>
-              <p class="text-gray-400 text-sm">License Expires</p>
-              <p class="text-white font-medium">
+              <p class="text-gray-400 text-xs md:text-sm">License Expires</p>
+              <p class="text-white font-medium text-sm md:text-base">
                 {{ formatDate(driver.license_expiration_date, false) }}
               </p>
             </div>

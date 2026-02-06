@@ -1,4 +1,5 @@
 import type { Admin } from "../types";
+import { useApi } from "./useApi";
 
 interface LoginResponse {
   success: boolean;

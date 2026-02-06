@@ -202,14 +202,16 @@ const handleSubmit = async () => {
 
     <!-- Modal -->
     <div
-      class="relative bg-secondary rounded-lg shadow-2xl max-w-4xl w-full mx-4 border border-secondary-light"
+      class="relative bg-secondary rounded-lg shadow-2xl max-w-sm md:max-w-2xl lg:max-w-4xl w-full mx-4 border border-secondary-light"
       @click="handleModalClick"
     >
       <!-- Header -->
       <div
-        class="flex items-center justify-between p-6 border-b border-secondary-light"
+        class="flex items-center justify-between p-4 md:p-6 border-b border-secondary-light"
       >
-        <h2 class="text-2xl font-semibold text-white">Edit Driver</h2>
+        <h2 class="text-lg md:text-2xl font-semibold text-white">
+          Edit Driver
+        </h2>
         <button
           class="text-gray-400 hover:text-white transition-colors"
           @click="handleBackdropClick"
@@ -219,14 +221,14 @@ const handleSubmit = async () => {
       </div>
 
       <!-- Content -->
-      <div class="p-6 max-h-[calc(100vh-200px)] overflow-y-auto">
+      <div class="p-4 md:p-6 max-h-[calc(100vh-200px)] overflow-y-auto">
         <form class="space-y-6" @submit.prevent="handleSubmit">
           <!-- Personal Information -->
           <div>
-            <h3 class="text-lg font-semibold text-white mb-4">
+            <h3 class="text-base md:text-lg font-semibold text-white mb-4">
               Personal Information
             </h3>
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <uiFormInput
                 id="edit_first_name"
                 v-model="formData.first_name"
@@ -248,7 +250,7 @@ const handleSubmit = async () => {
                 placeholder="Enter middle name"
               />
             </div>
-            <div class="grid grid-cols-2 gap-4 mt-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               <uiFormDateInput
                 id="edit_date_of_birth"
                 v-model="formData.date_of_birth"
@@ -268,10 +270,10 @@ const handleSubmit = async () => {
 
           <!-- License Information -->
           <div>
-            <h3 class="text-lg font-semibold text-white mb-4">
+            <h3 class="text-base md:text-lg font-semibold text-white mb-4">
               License Information
             </h3>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <uiFormInput
                 id="edit_license_number"
                 v-model="formData.license_number"
@@ -287,7 +289,7 @@ const handleSubmit = async () => {
                 position="bottom"
               />
             </div>
-            <div class="grid grid-cols-2 gap-4 mt-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               <uiFormSelect
                 id="edit_license_status"
                 v-model="formData.license_status"
@@ -300,10 +302,10 @@ const handleSubmit = async () => {
 
           <!-- Vehicle Information -->
           <div>
-            <h3 class="text-lg font-semibold text-white mb-4">
+            <h3 class="text-base md:text-lg font-semibold text-white mb-4">
               Vehicle Information
             </h3>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <uiFormInput
                 id="edit_vehicle_plate_number"
                 v-model="formData.vehicle_plate_number"
@@ -323,10 +325,10 @@ const handleSubmit = async () => {
 
           <!-- Address Information -->
           <div>
-            <h3 class="text-lg font-semibold text-white mb-4">
+            <h3 class="text-base md:text-lg font-semibold text-white mb-4">
               Address Information
             </h3>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="flex flex-col md:grid md:grid-cols-2 gap-4">
               <uiFormInput
                 id="edit_region"
                 v-model="formData.address_region"
@@ -369,10 +371,12 @@ const handleSubmit = async () => {
       </div>
 
       <!-- Footer -->
-      <div class="flex justify-end gap-3 p-6 border-t border-secondary-light">
+      <div
+        class="flex flex-col-reverse md:flex-row justify-end gap-3 p-4 md:p-6 border-t border-secondary-light"
+      >
         <button
           type="button"
-          class="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition-colors"
+          class="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition-colors text-sm md:text-base"
           @click="handleBackdropClick"
         >
           Cancel
@@ -380,7 +384,7 @@ const handleSubmit = async () => {
         <button
           type="submit"
           form="edit-driver-form"
-          class="px-4 py-2 rounded-lg btn-primary flex items-center gap-2 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          class="px-4 py-2 rounded-lg btn-primary flex items-center justify-center gap-2 transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-sm md:text-base"
           :disabled="isSubmitting || !hasChanges"
           @click="handleSubmit"
         >
