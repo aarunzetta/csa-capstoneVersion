@@ -7,6 +7,24 @@ export default defineNuxtConfig({
       apiBase: import.meta.env.NUXT_PUBLIC_API_BASE,
     },
   },
+  app: {
+    head: {
+      meta: [
+        {
+          name: "description",
+          content: "Commuter Security App - Management and Admin System",
+        },
+        { name: "og:title", content: "Commuter Security App" },
+        {
+          name: "og:description",
+          content: "Commuter Security App - Management and Admin System",
+        },
+        { name: "og:image", content: "/cma_logo.png" },
+        { name: "og:type", content: "website" },
+      ],
+      link: [{ rel: "icon", type: "image/x-icon", href: "/cma_logo.ico" }],
+    },
+  },
   modules: [
     "@nuxt/eslint",
     "@nuxtjs/tailwindcss",

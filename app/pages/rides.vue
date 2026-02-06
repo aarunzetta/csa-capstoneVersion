@@ -5,6 +5,9 @@ import type { Ride } from "../types/ride";
 import { useRides } from "../composables/useRides";
 import { formatDate } from "../utils/dateFormatter";
 import { Download } from "lucide-vue-next";
+import { useSeoTitle } from "../composables/useSeoTitle";
+
+useSeoTitle("Rides");
 
 // Define columns for the Rides table
 const columns: TableColumn[] = [
