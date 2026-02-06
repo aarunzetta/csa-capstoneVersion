@@ -168,14 +168,14 @@ const handleModalClick = (e: MouseEvent) => {
 
     <!-- Modal -->
     <div
-      class="relative bg-secondary rounded-lg shadow-2xl max-w-2xl w-full mx-4 border border-secondary-light"
+      class="relative bg-secondary rounded-lg shadow-2xl max-w-sm md:max-w-2xl w-full mx-4 border border-secondary-light"
       @click="handleModalClick"
     >
       <!-- Header -->
       <div
-        class="flex items-center justify-between p-6 border-b border-secondary-light"
+        class="flex items-center justify-between p-4 md:p-6 border-b border-secondary-light"
       >
-        <h2 class="text-2xl font-semibold text-white">Edit Admin</h2>
+        <h2 class="text-lg md:text-2xl font-semibold text-white">Edit Admin</h2>
         <button
           class="text-gray-400 hover:text-white transition-colors"
           @click="handleBackdropClick"
@@ -185,14 +185,17 @@ const handleModalClick = (e: MouseEvent) => {
       </div>
 
       <!-- Content -->
-      <div v-if="admin" class="p-6">
+      <div
+        v-if="admin"
+        class="p-4 md:p-6 max-h-[calc(100vh-200px)] overflow-y-auto"
+      >
         <form class="space-y-6" @submit.prevent="handleSubmit">
           <!-- Personal Information -->
           <div>
-            <h3 class="text-lg font-semibold text-white mb-4">
+            <h3 class="text-base md:text-lg font-semibold text-white mb-4">
               Personal Information
             </h3>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <uiFormInput
                   id="first_name"
@@ -218,7 +221,7 @@ const handleModalClick = (e: MouseEvent) => {
 
           <!-- Contact Information -->
           <div>
-            <h3 class="text-lg font-semibold text-white mb-4">
+            <h3 class="text-base md:text-lg font-semibold text-white mb-4">
               Contact Information
             </h3>
             <div class="space-y-4">
@@ -247,10 +250,10 @@ const handleModalClick = (e: MouseEvent) => {
 
           <!-- Role and Status -->
           <div>
-            <h3 class="text-lg font-semibold text-white mb-4">
+            <h3 class="text-base md:text-lg font-semibold text-white mb-4">
               Role and Status
             </h3>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <uiFormSelect
                   id="role"
@@ -284,17 +287,19 @@ const handleModalClick = (e: MouseEvent) => {
       </div>
 
       <!-- Footer -->
-      <div class="flex justify-end gap-3 p-6 border-t border-secondary-light">
+      <div
+        class="flex flex-col-reverse md:flex-row justify-end gap-3 p-4 md:p-6 border-t border-secondary-light"
+      >
         <button
           type="button"
-          class="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition-colors"
+          class="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition-colors text-sm md:text-base"
           @click="handleBackdropClick"
         >
           Cancel
         </button>
         <button
           type="submit"
-          class="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-2"
+          class="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm md:text-base"
           :disabled="!hasChanges || isSubmitting"
           @click="handleSubmit"
         >
