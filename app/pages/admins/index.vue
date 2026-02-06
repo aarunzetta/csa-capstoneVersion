@@ -19,8 +19,18 @@ const columns: TableColumn[] = [
   { key: "admin_name", label: "Admin", sortable: true },
   { key: "role", label: "Role", sortable: false },
   { key: "is_active", label: "Status", sortable: false },
-  { key: "last_login_at", label: "Last Login", sortable: true },
-  { key: "registered_at", label: "Registered At", sortable: true },
+  {
+    key: "last_login_at",
+    label: "Last Login",
+    sortable: true,
+    hideOn: "mobile",
+  },
+  {
+    key: "registered_at",
+    label: "Registered At",
+    sortable: true,
+    hideOn: "mobile-tablet",
+  },
 ];
 
 const filters = [
@@ -96,10 +106,11 @@ onMounted(() => {
 
 const roleColors: ColorMap = {
   super_admin:
-    "text-success  border border-success py-[6px] px-3 rounded-2xl bg-teal-900",
-  admin: "text-info border border-info py-[6px] px-3 rounded-2xl bg-blue-950",
+    "text-success  border border-success px-2 py-2 md:py-[6px] md:px-3 rounded-2xl bg-teal-900 text-nowrap",
+  admin:
+    "text-info border border-info px-2 py-2 md:py-[6px] md:px-3 rounded-2xl bg-blue-950 text-nowrap",
   moderator:
-    "text-warning border border-warning py-[6px] px-3 rounded-2xl bg-amber-950",
+    "text-warning border border-warning px-2 py-2 md:py-[6px] md:px-3 rounded-2xl bg-amber-950 text-nowrap",
 };
 
 const getStatusMeta = (value: number) => {
@@ -124,13 +135,19 @@ const getStatusMeta = (value: number) => {
       <layoutHeader>
         <template #actions>
           <button class="p-3 btn-secondary flex items-center gap-2 text-base">
-            <Download class="w-5 h-5" /><span>Export</span>
+            <Download class="w-4 h-4 lg:w-5 lg:h-5" /><span
+              class="text-sm lg:text-base"
+              >Export</span
+            >
           </button>
           <NuxtLink
             to="/admins/register"
             class="p-3 btn-primary flex items-center gap-2 text-base"
           >
-            <Plus class="w-5 h-5" /><span>Add Admin</span>
+            <Plus class="w-4 h-4 lg:w-5 lg:h-5" /><span
+              class="text-sm lg:text-base"
+              >Add Admin</span
+            >
           </NuxtLink></template
         >
       </layoutHeader>
@@ -139,8 +156,10 @@ const getStatusMeta = (value: number) => {
     <div class="bg-secondary-dark text-white p-6 flex-1">
       <div class="flex flex-col gap-8">
         <div>
-          <h2 class="text-white text-4xl font-semibold">Admins</h2>
-          <p class="text-gray-400 text-base mt-2">
+          <h2 class="text-white text-2xl md:text-3xl lg:text-4xl font-semibold">
+            Admins
+          </h2>
+          <p class="text-gray-400 text-sm md:text-base mt-2">
             Manage administrative users and permissions
           </p>
         </div>
@@ -185,7 +204,7 @@ const getStatusMeta = (value: number) => {
             <!-- Custom formatting for role -->
             <template #cell-role="{ value }">
               <span
-                class="text-sm"
+                class="text-xs md:text-sm"
                 :class="getStatusColor(value, roleColors)"
                 >{{ capitalize(formatRole(value)) }}</span
               >
