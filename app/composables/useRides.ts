@@ -1,4 +1,5 @@
 import type { Ride } from "../types";
+import { useApi } from "./useApi";
 
 interface RidesResponse {
   success: boolean;

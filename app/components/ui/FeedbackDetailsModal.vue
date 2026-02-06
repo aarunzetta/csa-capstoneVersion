@@ -57,14 +57,16 @@ const getSentimentColor = (rating: number) => {
 
     <!-- Modal -->
     <div
-      class="relative bg-secondary rounded-lg shadow-2xl max-w-4xl w-full mx-4 border border-secondary-light"
+      class="relative bg-secondary rounded-lg shadow-2xl max-w-sm md:max-w-2xl lg:max-w-4xl w-full mx-4 border border-secondary-light"
       @click="handleModalClick"
     >
       <!-- Header -->
       <div
-        class="flex items-center justify-between p-6 border-b border-secondary-light"
+        class="flex items-center justify-between p-4 md:p-6 border-b border-secondary-light"
       >
-        <h2 class="text-2xl font-semibold text-white">Feedback Details</h2>
+        <h2 class="text-lg md:text-2xl font-semibold text-white">
+          Feedback Details
+        </h2>
         <button
           class="text-gray-400 hover:text-white transition-colors"
           @click="handleBackdropClick"
@@ -76,21 +78,25 @@ const getSentimentColor = (rating: number) => {
       <!-- Content -->
       <div
         v-if="feedback"
-        class="p-6 space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto"
+        class="p-4 md:p-6 space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto"
       >
         <!-- Feedback Overview Section -->
-        <div class="flex justify-between items-center">
+        <div
+          class="flex flex-col md:flex-row md:justify-between md:items-center gap-4"
+        >
           <!-- Passenger Section -->
           <div class="flex items-center gap-2">
-            <CircleUser class="text-primary w-20 h-20" />
+            <CircleUser class="text-primary w-16 md:w-20 h-16 md:h-20" />
             <div>
               <div class="flex flex-col items-start">
-                <p class="text-white font-medium text-lg">
+                <p class="text-white font-medium text-base md:text-lg">
                   {{ feedback.passenger_first_name }}
                   {{ feedback.passenger_middle_name }}
                   {{ feedback.passenger_last_name }}
                 </p>
-                <p class="text-gray-400 text-sm font-medium">Passenger</p>
+                <p class="text-gray-400 text-xs md:text-sm font-medium">
+                  Passenger
+                </p>
               </div>
             </div>
           </div>
@@ -98,18 +104,19 @@ const getSentimentColor = (rating: number) => {
           <!-- Rating Section -->
           <div>
             <div class="flex items-center gap-2 mb-1">
-              <p class="text-gray-400 text-sm">Rating</p>
+              <p class="text-gray-400 text-xs md:text-sm">Rating</p>
               <span class="text-xs" :class="getSentimentColor(feedback.rating)">
                 {{ getSentiment(feedback.rating) }}
               </span>
             </div>
 
-            <div class="flex items-center gap-2">
+            <div class="flex flex-col md:flex-row md:items-center gap-2">
               <div class="flex gap-1">
                 <Star
                   v-for="i in 5"
                   :key="i"
-                  :size="20"
+                  :size="16"
+                  class="md:w-5 md:h-5"
                   :class="
                     i <= feedback.rating
                       ? 'fill-yellow-400 text-yellow-400'
@@ -117,7 +124,7 @@ const getSentimentColor = (rating: number) => {
                   "
                 />
               </div>
-              <p class="text-white font-medium">
+              <p class="text-white font-medium text-sm md:text-base">
                 {{ formatDate(feedback.created_at, false) }}
               </p>
             </div>
@@ -128,26 +135,35 @@ const getSentimentColor = (rating: number) => {
         <div>
           <div class="bg-secondary-light rounded-lg p-4">
             <div class="flex items-center gap-2 mb-4">
-              <MessageSquare class="text-gray-400 w-5 h-5" />
-              <h3 class="text-base font-semibold text-gray-400">Comment</h3>
+              <MessageSquare class="text-gray-400 w-4 md:w-5 h-4 md:h-5" />
+              <h3 class="text-sm md:text-base font-semibold text-gray-400">
+                Comment
+              </h3>
             </div>
-            <p v-if="feedback.comment" class="text-white whitespace-pre-wrap">
+            <p
+              v-if="feedback.comment"
+              class="text-white whitespace-pre-wrap text-sm md:text-base"
+            >
               {{ feedback.comment }}
             </p>
-            <p v-else class="text-gray-400 italic">No comment provided</p>
+            <p v-else class="text-gray-400 italic text-sm md:text-base">
+              No comment provided
+            </p>
           </div>
         </div>
 
         <!-- Participants Section -->
         <div>
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <!-- Driver Section -->
             <div class="bg-secondary-light rounded-lg p-4">
               <div class="flex items-center gap-2 mb-2">
-                <IdCard class="text-gray-400 w-5 h-5" />
-                <p class="text-gray-400 text-sm font-semibold">Driver</p>
+                <IdCard class="text-gray-400 w-4 md:w-5 h-4 md:h-5" />
+                <p class="text-gray-400 text-xs md:text-sm font-semibold">
+                  Driver
+                </p>
               </div>
-              <p class="text-white font-medium">
+              <p class="text-white font-medium text-sm md:text-base">
                 {{ feedback.driver_first_name }} {{ feedback.driver_last_name }}
               </p>
               <p class="text-white text-xs font-medium">
@@ -156,11 +172,16 @@ const getSentimentColor = (rating: number) => {
             </div>
             <div class="bg-secondary-light rounded-lg p-4">
               <div class="flex items-center gap-2 mb-2">
-                <MapPin class="text-gray-400 w-5 h-5" />
-                <p class="text-gray-400 text-sm font-semibold">Route</p>
+                <MapPin class="text-gray-400 w-4 md:w-5 h-4 md:h-5" />
+                <p class="text-gray-400 text-xs md:text-sm font-semibold">
+                  Route
+                </p>
               </div>
-              <p class="flex gap-2 items-center text-white font-medium">
-                {{ feedback.pickup_address }}<MoveRight />{{
+              <p
+                class="flex flex-col md:flex-row md:items-center gap-2 text-white font-medium text-sm md:text-base"
+              >
+                {{ feedback.pickup_address
+                }}<MoveRight class="hidden md:block" />{{
                   feedback.dropoff_address
                 }}
               </p>
@@ -168,18 +189,24 @@ const getSentimentColor = (rating: number) => {
             <!-- Ride Section -->
             <div class="bg-secondary-light rounded-lg p-4">
               <div class="flex items-center gap-2 mb-2">
-                <CarTaxiFront class="text-gray-400 w-5 h-5" />
-                <p class="text-gray-400 text-sm font-semibold">Ride ID</p>
+                <CarTaxiFront class="text-gray-400 w-4 md:w-5 h-4 md:h-5" />
+                <p class="text-gray-400 text-xs md:text-sm font-semibold">
+                  Ride ID
+                </p>
               </div>
-              <p class="text-white font-medium">#{{ feedback.ride_id }}</p>
+              <p class="text-white font-medium text-sm md:text-base">
+                #{{ feedback.ride_id }}
+              </p>
             </div>
 
             <div class="bg-secondary-light rounded-lg p-4">
               <div class="flex items-center gap-2 mb-2">
-                <Calendar class="text-gray-400 w-5 h-5" />
-                <p class="text-gray-400 text-sm font-semibold">Date</p>
+                <Calendar class="text-gray-400 w-4 md:w-5 h-4 md:h-5" />
+                <p class="text-gray-400 text-xs md:text-sm font-semibold">
+                  Date
+                </p>
               </div>
-              <p class="text-white font-medium">
+              <p class="text-white font-medium text-sm md:text-base">
                 {{ formatDate(feedback.created_at) }}
               </p>
             </div>

@@ -213,21 +213,25 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div class="w-[900px] max-w-5xl mx-auto">
+  <div class="w-full max-w-5xl mx-auto px-4 md:px-0">
     <!-- Multi-Step Wizard Progress Indicator -->
     <uiMultiStepWizard :steps="wizardSteps" :current-step="currentStep" />
 
     <!-- Form Content -->
-    <div class="bg-secondary rounded-lg p-8 border border-secondary-light">
+    <div
+      class="bg-secondary rounded-lg p-4 md:p-8 border border-secondary-light"
+    >
       <!-- Step 1: Personal Info -->
       <div v-show="currentStep === 1">
-        <h3 class="text-2xl font-semibold text-white mb-2">Personal Info</h3>
-        <p class="text-gray-400 mb-6">
+        <h3 class="text-lg md:text-2xl font-semibold text-white mb-2">
+          Personal Info
+        </h3>
+        <p class="text-sm md:text-base text-gray-400 mb-6">
           Enter the passenger's personal information
         </p>
 
         <div class="space-y-4">
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <uiFormInput
                 id="first_name"
@@ -251,7 +255,7 @@ const handleSubmit = async () => {
             </div>
           </div>
 
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <uiFormInput
                 id="middleName"
@@ -272,7 +276,7 @@ const handleSubmit = async () => {
             </div>
           </div>
 
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <uiFormInput
                 id="password"
@@ -299,13 +303,15 @@ const handleSubmit = async () => {
 
       <!-- Step 2: Contact Info -->
       <div v-show="currentStep === 2">
-        <h3 class="text-2xl font-semibold text-white mb-2">Contact Info</h3>
-        <p class="text-gray-400 mb-6">
+        <h3 class="text-lg md:text-2xl font-semibold text-white mb-2">
+          Contact Info
+        </h3>
+        <p class="text-sm md:text-base text-gray-400 mb-6">
           Enter the passenger's contact information
         </p>
 
         <div class="space-y-4">
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <uiFormInput
                 id="phone_number"
@@ -332,18 +338,20 @@ const handleSubmit = async () => {
 
       <!-- Step 3: Review -->
       <div v-show="currentStep === 3">
-        <h3 class="text-2xl font-semibold text-white mb-2">Review</h3>
-        <p class="text-gray-400 mb-6">
+        <h3 class="text-lg md:text-2xl font-semibold text-white mb-2">
+          Review
+        </h3>
+        <p class="text-sm md:text-base text-gray-400 mb-6">
           Review all information before submitting
         </p>
 
         <div class="space-y-6">
           <!-- Personal Info Summary -->
           <div class="bg-secondary-light rounded-lg p-4">
-            <h4 class="text-lg font-semibold text-white mb-3">
+            <h4 class="text-base md:text-lg font-semibold text-white mb-3">
               Personal Information
             </h4>
-            <div class="grid grid-cols-2 gap-4 text-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
                 <span class="text-gray-400">Name:</span>
                 <span class="text-white ml-2"
@@ -366,10 +374,10 @@ const handleSubmit = async () => {
 
           <!-- Contact Info Summary -->
           <div class="bg-secondary-light rounded-lg p-4">
-            <h4 class="text-lg font-semibold text-white mb-3">
+            <h4 class="text-base md:text-lg font-semibold text-white mb-3">
               Contact Information
             </h4>
-            <div class="grid grid-cols-2 gap-4 text-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
                 <span class="text-gray-400">Phone Number:</span>
                 <span class="text-white ml-2">{{ formData.phone_number }}</span>
@@ -388,9 +396,9 @@ const handleSubmit = async () => {
                 id="terms"
                 v-model="formData.termsAgreed"
                 type="checkbox"
-                class="mt-1 w-4 h-4 rounded bg-secondary-dark border-gray-700 text-primary"
+                class="mt-1 w-4 h-4 rounded bg-secondary-dark border-gray-700 text-primary flex-shrink-0"
               />
-              <label for="terms" class="text-sm text-gray-300">
+              <label for="terms" class="text-xs md:text-sm text-gray-300">
                 I agree to the
                 <a href="#" class="text-primary hover:underline"
                   >Terms and Conditions</a
@@ -406,9 +414,9 @@ const handleSubmit = async () => {
                 id="privacy"
                 v-model="formData.privacyAgreed"
                 type="checkbox"
-                class="mt-1 w-4 h-4 rounded bg-secondary-dark border-gray-700 text-primary"
+                class="mt-1 w-4 h-4 rounded bg-secondary-dark border-gray-700 text-primary flex-shrink-0"
               />
-              <label for="privacy" class="text-sm text-gray-300">
+              <label for="privacy" class="text-xs md:text-sm text-gray-300">
                 I agree to the
                 <a href="#" class="text-primary hover:underline"
                   >Privacy Policy</a
@@ -424,11 +432,11 @@ const handleSubmit = async () => {
 
       <!-- Navigation Buttons -->
       <div
-        class="flex items-center justify-between mt-8 pt-6 border-t border-secondary-light"
+        class="flex flex-col-reverse md:flex-row items-center justify-between gap-3 md:gap-0 mt-8 pt-6 border-t border-secondary-light"
       >
         <button
           v-if="currentStep > 1"
-          class="p-3 btn-primary flex items-center gap-2 text-base"
+          class="w-full md:w-auto px-4 py-2 md:p-3 btn-primary flex items-center justify-center gap-2 text-sm md:text-base"
           @click="previousStep"
         >
           Previous
@@ -438,7 +446,7 @@ const handleSubmit = async () => {
         <button
           v-if="currentStep < totalSteps"
           :disabled="!isCurrentStepValid()"
-          class="p-3 btn-primary flex items-center gap-2 text-base disabled:opacity-30 disabled:cursor-not-allowed"
+          class="w-full md:w-auto px-4 py-2 md:p-3 btn-primary flex items-center justify-center gap-2 text-sm md:text-base disabled:opacity-30 disabled:cursor-not-allowed"
           @click="nextStep"
         >
           Next Step
@@ -447,7 +455,7 @@ const handleSubmit = async () => {
         <button
           v-else
           :disabled="isSubmitting || !isCurrentStepValid()"
-          class="p-3 btn-primary flex items-center gap-2 text-base disabled:opacity-30 disabled:cursor-not-allowed"
+          class="w-full md:w-auto px-4 py-2 md:p-3 btn-primary flex items-center justify-center gap-2 text-sm md:text-base disabled:opacity-30 disabled:cursor-not-allowed"
           @click="handleSubmit"
         >
           <span v-if="!isSubmitting">Submit Registration</span>

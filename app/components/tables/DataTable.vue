@@ -444,7 +444,7 @@ watch(isActionModalOpen, (isOpen) => {
           <div
             v-for="filter in filters"
             :key="filter.key"
-            class="flex items-center gap-2"
+            class="hidden lg:flex items-center gap-2"
             data-filter-dropdown
           >
             <label class="text-gray-400 text-sm">{{ filter.label }}:</label>

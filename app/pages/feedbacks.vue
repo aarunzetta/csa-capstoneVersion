@@ -9,9 +9,14 @@ import { Star, Download } from "lucide-vue-next";
 // Define columns for the feedbacks table
 const columns: TableColumn[] = [
   { key: "passenger_name", label: "Passenger", sortable: true },
-  { key: "driver_name", label: "Driver", sortable: true },
+  { key: "driver_name", label: "Driver", sortable: true, hideOn: "mobile" },
   { key: "rating", label: "Rating", sortable: true },
-  { key: "sentiment", label: "Sentiment", sortable: false },
+  {
+    key: "sentiment",
+    label: "Sentiment",
+    sortable: false,
+    hideOn: "mobile-tablet",
+  },
   { key: "comments", label: "Comments", sortable: false },
   { key: "created_at", label: "Date", sortable: true },
 ];
@@ -101,7 +106,10 @@ onMounted(() => {
       <layoutHeader>
         <template #actions>
           <button class="p-3 btn-secondary flex items-center gap-2 text-base">
-            <Download class="w-5 h-5" /><span>Export</span>
+            <Download class="w-4 h-4 lg:w-5 lg:h-5" /><span
+              class="text-sm lg:text-base"
+              >Export</span
+            >
           </button>
         </template>
       </layoutHeader>
@@ -110,8 +118,10 @@ onMounted(() => {
     <div class="bg-secondary-dark text-white p-6 flex-1">
       <div class="flex flex-col gap-8">
         <div>
-          <h2 class="text-white text-4xl font-semibold">Feedbacks</h2>
-          <p class="text-gray-400 text-base mt-2">
+          <h2 class="text-white text-2xl md:text-3xl lg:text-4xl font-semibold">
+            Feedbacks
+          </h2>
+          <p class="text-gray-400 text-sm md:text-base mt-2">
             Review ratings and feedback from rides
           </p>
         </div>

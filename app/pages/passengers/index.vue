@@ -10,10 +10,20 @@ import { UserPlus, Download } from "lucide-vue-next";
 const columns: TableColumn[] = [
   { key: "passenger_name", label: "Passenger", sortable: true },
   { key: "username", label: "Username", sortable: true },
-  { key: "date_of_birth", label: "Date of Birth", sortable: true },
+  {
+    key: "date_of_birth",
+    label: "Date of Birth",
+    sortable: true,
+    hideOn: "mobile-tablet",
+  },
   { key: "email", label: "Email", sortable: true },
   { key: "phone_number", label: "Phone Number", sortable: false },
-  { key: "registered_at", label: "Registered At", sortable: true },
+  {
+    key: "registered_at",
+    label: "Registered At",
+    sortable: true,
+    hideOn: "mobile-tablet",
+  },
 ];
 
 // Use the passenger composable
@@ -59,13 +69,21 @@ onMounted(() => {
       <layoutHeader>
         <template #actions>
           <button class="p-3 btn-secondary flex items-center gap-2 text-base">
-            <Download class="w-5 h-5" /><span>Export</span>
+            <Download class="w-4 h-4 lg:w-5 lg:h-5" /><span
+              class="text-sm lg:text-base"
+              >Export</span
+            >
           </button>
           <NuxtLink
             to="/passengers/register"
             class="p-3 btn-primary flex items-center gap-2 text-base"
           >
-            <UserPlus class="w-5 h-5" /><span>Register New Passenger</span>
+            <UserPlus class="w-4 h-4 lg:w-5 lg:h-5" /><span
+              class="text-sm lg:text-base"
+            >
+              <span class="block lg:hidden">New Passenger</span>
+              <span class="hidden lg:block">Register New Passenger</span>
+            </span>
           </NuxtLink></template
         >
       </layoutHeader>
@@ -74,8 +92,10 @@ onMounted(() => {
     <div class="bg-secondary-dark text-white p-6 flex-1">
       <div class="flex flex-col gap-8">
         <div>
-          <h2 class="text-white text-4xl font-semibold">Passengers</h2>
-          <p class="text-gray-400 text-base mt-2">
+          <h2 class="text-white text-2xl md:text-3xl lg:text-4xl font-semibold">
+            Passengers
+          </h2>
+          <p class="text-gray-400 text-sm md:text-base mt-2">
             Manage and view all registered passengers
           </p>
         </div>
