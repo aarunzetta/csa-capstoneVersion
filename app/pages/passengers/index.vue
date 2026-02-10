@@ -5,6 +5,9 @@ import type { Passenger } from "../../types/passenger";
 import { usePassengers } from "../../composables/usePassengers";
 import { formatDate } from "../../utils/dateFormatter";
 import { UserPlus, Download } from "lucide-vue-next";
+import { useSeoTitle } from "../../composables/useSeoTitle";
+
+useSeoTitle("Passengers");
 
 // Define columns for the Passengers table
 const columns: TableColumn[] = [

@@ -14,10 +14,13 @@ import type { Ride } from "../types/ride";
 import { useRides } from "../composables/useRides";
 import { useDashboard } from "../composables/useDashboard";
 import { formatDate } from "../utils/dateFormatter";
+import { useSeoTitle } from "../composables/useSeoTitle";
 
 definePageMeta({
   middleware: "auth",
 });
+
+useSeoTitle("Dashboard");
 
 const quickActions = [
   {

@@ -5,6 +5,9 @@ import type { Feedback } from "../types/feedback";
 import { useFeedbacks } from "../composables/useFeedbacks";
 import { formatDate } from "../utils/dateFormatter";
 import { Star, Download } from "lucide-vue-next";
+import { useSeoTitle } from "../composables/useSeoTitle";
+
+useSeoTitle("Feedbacks");
 
 // Define columns for the feedbacks table
 const columns: TableColumn[] = [

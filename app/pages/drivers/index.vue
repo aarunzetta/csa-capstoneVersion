@@ -10,6 +10,9 @@ import {
 } from "../../utils/statusColorFormatter";
 import { capitalize } from "../../utils/capitalizeFormatter";
 import { UserPlus, Download } from "lucide-vue-next";
+import { useSeoTitle } from "../../composables/useSeoTitle";
+
+useSeoTitle("Drivers");
 
 // Define columns for the Drivers table
 const columns: TableColumn[] = [
