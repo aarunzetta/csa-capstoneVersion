@@ -1,7 +1,23 @@
 <script lang="ts" setup>
-import { Menu, Bell } from "lucide-vue-next";
+import { ref, onMounted, onUnmounted } from "vue";
+import { Bell, Menu, PanelLeftClose, PanelLeftOpen } from "lucide-vue-next";
 import { useSidebar } from "../../composables/useSidebar";
-const { toggleSidebar } = useSidebar();
+const { toggleSidebar, isOpen } = useSidebar();
+
+const isMobile = ref(false);
+
+const checkMobile = () => {
+  isMobile.value = window.innerWidth < 1024;
+};
+
+onMounted(() => {
+  checkMobile();
+  window.addEventListener("resize", checkMobile);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", checkMobile);
+});
 </script>
 
 <template>
@@ -12,7 +28,9 @@ const { toggleSidebar } = useSidebar();
       class="rounded transition-colors text-gray-400 hover:bg-gray-800 hover:text-white p-2"
       @click="toggleSidebar"
     >
-      <Menu :size="24" />
+      <Menu v-if="isMobile" :size="24" />
+      <PanelLeftClose v-else-if="isOpen" :size="24" />
+      <PanelLeftOpen v-else :size="24" />
     </button>
 
     <div class="flex gap-2 md:gap-4 items-center">
